@@ -133,6 +133,8 @@
     <Compile Include="Forms\Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\Maybe.cs" />
+    <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="Helpers\MobTypes.cs" />
     <Compile Include="Helpers\TriState.cs" />
     <Compile Include="Program.cs" />
@@ -202,7 +204,7 @@
     <Compile Include="Helpers\PNDHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\ProHelper.cs">
+    <Compile Include="Helpers\ProtoHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Forms\ProtoSearch.cs">
@@ -292,6 +294,22 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\required-files\ToEE World Builder.aim">
+      <Link>Resources\ToEE World Builder.aim</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\required-files\ToEE World Builder.ftd">
+      <Link>Resources\ToEE World Builder.ftd</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\required-files\ToEE World Builder.opc">
+      <Link>Resources\ToEE World Builder.opc</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="..\..\required-files\ToEE World Builder.pfr">
+      <Link>Resources\ToEE World Builder.pfr</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

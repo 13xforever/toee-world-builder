@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
+using WorldBuilder.Helpers;
 
 namespace WorldBuilder
 {
@@ -139,7 +140,7 @@ namespace WorldBuilder
 			{
 				lstResult.Items.Clear();
 
-				//ArrayList a = ProHelper.PRO_GetColumnNames();
+				//ArrayList a = ProtoHelper.GetColumnNames();
 				for (int i = 0; i < protos_complete.Count; i++)
 				{
 					string s_Proto = protos_complete[i].ToString();

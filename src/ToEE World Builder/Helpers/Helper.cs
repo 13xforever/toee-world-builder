@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.IO;
 
-namespace WorldBuilder
+namespace WorldBuilder.Helpers
 {
 	public class Helper
 	{

@@ -1,300 +1,60 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.IO;
+using WorldBuilder.Helpers;
 
 namespace WorldBuilder
 {
-	public static class ProHelper
+	public static class ProtoHelper
 	{
-		// Default column names, loaded before the patch file is parsed
-		public static List<string> PRO_GetColumnNames()
+		private static readonly string[] protoList = new string[334];
+
+		public static string[] GetColumnNames(string protoPatchPath = "ToEE World Builder.pfr")
 		{
-			//todo: move this to resource
-			const int itemCount = 334;
-			var ar = new List<string>(itemCount);
+			if (!string.IsNullOrEmpty(protoList[0]))
+				return protoList;
 
-			for (int i = 0; i < itemCount; i++)
-				ar.Add(("Unknown #" + (i + 1).ToString().PadRight(20, ' ') + "|\t"));
-
-			ar[  0] = "Line Number                  |\t";
-			ar[  1] = "Object Type                  |\t";
-			//ar[  2] = "Description                  |\t";
-			ar[  6] = "Model Scale (%)              |\t";
-			ar[ 20] = "Object Flags                 |\t";
-			ar[ 21] = "Spell Flags                  |\t";
-			ar[ 23] = "Description ID               |\t";
-			ar[ 24] = "Object Size                  |\t";
-			ar[ 27] = "Material                     |\t";
-			ar[ 30] = "Category (per category.mes)  |\t";
-			ar[ 31] = "Rotation                     |\t";
-			ar[ 32] = "Speed (walk)                 |\t";
-			ar[ 33] = "Speed (run)                  |\t";
-			ar[ 34] = "Object Model                 |\t";
-			ar[ 35] = "Target Size                  |\t";
-			ar[ 37] = "Portal Flags                 |\t";
-			ar[ 38] = "Portal Picklock DC           |\t";
-			ar[ 39] = "Portal Trap/Key ID           |\t";
-			ar[ 41] = "Container Flags              |\t";
-			ar[ 42] = "Container Lock DC            |\t";
-			ar[ 43] = "Container Key/Trap ID        |\t";
-			ar[ 44] = "Cont./NPC Inventory Source   |\t";
-			ar[ 50] = "Item Flags                   |\t";
-			ar[ 51] = "Item Weight                  |\t";
-			ar[ 52] = "Item Value (in copper)       |\t";
-			ar[ 53] = "Inventory Icon               |\t";
-			ar[ 55] = "Unidentified Description ID  |\t";
-			ar[ 59] = "Number of Charges            |\t";
-			ar[ 61] = "Equipment Slot Flags         |\t";
-			ar[ 62] = "Object Color (?)             |\t";
-			ar[ 63] = "Weapon Flags                 |\t";
-			ar[ 64] = "Weapon Range                 |\t";
-			ar[ 65] = "Ammo type                    |\t";
-			ar[ 68] = "Critical Hit Multiplier      |\t";
-			ar[ 69] = "Damage Type                  |\t";
-			ar[ 70] = "Damage Dice                  |\t";
-			ar[ 72] = "Weapon Class                 |\t";
-			ar[ 73] = "Critical Hit Threat Range    |\t";
-			ar[ 75] = "Stack Size                   |\t";
-			ar[ 76] = "Ammo Type                    |\t";
-			ar[ 79] = "Armor Max Dexterity Bonus    |\t";
-			ar[ 80] = "Spell Failure                |\t";
-			ar[ 81] = "Skill Check Penalty          |\t";
-			ar[ 82] = "Armor Type                   |\t";
-			ar[ 83] = "Helmet Type                  |\t";
-			ar[ 86] = "Coin Type                    |\t";
-			ar[ 89] = "Key ID                       |\t";
-			ar[ 94] = "Bag of Holding Flags         |\t";
-			ar[ 99] = "Critter Flags                |\t";
-			ar[101] = "Strength                     |\t";
-			ar[102] = "Dexterity                    |\t";
-			ar[103] = "Constitution                 |\t";
-			ar[104] = "Intelligence                 |\t";
-			ar[105] = "Wisdom                       |\t";
-			ar[106] = "Charisma                     |\t";
-			ar[108] = "Race                         |\t";
-			ar[109] = "Gender                       |\t";
-			ar[113] = "Alignment                    |\t";
-			ar[114] = "Deity                        |\t";
-			ar[115] = "Domain 1                     |\t";
-			ar[116] = "Domain 2                     |\t";
-			ar[117] = "Negative/Positive (?)        |\t";
-			ar[123] = "Picture #                    |\t";
-			ar[129] = "NPC Description (If Unknown) |\t";
-			ar[130] = "Reach                        |\t";
-			ar[132] = "Number of Attacks (?)        |\t";
-			ar[133] = "Creature Damage Dice         |\t";
-			ar[134] = "Creature Damage Type         |\t";
-			ar[135] = "To Hit (?)                   |\t";
-			ar[136] = "Number of Attacks (?)        |\t";
-			ar[137] = "Creature Damage Dice         |\t";
-			ar[138] = "Creature Damage Type         |\t";
-			ar[139] = "To Hit (?)                   |\t";
-			ar[140] = "Number of Attacks (?)        |\t";
-			ar[141] = "Creature Damage Dice         |\t";
-			ar[142] = "Creature Damage Type         |\t";
-			ar[143] = "To Hit (?)                   |\t";
-			ar[144] = "Number of Attacks (?)        |\t";
-			ar[145] = "Creature Damage Dice         |\t";
-			ar[146] = "Creature Damage Type         |\t";
-			ar[147] = "To Hit (?)                   |\t";
-			ar[148] = "Hair Color                   |\t";
-			ar[149] = "Hair Type                    |\t";
-			ar[152] = "NPC Flags                    |\t";
-			ar[157] = "Challenge Rating (CR)        |\t";
-			ar[158] = "Base Reflex Save             |\t";
-			ar[159] = "Base Fortitude Save          |\t";
-			ar[160] = "Base Will Save               |\t";
-			ar[161] = "Natural Armor Class          |\t";
-			ar[162] = "Hit Dice (HD)                |\t";
-			ar[163] = "Creature Type                |\t";
-			ar[164] = "Creature Subtype             |\t";
-			ar[165] = "NPC Loot Share Amount        |\t";
-			ar[166] = "Trap Flags                   |\t";
-			ar[167] = "Trap Difficulty              |\t";
-			ar[168] = "Property 1 Type              |\t";
-			ar[169] = "Property 1 Param. 1          |\t";
-			ar[170] = "Property 1 Param. 2          |\t";
-			ar[171] = "Property 2 Type              |\t";
-			ar[172] = "Property 2 Param. 1          |\t";
-			ar[173] = "Property 2 Param. 2          |\t";
-			ar[174] = "Property 3 Type              |\t";
-			ar[175] = "Property 3 Param. 1          |\t";
-			ar[176] = "Property 3 Param. 2          |\t";
-			ar[177] = "Property 4 Type              |\t";
-			ar[178] = "Property 4 Param. 1          |\t";
-			ar[179] = "Property 4 Param. 2          |\t";
-			ar[180] = "Property 5 Type              |\t";
-			ar[181] = "Property 5 Param. 1          |\t";
-			ar[182] = "Property 5 Param. 2          |\t";
-			ar[183] = "Property 6 Type              |\t";
-			ar[184] = "Property 6 Param. 1          |\t";
-			ar[185] = "Property 6 Param. 2          |\t";
-			ar[186] = "Property 7 Type              |\t";
-			ar[187] = "Property 7 Param. 1          |\t";
-			ar[188] = "Property 7 Param. 2          |\t";
-			ar[189] = "Property 8 Type              |\t";
-			ar[190] = "Property 8 Param. 1          |\t";
-			ar[191] = "Property 8 Param. 2          |\t";
-			ar[192] = "Property 9 Type              |\t";
-			ar[193] = "Property 9 Param. 1          |\t";
-			ar[194] = "Property 9 Param. 2          |\t";
-			ar[195] = "Property 10 Type             |\t";
-			ar[196] = "Property 10 Param. 1         |\t";
-			ar[197] = "Property 10 Param. 2         |\t";
-			ar[198] = "Property 11 Type             |\t";
-			ar[199] = "Property 11 Param. 1         |\t";
-			ar[200] = "Property 11 Param. 2         |\t";
-			ar[201] = "Property 12 Type             |\t";
-			ar[202] = "Property 12 Param. 1         |\t";
-			ar[203] = "Property 12 Param. 2         |\t";
-			ar[204] = "Property 13 Type             |\t";
-			ar[205] = "Property 13 Param. 1         |\t";
-			ar[206] = "Property 13 Param. 2         |\t";
-			ar[207] = "Property 14 Type             |\t";
-			ar[208] = "Property 14 Param. 1         |\t";
-			ar[209] = "Property 14 Param. 2         |\t";
-			ar[210] = "Property 15 Type             |\t";
-			ar[211] = "Property 15 Param. 1         |\t";
-			ar[212] = "Property 15 Param. 2         |\t";
-			ar[213] = "Property 16 Type             |\t";
-			ar[214] = "Property 16 Param. 1         |\t";
-			ar[215] = "Property 16 Param. 2         |\t";
-			ar[216] = "Property 17 Type             |\t";
-			ar[217] = "Property 17 Param. 1         |\t";
-			ar[218] = "Property 17 Param. 2         |\t";
-			ar[219] = "Property 18 Type             |\t";
-			ar[220] = "Property 18 Param. 1         |\t";
-			ar[221] = "Property 18 Param. 2         |\t";
-			ar[222] = "Property 19 Type             |\t";
-			ar[223] = "Property 19 Param. 1         |\t";
-			ar[224] = "Property 19 Param. 2         |\t";
-			ar[225] = "Property 20 Type             |\t";
-			ar[226] = "Property 20 Param. 1         |\t";
-			ar[227] = "Property 20 Param. 2         |\t";
-			ar[228] = "Class 1                      |\t";
-			ar[229] = "Class 1 Level                |\t";
-			ar[230] = "Class 2                      |\t";
-			ar[231] = "Class 2 Level                |\t";
-			ar[232] = "Class 3                      |\t";
-			ar[233] = "Class 3 Level                |\t";
-			ar[234] = "Class 4                      |\t";
-			ar[235] = "Class 4 Level                |\t";
-			ar[236] = "Class 5                      |\t";
-			ar[237] = "Class 5 Level                |\t";
-			ar[238] = "Skill 1                      |\t";
-			ar[239] = "Skill 1 Level                |\t";
-			ar[240] = "Skill 2                      |\t";
-			ar[241] = "Skill 2 Level                |\t";
-			ar[242] = "Skill 3                      |\t";
-			ar[243] = "Skill 3 Level                |\t";
-			ar[244] = "Skill 4                      |\t";
-			ar[245] = "Skill 4 Level                |\t";
-			ar[246] = "Skill 5                      |\t";
-			ar[247] = "Skill 5 Level                |\t";
-			ar[248] = "Skill 6                      |\t";
-			ar[249] = "Skill 6 Level                |\t";
-			ar[250] = "Skill 7                      |\t";
-			ar[251] = "Skill 7 Level                |\t";
-			ar[252] = "Skill 8                      |\t";
-			ar[253] = "Skill 8 Level                |\t";
-			ar[254] = "Skill 9                      |\t";
-			ar[255] = "Skill 9 Level                |\t";
-			ar[256] = "Skill 10                     |\t";
-			ar[257] = "Skill 10 Level               |\t";
-			ar[258] = "Feat                         |\t";
-			ar[259] = "Feat                         |\t";
-			ar[260] = "Feat                         |\t";
-			ar[261] = "Feat                         |\t";
-			ar[262] = "Feat                         |\t";
-			ar[263] = "Feat                         |\t";
-			ar[264] = "Feat                         |\t";
-			ar[265] = "Feat                         |\t";
-			ar[266] = "Feat                         |\t";
-			ar[267] = "Feat                         |\t";
-			ar[268] = "Script: san_examine          |\t";
-			ar[269] = "Script: san_use              |\t";
-			ar[270] = "Script: san_destroy          |\t";
-			ar[271] = "Script: san_unlock           |\t";
-			ar[272] = "Script: san_get              |\t";
-			ar[273] = "Script: san_drop             |\t";
-			ar[274] = "Script: san_throw            |\t";
-			ar[275] = "Script: san_hit              |\t";
-			ar[276] = "Script: san_miss             |\t";
-			ar[277] = "Script: san_dialog           |\t";
-			ar[278] = "Script: san_first_heartbeat  |\t";
-			ar[279] = "Script: san_catching_thief_pc|\t";
-			ar[280] = "Script: san_dying            |\t";
-			ar[281] = "Script: san_enter_combat     |\t";
-			ar[282] = "Script: san_exit_combat      |\t";
-			ar[283] = "Script: san_start_combat     |\t";
-			ar[284] = "Script: san_end_combat       |\t";
-			ar[285] = "Script: san_buy_object       |\t";
-			ar[286] = "Script: san_resurrect        |\t";
-			ar[287] = "Script: san_heartbeat        |\t";
-			ar[288] = "Script: san_leader_killing   |\t";
-			ar[289] = "Script: san_insert_item      |\t";
-			ar[290] = "Script: san_will_kos         |\t";
-			ar[291] = "Script: san_taking_damage    |\t";
-			ar[292] = "Script: san_wield_on         |\t";
-			ar[293] = "Script: san_wield_off        |\t";
-			ar[294] = "Script: san_critter_hits     |\t";
-			ar[295] = "Script: san_new_sector       |\t";
-			ar[296] = "Script: san_remove_item      |\t";
-			ar[297] = "Script: san_leader_sleeping  |\t";
-			ar[298] = "Script: san_bust             |\t";
-			ar[299] = "Script: san_dialog_override  |\t";
-			ar[300] = "Script: san_transfer         |\t";
-			ar[301] = "Script: san_caught_thief     |\t";
-			ar[302] = "Script: san_critical_hit     |\t";
-			ar[303] = "Script: san_critical_miss    |\t";
-			ar[304] = "Script: san_join             |\t";
-			ar[305] = "Script: san_disband          |\t";
-			ar[306] = "Script: san_new_map          |\t";
-			ar[307] = "Script: san_trap             |\t";
-			ar[308] = "Script: san_true_seeing      |\t";
-			ar[309] = "Script: san_spell_cast       |\t";
-			ar[310] = "Script: san_unlock_attempt   |\t";
-			ar[311] = "Waypoint anim (?)            |\t";
-			ar[312] = "Spell                        |\t";
-			ar[313] = "Spell                        |\t";
-			ar[314] = "Spell                        |\t";
-			ar[315] = "Spell                        |\t";
-			ar[316] = "Spell                        |\t";
-			ar[317] = "Spell                        |\t";
-			ar[318] = "Spell                        |\t";
-			ar[319] = "Spell                        |\t";
-			ar[320] = "Spell                        |\t";
-			ar[321] = "Spell                        |\t";
-			ar[322] = "Spell                        |\t";
-			ar[323] = "Spell                        |\t";
-			ar[324] = "Spell                        |\t";
-			ar[325] = "Spell                        |\t";
-			ar[326] = "Spell                        |\t";
-			ar[327] = "Spell                        |\t";
-			ar[328] = "Spell                        |\t";
-			ar[329] = "Spell                        |\t";
-			ar[330] = "Spell                        |\t";
-			ar[331] = "Spell                        |\t";
-			ar[332] = "Name (Known)                 |\t";
-			ar[333] = "AI Strategy Type             |\t";
-
-			if (File.Exists("ToEE World Builder.pfr"))
+			lock (protoList)
 			{
-				using (var sr = new StreamReader("ToEE World Builder.pfr"))
-					while (!sr.EndOfStream)
-					{
-						var protoPatchName = sr.ReadLine();
-						if (protoPatchName == "[END PROTO FIELD PATCH]" || protoPatchName == null) break;
+				if (!string.IsNullOrEmpty(protoList[0]))
+					return protoList;
 
-						protoPatchName = protoPatchName.Trim();
-						if (protoPatchName.Length == 0 || protoPatchName.Substring(0, 2) == "//") continue;
+				//read default list from resources
+				using (var stream = MiscHelper.GetResourceStreamThatEndsWith(".pfr"))
+					if (stream != null)
+						using (var reader = new StreamReader(stream))
+							ReadPatchList(reader, protoList);
 
-						var protoPatchNameArr = protoPatchName.Split('=');
-						ar[int.Parse(protoPatchNameArr[0])] = protoPatchNameArr[1].PadRight(29, ' ') + "|\t";
-					}
+				//read patch if needed
+				if (File.Exists(protoPatchPath))
+					using (var reader = new StreamReader(protoPatchPath))
+						ReadPatchList(reader, protoList, "[END PROTO FIELD PATCH]");
+
+				//format and fix any holes with default names
+				for (int i = 0; i < protoList.Length; i++)
+					if (string.IsNullOrEmpty(protoList[i]))
+						protoList[i] = ("Unknown #" + (i + 1).ToString().PadRight(20, ' ') + "|\t");
+					else
+						protoList[i] = protoList[i].PadRight(29, ' ') + "|\t";
+				return protoList;
 			}
+		}
 
-			return ar;
+		private static void ReadPatchList(StreamReader reader, string[] list, string endOfListMarker = null)
+		{
+			while (!reader.EndOfStream)
+			{
+				var protoPatchName = reader.ReadLine();
+				if (protoPatchName == endOfListMarker || protoPatchName == null) break;
+
+				protoPatchName = protoPatchName.Trim();
+				if (protoPatchName.Length == 0 || protoPatchName.Substring(0, 2) == "//") continue;
+
+				var protoPatchNameArr = protoPatchName.Split('=');
+				int idx;
+				if (!int.TryParse(protoPatchNameArr[0], out idx) || idx >= list.Length) continue;
+
+				list[idx] = protoPatchNameArr[1];
+			}
 		}
 
 		// + Patch v1.4.421 +

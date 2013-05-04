@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using WorldBuilder.Helpers;
 
 namespace WorldBuilder
 {
