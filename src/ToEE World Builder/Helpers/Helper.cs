@@ -6,6 +6,8 @@ namespace WorldBuilder
 {
 	public class Helper
 	{
+		#region MOB helpers
+
 		public static string LastOpenedMOB = ""; // v1.7.5s1: For Cerulean the Blue: a string of last opened MOB file
 		public static string InteropPath = "C:\\wb200_il.lri"; // interoperability support for v2.0.0
 		public static Hashtable Proto_By_ID = new Hashtable();
@@ -14,8 +16,8 @@ namespace WorldBuilder
 
 		public static void MOB_GenerateGUID(out string s_GUID, out byte[] GUID)
 		{
-			Random r = new Random();
-			byte[] generator = new byte[16];
+			var r = new Random();
+			var generator = new byte[16];
 			GUID = new byte[24];
 
 			s_GUID = "G_";
@@ -64,12 +66,12 @@ namespace WorldBuilder
 			for (int i = 7; i >= 0; i--)
 				BitmapReal += BitmapBlock[i];
 
-			return System.Convert.ToByte(BitmapReal, 2);
+			return Convert.ToByte(BitmapReal, 2);
 		}
 
 		public static ArrayList MOB_BitmapToBytes(string Bitmap)
 		{
-			ArrayList bytes = new ArrayList();
+			var bytes = new ArrayList();
 
 			for (int i = 0; i < Bitmap.Length; i += 8)
 			{
@@ -95,12 +97,12 @@ namespace WorldBuilder
 
 		public static byte[] MOB_ReturnHeader(Int16 Proto_ID)
 		{
-			byte[] header = new byte[28];
+			var header = new byte[28];
 			header[0x00] = 0x77;
 			header[0x04] = 0x01;
 
-			byte PROTO_HIGH = (byte)Proto_ID;
-			byte PROTO_LOW = (byte)(Proto_ID >> 8);
+			var PROTO_HIGH = (byte) Proto_ID;
+			var PROTO_LOW = (byte) (Proto_ID >> 8);
 
 			header[0x0C] = PROTO_HIGH;
 			header[0x0D] = PROTO_LOW;
@@ -111,12 +113,12 @@ namespace WorldBuilder
 		[Obsolete("This function might have become deprecated since v1.7.x")]
 		public static byte[] MOB_ReturnHeader(Int16 Proto_ID, bool MarkAsCompatible)
 		{
-			byte[] header = new byte[28];
+			var header = new byte[28];
 			header[0x00] = 0x77;
 			header[0x04] = 0x01;
 
-			byte PROTO_HIGH = (byte)Proto_ID;
-			byte PROTO_LOW = (byte)(Proto_ID >> 8);
+			var PROTO_HIGH = (byte) Proto_ID;
+			var PROTO_LOW = (byte) (Proto_ID >> 8);
 
 			header[0x0C] = PROTO_HIGH;
 			header[0x0D] = PROTO_LOW;
@@ -142,12 +144,12 @@ namespace WorldBuilder
 
 		public static byte[] MOB_ReturnHeader(Int16 Proto_ID, bool DONT_USE_DEPRECATED, bool GenerateObjID)
 		{
-			byte[] header = new byte[28];
+			var header = new byte[28];
 			header[0x00] = 0x77;
 			header[0x04] = 0x01;
 
-			byte PROTO_HIGH = (byte)Proto_ID;
-			byte PROTO_LOW = (byte)(Proto_ID >> 8);
+			var PROTO_HIGH = (byte) Proto_ID;
+			var PROTO_LOW = (byte) (Proto_ID >> 8);
 
 			header[0x0C] = PROTO_HIGH;
 			header[0x0D] = PROTO_LOW;
@@ -227,7 +229,7 @@ namespace WorldBuilder
 			string Bitmap = "";
 			int Num_Blocks = MOB_GetNumberofBitmapBlocks(MobType);
 
-			for (int i = 0; i < Num_Blocks * 32; i++)
+			for (int i = 0; i < Num_Blocks*32; i++)
 				Bitmap += "0";
 
 			return Bitmap;
@@ -237,7 +239,7 @@ namespace WorldBuilder
 		{
 			string Bitmap = "";
 
-			for (int i = 0; i < NumberOfBlocks * 32; i++)
+			for (int i = 0; i < NumberOfBlocks*32; i++)
 				Bitmap += "0";
 
 			return Bitmap;
@@ -252,7 +254,7 @@ namespace WorldBuilder
 				string _BMP = "";
 				string _BMP2 = "";
 
-				_BMP = System.Convert.ToString(Byte.Parse(b.ToString()), 2).PadLeft(8, '0');
+				_BMP = Convert.ToString(Byte.Parse(b.ToString()), 2).PadLeft(8, '0');
 
 				for (int i = 7; i >= 0; i--)
 					_BMP2 += _BMP[i];
@@ -268,7 +270,7 @@ namespace WorldBuilder
 			string BMP = "";
 			foreach (byte b in bytes)
 			{
-				string _BMP = System.Convert.ToString(b, 2).PadLeft(8, '0');
+				string _BMP = Convert.ToString(b, 2).PadLeft(8, '0');
 				string _BMP2 = "";
 
 				for (int i = 7; i >= 0; i--)
@@ -292,7 +294,7 @@ namespace WorldBuilder
 		}
 
 		/// <param name="Property_ID">
-		/// Keep in mind that the count starts from 1, <b>not</b> from 0
+		///     Keep in mind that the count starts from 1, <b>not</b> from 0
 		/// </param>
 		public static string MOB_SetProperty(string Bitmap, int Property_ID)
 		{
@@ -316,11 +318,122 @@ namespace WorldBuilder
 
 		public static string MOB_ModifyProperty(string Bitmap, int Property_ID, bool Value)
 		{
-			if (Value == true)
+			if (Value)
 				return MOB_SetProperty(Bitmap, Property_ID);
 			else
 				return MOB_ClearProperty(Bitmap, Property_ID);
 		}
+
+		/// <summary>
+		///     A random mobile object proto ObjID generator, based on random
+		///     number generation within known limits. This code will serve as a
+		///     means of making the object more unique in the game memory space.
+		/// </summary>
+		public static byte[] MOB_GenerateObjID(byte[] header)
+		{
+			byte[] header_with_objid = header;
+			var r = new Random();
+			int objid_mod_1 = r.Next(0x00010101, 0x00FFFFFF);
+			int objid_mod_2 = r.Next(0x00010101, 0x00FFFFFF);
+			var objid_mod_pre = (short) r.Next(short.MinValue, short.MaxValue);
+			var objid_fpart = (byte) r.Next(0, 255);
+			var objid_fpart_ex = (byte) r.Next(0, 255);
+			var objid_set_prefix = (byte) r.Next(0, 255);
+
+			// set up predefined stuff
+			header_with_objid[16] = 0x02;
+
+			// fill bytes 8..11 with objid_mod_1, and 20..23/24..27 with
+			// objid_mod_2
+			header_with_objid[8] = (byte) objid_mod_1;
+			header_with_objid[9] = (byte) (objid_mod_1 >> 8);
+			header_with_objid[10] = (byte) (objid_mod_1 >> 16);
+			header_with_objid[11] = (byte) (objid_mod_1 >> 24);
+
+			if (objid_fpart > 127)
+			{
+				// 20..23
+				header_with_objid[20] = (byte) objid_mod_2;
+				header_with_objid[21] = (byte) (objid_mod_2 >> 8);
+				header_with_objid[22] = (byte) (objid_mod_2 >> 16);
+				header_with_objid[23] = (byte) (objid_mod_2 >> 24);
+
+				if (objid_fpart_ex > 127)
+				{
+					header_with_objid[21] = header_with_objid[9];
+					header_with_objid[22] = header_with_objid[10];
+				}
+			}
+			else
+			{
+				// 24..27
+				header_with_objid[24] = (byte) objid_mod_2;
+				header_with_objid[25] = (byte) (objid_mod_2 >> 8);
+				header_with_objid[26] = (byte) (objid_mod_2 >> 16);
+				header_with_objid[27] = (byte) (objid_mod_2 >> 24);
+			}
+
+			// should we set the objid prefix?
+			if (objid_set_prefix > 127)
+			{
+				header_with_objid[6] = (byte) objid_mod_pre;
+				header_with_objid[7] = (byte) (objid_mod_pre >> 8);
+			}
+
+			return header_with_objid;
+		}
+
+		/// <summary>
+		///     Sizeable array positioning function. Experimental.
+		/// </summary>
+		public static UInt32 MOB_GenerateSARC(bool s_mode)
+		{
+			if (s_mode)
+			{
+				// we have to generate the SARC data
+
+				UInt32 sa_mem_index = 0;
+				string sa_str = "";
+				string[] sa_str_arr = null;
+
+				var sr = new StreamReader("ToEE World Builder.sar");
+				while ((sa_str = sr.ReadLine()) != "[END INTERNAL PATCH]")
+				{
+					if (sa_str.Trim() == "")
+						continue;
+
+					if (sa_str.Substring(0, 2) == "//") // comment
+						continue;
+
+					sa_str_arr = sa_str.Split('=');
+					sa_mem_index = UInt32.Parse(sa_str_arr[1]);
+				}
+				sr.Close();
+
+				// modify and write back
+				UInt32 sa_mem_indexA = sa_mem_index + (UInt32) (new Random().Next(5, 8));
+				if (sa_mem_indexA > 0x1BFF) sa_mem_indexA = 0x1661;
+
+				var sw = new StreamWriter("ToEE World Builder.sar");
+				sw.WriteLine("// FOR THE SAKE OF YOUR OWN SANITY, DO **NOT** MODIFY THIS FILE!!!");
+				sw.WriteLine("// MODIFYING THIS FILE CAN CAUSE FATAL ERRORS WHILE SAVING BACK MOBILE OBJECTS !");
+				sw.WriteLine("");
+				sw.WriteLine("SARC=" + sa_mem_indexA.ToString());
+				sw.WriteLine("[END INTERNAL PATCH]");
+				sw.Close();
+
+				return sa_mem_index;
+			}
+			else
+			{
+				// no need to generate SARC, return a 32-bit zero
+				return 0;
+			}
+		}
+
+		#endregion
+
+		#region GEN
 
 		public static MobTypes GEN_GetMobileType(string MobileTypeString)
 		{
@@ -365,113 +478,6 @@ namespace WorldBuilder
 			}
 		}
 
-		/// <summary>
-		/// A random mobile object proto ObjID generator, based on random
-		/// number generation within known limits. This code will serve as a
-		/// means of making the object more unique in the game memory space.
-		/// </summary>
-		public static byte[] MOB_GenerateObjID(byte[] header)
-		{
-			byte[] header_with_objid = header;
-			Random r = new Random();
-			int objid_mod_1 = r.Next(0x00010101, 0x00FFFFFF);
-			int objid_mod_2 = r.Next(0x00010101, 0x00FFFFFF);
-			short objid_mod_pre = (short)r.Next(short.MinValue, short.MaxValue);
-			byte objid_fpart = (byte)r.Next(0, 255);
-			byte objid_fpart_ex = (byte)r.Next(0, 255);
-			byte objid_set_prefix = (byte)r.Next(0, 255);
-
-			// set up predefined stuff
-			header_with_objid[16] = 0x02;
-
-			// fill bytes 8..11 with objid_mod_1, and 20..23/24..27 with
-			// objid_mod_2
-			header_with_objid[8] = (byte)objid_mod_1;
-			header_with_objid[9] = (byte)(objid_mod_1 >> 8);
-			header_with_objid[10] = (byte)(objid_mod_1 >> 16);
-			header_with_objid[11] = (byte)(objid_mod_1 >> 24);
-
-			if (objid_fpart > 127)
-			{
-				// 20..23
-				header_with_objid[20] = (byte)objid_mod_2;
-				header_with_objid[21] = (byte)(objid_mod_2 >> 8);
-				header_with_objid[22] = (byte)(objid_mod_2 >> 16);
-				header_with_objid[23] = (byte)(objid_mod_2 >> 24);
-
-				if (objid_fpart_ex > 127)
-				{
-					header_with_objid[21] = header_with_objid[9];
-					header_with_objid[22] = header_with_objid[10];
-				}
-			}
-			else
-			{
-				// 24..27
-				header_with_objid[24] = (byte)objid_mod_2;
-				header_with_objid[25] = (byte)(objid_mod_2 >> 8);
-				header_with_objid[26] = (byte)(objid_mod_2 >> 16);
-				header_with_objid[27] = (byte)(objid_mod_2 >> 24);
-			}
-
-			// should we set the objid prefix?
-			if (objid_set_prefix > 127)
-			{
-				header_with_objid[6] = (byte)objid_mod_pre;
-				header_with_objid[7] = (byte)(objid_mod_pre >> 8);
-			}
-
-			return header_with_objid;
-		}
-
-		/// <summary>
-		/// Sizeable array positioning function. Experimental.
-		/// </summary>
-		public static UInt32 MOB_GenerateSARC(bool s_mode)
-		{
-			if (s_mode)
-			{
-				// we have to generate the SARC data
-
-				UInt32 sa_mem_index = 0;
-				string sa_str = "";
-				string[] sa_str_arr = null;
-
-				StreamReader sr = new StreamReader("ToEE World Builder.sar");
-				while ((sa_str = sr.ReadLine()) != "[END INTERNAL PATCH]")
-				{
-					if (sa_str.Trim() == "")
-						continue;
-
-					if (sa_str.Substring(0, 2) == "//") // comment
-						continue;
-
-					sa_str_arr = sa_str.Split('=');
-					sa_mem_index = UInt32.Parse(sa_str_arr[1]);
-				}
-				sr.Close();
-
-				// modify and write back
-				UInt32 sa_mem_indexA = sa_mem_index + (UInt32)(new Random().Next(5, 8));
-				if (sa_mem_indexA > 0x1BFF) sa_mem_indexA = 0x1661;
-
-				StreamWriter sw = new StreamWriter("ToEE World Builder.sar");
-				sw.WriteLine("// FOR THE SAKE OF YOUR OWN SANITY, DO **NOT** MODIFY THIS FILE!!!");
-				sw.WriteLine("// MODIFYING THIS FILE CAN CAUSE FATAL ERRORS WHILE SAVING BACK MOBILE OBJECTS !");
-				sw.WriteLine("");
-				sw.WriteLine("SARC=" + sa_mem_indexA.ToString());
-				sw.WriteLine("[END INTERNAL PATCH]");
-				sw.Close();
-
-				return sa_mem_index;
-			}
-			else
-			{
-				// no need to generate SARC, return a 32-bit zero
-				return (UInt32)0;
-			}
-		}
-
 		public static uint GEN_Bitmap_To_UInt32(string Bitmap)
 		{
 			uint BIT_INT = 0;
@@ -482,7 +488,7 @@ namespace WorldBuilder
 				BIT_FLAG++;
 
 				if (Bitmap[i] == '1')
-					BIT_INT += (uint)Math.Pow(2, (double)i);
+					BIT_INT += (uint) Math.Pow(2, i);
 			}
 
 			return BIT_INT;
@@ -494,8 +500,8 @@ namespace WorldBuilder
 
 			for (int i = 0; i < 4; i++)
 			{
-				byte CURRENT_BYTE = (byte)(Flags >> (8 * i));
-				string _BMP = System.Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
+				var CURRENT_BYTE = (byte) (Flags >> (8*i));
+				string _BMP = Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
 				string _BMP2 = "";
 
 				for (int j = 7; j >= 0; j--)
@@ -508,7 +514,7 @@ namespace WorldBuilder
 		}
 
 		/// <summary>
-		/// a 64-bit version of <see cref="GEN_UInt32_To_Bitmap"/>
+		///     a 64-bit version of <see cref="GEN_UInt32_To_Bitmap" />
 		/// </summary>
 		public static string GEN_UInt64_To_Bitmap(UInt64 Flags)
 		{
@@ -516,8 +522,8 @@ namespace WorldBuilder
 
 			for (int i = 0; i < 8; i++)
 			{
-				byte CURRENT_BYTE = (byte)(Flags >> (8 * i));
-				string _BMP = System.Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
+				var CURRENT_BYTE = (byte) (Flags >> (8*i));
+				string _BMP = Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
 				string _BMP2 = "";
 
 				for (int j = 7; j >= 0; j--)
@@ -531,32 +537,7 @@ namespace WorldBuilder
 
 		public static UInt64 GEN_GetComp2(int number)
 		{
-			return (UInt64)(Math.Pow(2, number) - 1);
-		}
-
-		/// <summary>
-		/// Write an extended complement to 2
-		/// </summary>
-		public static void GetComp2Ex(BinaryWriter w_mob, uint no_entries)
-		{
-			uint ex_fillers = no_entries / 32;
-			uint c_highest = no_entries % 32;
-
-			w_mob.Write(ex_fillers + 1);
-
-			for (int i = 0; i < ex_fillers; i++)
-				w_mob.Write((uint)0xFFFFFFFF);
-
-			uint final_mod = (uint)Math.Pow(2, (double)c_highest) - 1;
-			w_mob.Write(final_mod);
-		}
-
-		/// <summary>
-		/// Gen a size of an extended complement to 2
-		/// </summary>
-		public static uint GetSizeofComp2Ex(uint no_entries)
-		{
-			return (no_entries / 32) + 1;
+			return (UInt64) (Math.Pow(2, number) - 1);
 		}
 
 		public static string GEN_ConvertBytesToStringGUID(byte[] GUID_bytes)
@@ -587,30 +568,188 @@ namespace WorldBuilder
 		}
 
 		/// <summary>
-		/// Convert an UInt32 flag value into a set of bytes
-		/// (for sector wall flag setup routine)
+		///     Convert an UInt32 flag value into a set of bytes
+		///     (for sector wall flag setup routine)
 		/// </summary>
 		public static byte[] GEN_ConvertFlagsToByteArray(uint flags)
 		{
-			byte[] bytes = new byte[4];
+			var bytes = new byte[4];
 
-			bytes[0] = (byte)flags;
-			bytes[1] = (byte)(flags >> 8);
-			bytes[2] = (byte)(flags >> 16);
-			bytes[3] = (byte)(flags >> 24);
+			bytes[0] = (byte) flags;
+			bytes[1] = (byte) (flags >> 8);
+			bytes[2] = (byte) (flags >> 16);
+			bytes[3] = (byte) (flags >> 24);
 
 			return bytes;
 		}
 
+		#endregion
+
+		/// <summary>
+		///     Write an extended complement to 2
+		/// </summary>
+		public static void GetComp2Ex(BinaryWriter w_mob, uint no_entries)
+		{
+			uint ex_fillers = no_entries/32;
+			uint c_highest = no_entries%32;
+
+			w_mob.Write(ex_fillers + 1);
+
+			for (int i = 0; i < ex_fillers; i++)
+				w_mob.Write(0xFFFFFFFF);
+
+			uint final_mod = (uint) Math.Pow(2, c_highest) - 1;
+			w_mob.Write(final_mod);
+		}
+
+		/// <summary>
+		///     Gen a size of an extended complement to 2
+		/// </summary>
+		public static uint GetSizeofComp2Ex(uint no_entries)
+		{
+			return (no_entries/32) + 1;
+		}
+
+		/// <summary>
+		///     Hash function - HashPJW. Returns a 32-bit uint value from a string.
+		/// </summary>
+		public static uint hashpjw(string ptr)
+		{
+			uint val = 0;
+
+			for (int i = 0; i < ptr.Length; i++)
+			{
+				uint tmp;
+				val = (val << 4) + ptr[i];
+
+				tmp = (val & 0xf0000000);
+				if (tmp != 0)
+				{
+					val = val ^ (tmp >> 24);
+					val = val ^ tmp;
+				}
+			}
+			return val;
+		}
+
+		/// <summary>
+		///     ElfHash - another hashing function. Used for lights.
+		/// </summary>
+		/// <param name="str"></param>
+		/// <returns></returns>
+		public static uint HashID_Generate(string str)
+		{
+			uint h = 0, g;
+			for (int i = 0; i < str.Length; i++)
+			{
+				uint cur = str[i];
+				if (cur >= 'a' && cur <= 'z') cur -= ('a' - 'A');
+				h = (h << 4) + cur;
+				g = h & 0xF0000000;
+				if (g != 0)
+					h ^= g >> 24;
+				h &= ~g;
+			}
+			return h;
+		}
+
+		#region DC/rank functions
+
+		public static int DC_BITS = 0x0000007F;
+		public static int DC_POS = 0;
+		public static int RANK_BITS = 0x00003F80;
+		public static int RANK_POS = 7;
+
+		public static int GET_DC(int target)
+		{
+			return (((target) & DC_BITS) >> DC_POS);
+		}
+
+		public static int GET_RANK(int target)
+		{
+			return (((target) & RANK_BITS) >> RANK_POS);
+		}
+
+		public static int MAKE_DC(int x, int dc)
+		{
+			return (((x) & ~DC_BITS) | (((dc) & (DC_BITS >> DC_POS))) << DC_POS);
+		}
+
+		public static int MAKE_RANK(int x, int r)
+		{
+			return (((x) & ~RANK_BITS) | (((r) & (RANK_BITS >> RANK_POS))) << RANK_POS);
+		}
+
+		#endregion
+
+		#region Generator functions
+
+		public static int GENERATOR_BITS = 0x07F80000;
+		public static int GENERATOR_POS = 19;
+		public static int SPAWNMAX_BITS = 0x0007C000;
+		public static int SPAWNMAX_POS = 14;
+		public static int TOTAL_BITS = 0x00003F80;
+		public static int TOTAL_POS = 7;
+		public static int NPCGEN_BITS = 0x00E00000;
+		public static int NPCGEN_POS = 21;
+
+		public static int GET_GENID(int target)
+		{
+			return (((target) & GENERATOR_BITS) >> GENERATOR_POS);
+		}
+
+		public static int GET_SPAWNMAX(int target)
+		{
+			return (((target) & SPAWNMAX_BITS) >> SPAWNMAX_POS);
+		}
+
+		public static int GET_TOTAL(int target)
+		{
+			return (((target) & TOTAL_BITS) >> TOTAL_POS);
+		}
+
+		public static int GET_NPCGEN(int target)
+		{
+			return (((target) & NPCGEN_BITS) >> NPCGEN_POS);
+		}
+
+		public static int MAKE_GENID(int x, int gid)
+		{
+			return (((x) & ~GENERATOR_BITS) | (((gid) & (GENERATOR_BITS >> GENERATOR_POS))) << GENERATOR_POS);
+		}
+
+		public static int MAKE_SPAWNMAX(int x, int max)
+		{
+			return (((x) & ~SPAWNMAX_BITS) | (((max) & (SPAWNMAX_BITS >> SPAWNMAX_POS))) << SPAWNMAX_POS);
+		}
+
+		public static int MAKE_TOTAL(int x, int tot)
+		{
+			return (((x) & ~TOTAL_BITS) | (((tot) & (TOTAL_BITS >> TOTAL_POS))) << TOTAL_POS);
+		}
+
+		public static int MAKE_NPCGEN(int x, int ngen)
+		{
+			return (((x) & ~NPCGEN_BITS) | (((ngen) & (NPCGEN_BITS >> NPCGEN_POS))) << NPCGEN_POS);
+		}
+
+		#endregion
+
 		#region SECTOR HELPER ROUTINES
+
+		public static ArrayList SectorTiles = new ArrayList(); // Sector data
+		public static ArrayList SectorLights = new ArrayList();
+		public static ArrayList SectorObjects = new ArrayList();
+		public static ArrayList SectorLightsChunk = new ArrayList();
+
 		public static UInt32 SEC_GetSecNameFromXY(int Sec_X, int Sec_Y)
 		{
-			int X = Sec_X * 4;
+			int X = Sec_X*4;
 			int Y = Sec_Y;
 
 			string S = X.ToString("X").PadLeft(2, '0') + "0000" + Y.ToString("X").PadLeft(2, '0');
 
-			uint U = System.Convert.ToUInt32(S, 16);
+			uint U = Convert.ToUInt32(S, 16);
 
 			return U;
 		}
@@ -619,32 +758,32 @@ namespace WorldBuilder
 		{
 			uint u = 0;
 
-			int Sec_X = World_X / 64;
-			int Sec_Y = World_Y / 64;
+			int Sec_X = World_X/64;
+			int Sec_Y = World_Y/64;
 
 			Sec_X *= 4;
 			string S = Sec_X.ToString("X").PadLeft(2, '0') + "0000" + Sec_Y.ToString("X").PadLeft(2, '0');
-			u = System.Convert.ToUInt32(S, 16);
+			u = Convert.ToUInt32(S, 16);
 
 			return u;
 		}
 
 		public static void SEC_CreateEmptySectorFile(BinaryWriter w_sec)
 		{
-			w_sec.Write((int)0); // No lights
+			w_sec.Write(0); // No lights
 
 			for (int i = 0; i < 4096; i++)
 			{
-				w_sec.Write((UInt64)2); // Sector tile data
-				w_sec.Write((UInt64)0);
+				w_sec.Write((UInt64) 2); // Sector tile data
+				w_sec.Write((UInt64) 0);
 			}
 
-			w_sec.Write((int)1);
-			w_sec.Write((short)4);
-			w_sec.Write((byte)0xAA);
+			w_sec.Write(1);
+			w_sec.Write((short) 4);
+			w_sec.Write((byte) 0xAA);
 
 			for (int j = 0; j < 45; j++)
-				w_sec.Write((byte)0);
+				w_sec.Write((byte) 0);
 		}
 
 		public static void SEC_GetXY(string sectorName, ref int X, ref int Y)
@@ -653,14 +792,14 @@ namespace WorldBuilder
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
-			X = System.Convert.ToInt32(sectorX, 16) / 4;
-			Y = System.Convert.ToInt32(sectorY, 16);
+			X = Convert.ToInt32(sectorX, 16)/4;
+			Y = Convert.ToInt32(sectorY, 16);
 
 			return;
 		}
 
 		/// <summary>
-		/// NOTE: in fact, minX and minY are reversed here... as well as maxX and maxY... sorry
+		///     NOTE: in fact, minX and minY are reversed here... as well as maxX and maxY... sorry
 		/// </summary>
 		public static void Sec_GetMinMax(string sectorName, ref int minX, ref int maxX, ref int minY, ref int maxY)
 		{
@@ -669,21 +808,16 @@ namespace WorldBuilder
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
-			int X = System.Convert.ToInt32(sectorX, 16) / 4;
-			int Y = System.Convert.ToInt32(sectorY, 16);
+			int X = Convert.ToInt32(sectorX, 16)/4;
+			int Y = Convert.ToInt32(sectorY, 16);
 
-			minX = 64 * X;
-			maxX = (64 * (X + 1)) - 1;
-			minY = 64 * Y;
-			maxY = (64 * (Y + 1)) - 1;
+			minX = 64*X;
+			maxX = (64*(X + 1)) - 1;
+			minY = 64*Y;
+			maxY = (64*(Y + 1)) - 1;
 
 			return;
 		}
-
-		public static ArrayList SectorTiles = new ArrayList(); // Sector data
-		public static ArrayList SectorLights = new ArrayList();
-		public static ArrayList SectorObjects = new ArrayList();
-		public static ArrayList SectorLightsChunk = new ArrayList();
 
 		public static void SEC_CreateNewData()
 		{
@@ -693,7 +827,7 @@ namespace WorldBuilder
 			SectorObjects = new ArrayList();
 			SectorLightsChunk = new ArrayList();
 
-			byte[] tiledata = new byte[16];
+			var tiledata = new byte[16];
 			tiledata[0] = 0x02;
 
 			for (int j = 1; j < 16; j++)
@@ -705,17 +839,17 @@ namespace WorldBuilder
 			}
 
 			for (int k = 0; k < 4; k++)
-				SectorObjects.Add((byte)0x00);
+				SectorObjects.Add((byte) 0x00);
 		}
 
 		public static void SEC_WriteUnknownEmptyAreas(BinaryWriter w_sec)
 		{
-			w_sec.Write((int)1);
-			w_sec.Write((short)4);
-			w_sec.Write((byte)0xAA);
+			w_sec.Write(1);
+			w_sec.Write((short) 4);
+			w_sec.Write((byte) 0xAA);
 
 			for (int j = 0; j < 41; j++)
-				w_sec.Write((byte)0);
+				w_sec.Write((byte) 0);
 		}
 
 		public static void SEC_SetTileData(int X, int Y, byte[] tiledata)
@@ -724,14 +858,14 @@ namespace WorldBuilder
 				return;
 
 			//todo: FIXME: Tile position in an array of tiles?
-			int target = Y * 64 + X;
+			int target = Y*64 + X;
 
-			Helper.SectorTiles[target] = tiledata;
+			SectorTiles[target] = tiledata;
 		}
 
 		public static byte[] SEC_MakeTileData(byte STEP_SOUND, byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8, byte b9, byte b10, byte b11, byte b12, byte b13, byte b14, byte b15)
 		{
-			byte[] tiledata = new byte[16];
+			var tiledata = new byte[16];
 
 			tiledata[0] = STEP_SOUND;
 			tiledata[1] = b1;
@@ -773,9 +907,11 @@ namespace WorldBuilder
 
 			return IS_VALID_RECT;
 		}
+
 		#endregion
 
 		#region SVB UTILITY ROUTINES
+
 		// SVB Format: each SVB file is 18432 bytes long
 		//             the total bitmap size in SVB is, thus, 147456 bits long
 		//             (internal: it's exactly 4608 blocks)
@@ -791,8 +927,8 @@ namespace WorldBuilder
 		}
 
 		/// <summary>
-		/// Return the location of the first bit belonging to the (X,Y) tile
-		/// in a sector visibility block bitmap
+		///     Return the location of the first bit belonging to the (X,Y) tile
+		///     in a sector visibility block bitmap
 		/// </summary>
 		public static int SVB_GetTileAddress(int X, int Y)
 		{
@@ -811,7 +947,7 @@ namespace WorldBuilder
 			 *                    LM = (576*4*Y + 3*4*X) + 384 + 4
 			 *                    LR = (576*4*Y + 3*4*X) + 384 + 8
 			 */
-			int tile_loc = 2304 * Y + 12 * X;
+			int tile_loc = 2304*Y + 12*X;
 			return tile_loc;
 		}
 
@@ -824,14 +960,16 @@ namespace WorldBuilder
 
 			return Bitmap;
 		}
+
 		#endregion
 
 		#region HSD-SPECIFIC ROUTINES
+
 		public static byte[] HSD_Tiles;
 
 		public static byte[] HSD_NewArray()
 		{
-			byte[] HSD = new byte[36864];
+			var HSD = new byte[36864];
 
 			for (int i = 0; i < HSD.GetUpperBound(0); i++)
 				HSD[i] = 0x00; // initialize
@@ -855,68 +993,33 @@ namespace WorldBuilder
 			if (X < 0 || X > 63 || Y < 0 || Y > 63)
 				return -1;
 
-			int tile_loc = ((Y * 64 + X) * 9) + 1;
+			int tile_loc = ((Y*64 + X)*9) + 1;
 			return tile_loc;
 		}
 
 		public static void HSD_ModifyProperty(int tile_ptr, bool source)
 		{
-			if (source == true)
-				Helper.HSD_Tiles[tile_ptr] = 0x24;
+			if (source)
+				HSD_Tiles[tile_ptr] = 0x24;
 			else
-				Helper.HSD_Tiles[tile_ptr] = 0x00;
+				HSD_Tiles[tile_ptr] = 0x00;
 		}
 
 		public static void HSD_ModifyProperty(int tile_ptr, bool source, byte neg_height)
 		{
-			if (source == true)
-				Helper.HSD_Tiles[tile_ptr] = neg_height;
+			if (source)
+				HSD_Tiles[tile_ptr] = neg_height;
 			else
-				Helper.HSD_Tiles[tile_ptr] = 0x00;
+				HSD_Tiles[tile_ptr] = 0x00;
 		}
+
 		#endregion
 
 		#region Obsolete SECTOR LIGHTS CODE
+
 		// Light info. Must be exactly 108 bytes long.
 		// * THIS CODE IS OUTDATED AND IS LEFT ONLY FOR COMPATIBILITY WITH OTHER FACILITIES *
 		// * OF THE TOEEWB SECTOR EDITOR *
-
-		[Obsolete]
-		public struct LightInfo
-		{
-			public uint unknown1; // 4
-			public uint unknown2; // 8
-			public uint unknown3_ltype; // 12
-			public uint unknown4_flags; // 16
-			public byte red; // 17
-			public byte blue; // 18
-			public byte green; // 19
-			public byte unknown5; // 20
-			public uint unknown6; // 24
-			public uint loc_x; // 28
-			public uint loc_y; // 32
-			public float ofs_x; // 36
-			public float ofs_y; // 40
-			public float ofs_z; // 44
-			public float unknown7; // 48
-			public float unknown8; // 52
-			public float unknown9; // 56
-			public float radius; // 60
-			public float unknown10; // 64
-			public uint unknown11; // 68
-			public uint unknown12; // 72
-			public uint unknown13; // 76
-			public float unknown14_start_angle; // 80
-			public float unknown15_end_angle; // 84
-			public float unknown16; // 88
-			public float unknown17_facing_x; // 92
-			public float unknown18_facing_y; // 96
-			public float unknown19_facing_z; // 100
-			public float unknown20_affects_color; // 104
-			public uint unknown21; // 108
-			/* ERROR LEVEL */
-			public int struct_errorlevel;
-		}
 
 		[Obsolete]
 		public static void SaveLight(BinaryWriter buf, LightInfo light)
@@ -989,36 +1092,47 @@ namespace WorldBuilder
 			light.unknown20_affects_color = buf.ReadSingle();
 			light.unknown21 = buf.ReadUInt32();
 		}
+
+		[Obsolete]
+		public struct LightInfo
+		{
+			public byte blue; // 18
+			public byte green; // 19
+			public uint loc_x; // 28
+			public uint loc_y; // 32
+			public float ofs_x; // 36
+			public float ofs_y; // 40
+			public float ofs_z; // 44
+			public float radius; // 60
+			public byte red; // 17
+			public int struct_errorlevel;
+			public uint unknown1; // 4
+			public float unknown10; // 64
+			public uint unknown11; // 68
+			public uint unknown12; // 72
+			public uint unknown13; // 76
+			public float unknown14_start_angle; // 80
+			public float unknown15_end_angle; // 84
+			public float unknown16; // 88
+			public float unknown17_facing_x; // 92
+			public float unknown18_facing_y; // 96
+			public float unknown19_facing_z; // 100
+			public uint unknown2; // 8
+			public float unknown20_affects_color; // 104
+			public uint unknown21; // 108
+			public uint unknown3_ltype; // 12
+			public uint unknown4_flags; // 16
+			public byte unknown5; // 20
+			public uint unknown6; // 24
+			public float unknown7; // 48
+			public float unknown8; // 52
+			public float unknown9; // 56
+			/* ERROR LEVEL */
+		}
+
 		#endregion
 
 		#region WAYPOINT STRUCTURE
-		public struct WaypointInfo
-		{
-			public uint flags; // FLAGS
-			public uint X; // 2
-			public uint Y; // 3
-			public float Xofs; // 4
-			public float Yofs; // 5
-			public float Rotation; // 6
-			//public uint z5; // 7
-			//public uint z6; // 8
-			public byte anim1; // 8 animation indices per waypoint
-			public byte anim2;
-			public byte anim3;
-			public byte anim4;
-			public byte anim5;
-			public byte anim6;
-			public byte anim7;
-			public byte anim8;
-			public uint delay; // 9
-			public uint z8; // 10
-			public uint z9; // 11
-			public uint z10; // 12
-			public uint z11; // 13
-			public uint z12; // 14
-			public uint z13; // 15
-			public uint z14; // 16
-		}
 
 		public static void SaveWaypoint(BinaryWriter buf, WaypointInfo way)
 		{
@@ -1048,7 +1162,7 @@ namespace WorldBuilder
 
 		public static WaypointInfo LoadWaypoint(BinaryReader buf)
 		{
-			WaypointInfo way = new WaypointInfo();
+			var way = new WaypointInfo();
 
 			way.flags = buf.ReadUInt32();
 			way.X = buf.ReadUInt32();
@@ -1078,7 +1192,7 @@ namespace WorldBuilder
 
 		public static WaypointInfo CreateWaypoint(uint X, uint Y, byte a1, byte a2, byte a3, byte a4, byte a5, byte a6, byte a7, byte a8, float ROT, uint DELAY, bool IsAnimated, bool IsRotated, bool IsDelayed)
 		{
-			WaypointInfo way = new WaypointInfo();
+			var way = new WaypointInfo();
 			way.X = X;
 			way.Y = Y;
 
@@ -1105,60 +1219,82 @@ namespace WorldBuilder
 
 			return way;
 		}
+
+		public struct WaypointInfo
+		{
+			public float Rotation; // 6
+			public uint X; // 2
+			public float Xofs; // 4
+			public uint Y; // 3
+			public float Yofs; // 5
+			//public uint z5; // 7
+			//public uint z6; // 8
+			public byte anim1; // 8 animation indices per waypoint
+			public byte anim2;
+			public byte anim3;
+			public byte anim4;
+			public byte anim5;
+			public byte anim6;
+			public byte anim7;
+			public byte anim8;
+			public uint delay; // 9
+			public uint flags; // FLAGS
+			public uint z10; // 12
+			public uint z11; // 13
+			public uint z12; // 14
+			public uint z13; // 15
+			public uint z14; // 16
+			public uint z8; // 10
+			public uint z9; // 11
+		}
+
 		#endregion
 
 		#region Light structures for the Extended Sector Light Editor
-		/// <summary>
-		/// A structure defining three a 3-dimensional (x,y,z) vector
-		/// </summary>
-		public struct Vector3
-		{
-			public float x;
-			public float y;
-			public float z;
-		}
 
-		public uint LGT_STATUS_1 = 0x00000001; // Light flags
-		public uint LGT_STATUS_2 = 0x00000002;
 		public uint LGT_ANIMATED = 0x00000004;
-		public uint LGT_VIEW_CONTROLS = 0x00000008;
 		public uint LGT_EXTENDED_LIGHT = 0x00000010;
 		public uint LGT_PARTICLE_SYSTEM = 0x00000020;
+		public uint LGT_STATUS_1 = 0x00000001; // Light flags
+		public uint LGT_STATUS_2 = 0x00000002;
+		public uint LGT_VIEW_CONTROLS = 0x00000008;
 
 		/// <summary>
-		/// A basic 64-byte light. A structure that must be defined for all lights.
+		///     A basic 64-byte light. A structure that must be defined for all lights.
 		/// </summary>
 		public struct LightBasic
 		{
-			public UInt64 handle;  // must always be 0x0?
-			public UInt32 flags;   // light flags
-			public UInt32 type;    // light type
-			public byte red;       // red
-			public byte green;     // green
-			public byte blue;      // blue
-			public byte padding1;  // padding area (has no effect)
-			public UInt32 padding2; // padding area (has no effect)
-			public UInt32 x;         // coordinate X
-			public UInt32 y;         // coordinate Y
-			public float ofs_x;     // offset X
-			public float ofs_y;     // offset Y
-			public float height;    // offset Z (height)
+			public float angle; // light angle
+			public byte blue; // blue
 			public Vector3 direction; // direction of the light
-			public float range;       // light range
-			public float angle;       // light angle
+			public UInt32 flags; // light flags
+			public byte green; // green
+			public UInt64 handle; // must always be 0x0?
+			public float height; // offset Z (height)
+			public float ofs_x; // offset X
+			public float ofs_y; // offset Y
+			public byte padding1; // padding area (has no effect)
+			public UInt32 padding2; // padding area (has no effect)
+			public float range; // light range
+			public byte red; // red
+			public UInt32 type; // light type
+			public UInt32 x; // coordinate X
+			public UInt32 y; // coordinate Y
 		}
 
 		/// <summary>
-		/// Particle system substructure.
+		///     Extended light structure. Incorporates both the primary and the secondary lights. 108 bytes long.
+		///     It is recommended to use this structure in any case, and write back necessary parts of the light
+		///     per the flags and type.
 		/// </summary>
-		public struct PartSys
+		public struct LightEx
 		{
-			public UInt32 hash_id;  // hash ID for the particle system name
-			public UInt32 id;       // ID of the particle system
+			public LightPrimary light_pri;
+			public LightSecondary light_sec;
 		}
 
 		/// <summary>
-		/// Primary light structure. Used for all light types and wraps a basic light. 72 bytes long.
+		///     Primary light structure. Used for all light types and wraps a basic light. 72 bytes long.
 		/// </summary>
 		public struct LightPrimary
 		{
@@ -1167,153 +1303,40 @@ namespace WorldBuilder
 		}
 
 		/// <summary>
-		/// Secondary light structure. Used only for certain light types.
+		///     Secondary light structure. Used only for certain light types.
 		/// </summary>
 		public struct LightSecondary
 		{
-			public UInt32 type;     // light type
-			public byte red;        // red
-			public byte green;      // green
-			public byte blue;       // blue
-			public byte padding1;   // padding area (has no effect)
+			public float angle; // light angle
+			public byte blue; // blue
 			public Vector3 direction; // direction of the light
-			public float range;       // light range
-			public float angle;       // light angle
+			public byte green; // green
+			public byte padding1; // padding area (has no effect)
 			public PartSys partsys2; // secondary light particle system
+			public float range; // light range
+			public byte red; // red
+			public UInt32 type; // light type
 		}
 
 		/// <summary>
-		/// Extended light structure. Incorporates both the primary and the secondary lights. 108 bytes long.
-		/// It is recommended to use this structure in any case, and write back necessary parts of the light
-		/// per the flags and type.
+		///     Particle system substructure.
 		/// </summary>
-		public struct LightEx
+		public struct PartSys
 		{
-			public LightPrimary light_pri;
-			public LightSecondary light_sec;
-		}
-		#endregion
-
-		/// <summary>
-		/// Hash function - HashPJW. Returns a 32-bit uint value from a string.
-		/// </summary>
-		public static uint hashpjw(string ptr)
-		{
-			uint val = 0;
-
-			for (int i = 0; i < ptr.Length; i++)
-			{
-				uint tmp;
-				val = (val << 4) + ptr[i];
-
-				tmp = (val & 0xf0000000);
-				if (tmp != 0)
-				{
-					val = val ^ (tmp >> 24);
-					val = val ^ tmp;
-				}
-			}
-			return val;
+			public UInt32 hash_id; // hash ID for the particle system name
+			public UInt32 id; // ID of the particle system
 		}
 
 		/// <summary>
-		/// ElfHash - another hashing function. Used for lights.
+		///     A structure defining three a 3-dimensional (x,y,z) vector
 		/// </summary>
-		/// <param name="str"></param>
-		/// <returns></returns>
-		public static uint HashID_Generate(string str)
+		public struct Vector3
 		{
-
-			uint h = 0, g;
-			for (int i = 0; i < str.Length; i++)
-			{
-				uint cur = (uint)str[i];
-				if (cur >= 'a' && cur <= 'z') cur -= ('a' - 'A');
-				h = (h << 4) + cur;
-				g = h & 0xF0000000;
-				if (g != 0)
-					h ^= g >> 24;
-				h &= ~g;
-			}
-			return h;
+			public float x;
+			public float y;
+			public float z;
 		}
 
-		#region DC/rank functions
-		public static int DC_BITS = 0x0000007F;
-		public static int DC_POS = 0;
-		public static int RANK_BITS = 0x00003F80;
-		public static int RANK_POS = 7;
-
-		public static int GET_DC(int target)
-		{
-			return (((target) & DC_BITS) >> DC_POS);
-		}
-
-		public static int GET_RANK(int target)
-		{
-			return (((target) & RANK_BITS) >> RANK_POS);
-		}
-
-		public static int MAKE_DC(int x, int dc)
-		{
-			return (((x) & ~DC_BITS) | (((dc) & (DC_BITS >> DC_POS))) << DC_POS);
-		}
-
-		public static int MAKE_RANK(int x, int r)
-		{
-			return (((x) & ~RANK_BITS) | (((r) & (RANK_BITS >> RANK_POS))) << RANK_POS);
-		}
-		#endregion
-
-		#region Generator functions
-		public static int GENERATOR_BITS = 0x07F80000;
-		public static int GENERATOR_POS = 19;
-		public static int SPAWNMAX_BITS = 0x0007C000;
-		public static int SPAWNMAX_POS = 14;
-		public static int TOTAL_BITS = 0x00003F80;
-		public static int TOTAL_POS = 7;
-		public static int NPCGEN_BITS = 0x00E00000;
-		public static int NPCGEN_POS = 21;
-
-		public static int GET_GENID(int target)
-		{
-			return (((target) & GENERATOR_BITS) >> GENERATOR_POS);
-		}
-
-		public static int GET_SPAWNMAX(int target)
-		{
-			return (((target) & SPAWNMAX_BITS) >> SPAWNMAX_POS);
-		}
-
-		public static int GET_TOTAL(int target)
-		{
-			return (((target) & TOTAL_BITS) >> TOTAL_POS);
-		}
-
-		public static int GET_NPCGEN(int target)
-		{
-			return (((target) & NPCGEN_BITS) >> NPCGEN_POS);
-		}
-
-		public static int MAKE_GENID(int x, int gid)
-		{
-			return (((x) & ~GENERATOR_BITS) | (((gid) & (GENERATOR_BITS >> GENERATOR_POS))) << GENERATOR_POS);
-		}
-
-		public static int MAKE_SPAWNMAX(int x, int max)
-		{
-			return (((x) & ~SPAWNMAX_BITS) | (((max) & (SPAWNMAX_BITS >> SPAWNMAX_POS))) << SPAWNMAX_POS);
-		}
-
-		public static int MAKE_TOTAL(int x, int tot)
-		{
-			return (((x) & ~TOTAL_BITS) | (((tot) & (TOTAL_BITS >> TOTAL_POS))) << TOTAL_POS);
-		}
-
-		public static int MAKE_NPCGEN(int x, int ngen)
-		{
-			return (((x) & ~NPCGEN_BITS) | (((ngen) & (NPCGEN_BITS >> NPCGEN_POS))) << NPCGEN_POS);
-		}
 		#endregion
 	}
 }
