@@ -49,7 +49,7 @@ Compiling the code
 
 If you have Visual Studio 2010 or newer, you can open `ToEE World Builder.sln` solution file and then choose to **Build solution** option to create an executable.
 
-If you only have .NET 4.0 or newer, you can build solution from command line. Just run `%systemroot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "ToEE World Builder.sln"` command from `src` directory.
+If you only have .NET 4.0 or newer, you can build solution from command line. Just run `build.cmd` batch file from `src` directory.
 
 Support
 -------
