@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 9.00
 # Visual C# Express 2005
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToEE World Builder NET2", "ToEE World Builder NET2.csproj", "{DA7AEA60-646C-4F04-97AA-326EA81CE26F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToEE World Builder", "ToEE World Builder\ToEE World Builder.csproj", "{DA7AEA60-646C-4F04-97AA-326EA81CE26F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
