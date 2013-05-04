@@ -497,6 +497,7 @@ namespace WorldBuilder
 
 		private static readonly string[] Race = new [] {"race_dwarf", "race_elf", "race_gnome", "race_halfelf", "race_halforc", "race_halfling", "race_human"};
 		private static readonly string[] Gender = new [] {"female", "male"};
+
 		private static readonly string[] Alignment = new []
 						{
 							"align_chaotic_evil",

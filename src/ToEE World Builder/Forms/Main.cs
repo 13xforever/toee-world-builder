@@ -6452,7 +6452,7 @@ namespace WorldBuilder
 
 		private string OpenJP = "";
 		private int OpenJP_Max;
-		private TabReader tr;
+		private List<string> Data;
 
 		private void btnOpenJP_Click(object sender, EventArgs e)
 		{
@@ -6460,11 +6460,11 @@ namespace WorldBuilder
 			if (MultiODLG.ShowDialog() == DialogResult.OK)
 			{
 				OpenJP = MultiODLG.FileName;
-				tr = new TabReader(MultiODLG.FileName, FileMode.Open);
+				Data = TabReader.Read(MultiODLG.FileName);
 
-				for (int i = 0; i < tr.Data.Count; i++)
+				for (int i = 0; i < Data.Count; i++)
 				{
-					string[] elements = tr.Data[i].ToString().Split('\t');
+					string[] elements = Data[i].ToString().Split('\t');
 					lstJumpPoints.Items.Add(elements[0] + ": " + elements[1] + " (Map " + elements[2] + " at X=" + elements[3] + ";Y=" + elements[4] + ")");
 
 					if (Int32.Parse(elements[0]) > OpenJP_Max)
@@ -6485,8 +6485,8 @@ namespace WorldBuilder
 				return;
 
 			var sw = new StreamWriter(new FileStream(OpenJP, FileMode.Create));
-			for (int i = 0; i < tr.Data.Count; i++)
-				sw.WriteLine(tr.Data[i].ToString());
+			for (int i = 0; i < Data.Count; i++)
+				sw.WriteLine(Data[i].ToString());
 
 			sw.Close();
 
@@ -6498,7 +6498,7 @@ namespace WorldBuilder
 			if (lstJumpPoints.SelectedIndex == -1)
 				return;
 
-			string[] el = tr.Data[lstJumpPoints.SelectedIndex].ToString().Split('\t');
+			string[] el = Data[lstJumpPoints.SelectedIndex].ToString().Split('\t');
 
 			JPIndex.Text = el[0];
 			JPName.Text = el[1];
@@ -6512,7 +6512,7 @@ namespace WorldBuilder
 			if (lstJumpPoints.SelectedIndex == -1)
 				return;
 
-			tr.Data.RemoveAt(lstJumpPoints.SelectedIndex);
+			Data.RemoveAt(lstJumpPoints.SelectedIndex);
 			lstJumpPoints.Items.Remove(lstJumpPoints.Items[lstJumpPoints.SelectedIndex]);
 		}
 
@@ -6522,16 +6522,16 @@ namespace WorldBuilder
 				return;
 
 			// Check if a jump point already exists
-			for (int i = 0; i < tr.Data.Count; i++)
+			for (int i = 0; i < Data.Count; i++)
 			{
-				if (tr.Data[i].ToString().Split('\t')[0] == JPIndex.Text)
+				if (Data[i].ToString().Split('\t')[0] == JPIndex.Text)
 				{
 					MessageBox.Show("This jump point already exists!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 			}
 
-			tr.Data.Add(JPIndex.Text + "\t" + JPName.Text + "\t" + JPMap.Text + "\t" + JPX.Text + "\t" + JPY.Text);
+			Data.Add(JPIndex.Text + "\t" + JPName.Text + "\t" + JPMap.Text + "\t" + JPX.Text + "\t" + JPY.Text);
 			lstJumpPoints.Items.Add(JPIndex.Text + ": " + JPName.Text + " (Map " + JPMap.Text + " at X=" + JPX.Text + ";Y=" + JPY.Text + ")");
 		}
 
@@ -6543,7 +6543,7 @@ namespace WorldBuilder
 			if (lstJumpPoints.SelectedIndex == -1)
 				return;
 
-			tr.Data[lstJumpPoints.SelectedIndex] = JPIndex.Text + "\t" + JPName.Text + "\t" + JPMap.Text + "\t" + JPX.Text + "\t" + JPY.Text;
+			Data[lstJumpPoints.SelectedIndex] = JPIndex.Text + "\t" + JPName.Text + "\t" + JPMap.Text + "\t" + JPX.Text + "\t" + JPY.Text;
 			lstJumpPoints.Items[lstJumpPoints.SelectedIndex] = JPIndex.Text + ": " + JPName.Text + " (Map " + JPMap.Text + " at X=" + JPX.Text + ";Y=" + JPY.Text + ")";
 		}
 
