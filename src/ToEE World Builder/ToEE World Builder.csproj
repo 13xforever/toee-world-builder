@@ -7,8 +7,7 @@
     <ProjectGuid>{DA7AEA60-646C-4F04-97AA-326EA81CE26F}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\Toee-logo.ico</ApplicationIcon>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
     <AssemblyName>ToEE World Builder</AssemblyName>
@@ -312,6 +311,9 @@
       <Link>Resources\ToEE World Builder.pfr</Link>
     </EmbeddedResource>
     <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Toee-logo.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
