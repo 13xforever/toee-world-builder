@@ -29,7 +29,7 @@ Requirements:
 In order to successfully compile ToEE World Builder .NET2, you need the
 following software:
 
-* [Microsoft .NET Framework v2.0](http://microsoft.com/net) or newer
+* [Microsoft .NET Framework v2.0](http://www.microsoft.com/net/download) or newer
 * [Microsoft Visual C# 2005](http://www.microsoft.com/visualstudio/eng/downloads) or any newer release (Express version is free)
 
 Note that other IDEs supporting C# 2.0 *MAY* be able to build the ToEEWB.NET2
