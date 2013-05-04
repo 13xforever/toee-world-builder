@@ -1,7 +1,7 @@
-ToEE World Builder .NET2 version 2.0.0 Open-Source Edition
+ToEE World Builder .NET2 version 2.0.5a Open-Source Edition
 ==========================================================
 
-Copyright &copy; 2005-2006    Michael Kamensky, all rights reserved.
+Copyright &copy; 2005-2013    Michael Kamensky, all rights reserved.
 
 ---
 
@@ -22,7 +22,7 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 ---
 
 !!! PLEASE READ THIS INFORMATION FIRST !!!
-==========================================
+------------------------------------------
 
 This package includes the source code and all required files needed to
 build a redistributable package of the ToEE World Builder .NET2.
@@ -68,20 +68,20 @@ License (GPL) version 2, under the terms of which this package is distributed.
 Compiling the code
 ------------------
 
-After loading ToEE World Builder solution file (`ToEE World Builder.sln`) into the
+After loading `ToEE World Builder.sln` solution file into the
 Visual C# IDE you may choose the **Build solution** option to create an executable.
 Afterwards, you will need to copy the files from the `required-files` folder into
 the folder where your executable is in order to ensure the correct work of the
 compiled ToEE World Builder.
 
 Support
-=======
+-------
 
 The open source distribution comes with no specific support. As usual, you are
 free to ask questions about the code on the forum in the corresponding thread.
 
 Disclaimer
-==========
+----------
 
 Any third-party derivative work based on this open source package is **not** 
 supported by the original program authors. Use the derived builds of ToEEWB
