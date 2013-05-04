@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace WorldBuilder
@@ -6,62 +7,64 @@ namespace WorldBuilder
 	public static class ProHelper
 	{
 		// Default column names, loaded before the patch file is parsed
-		public static ArrayList PRO_GetColumnNames()
+		public static List<string> PRO_GetColumnNames()
 		{
-			ArrayList ar = new ArrayList();
+			//todo: move this to resource
+			const int itemCount = 334;
+			var ar = new List<string>(itemCount);
 
-			for (int i = 0; i < 334; i++)
+			for (int i = 0; i < itemCount; i++)
 				ar.Add(("Unknown #" + (i + 1).ToString().PadRight(20, ' ') + "|\t"));
 
-			ar[0] = "Line Number                  |\t";
-			ar[1] = "Object Type                  |\t";
-			//ar[2] = "Description                  |\t";
-			ar[6] = "Model Scale (%)              |\t";
-			ar[20] = "Object Flags                 |\t";
-			ar[21] = "Spell Flags                  |\t";
-			ar[23] = "Description ID               |\t";
-			ar[24] = "Object Size                  |\t";
-			ar[27] = "Material                     |\t";
-			ar[30] = "Category (per category.mes)  |\t";
-			ar[31] = "Rotation                     |\t";
-			ar[32] = "Speed (walk)                 |\t";
-			ar[33] = "Speed (run)                  |\t";
-			ar[34] = "Object Model                 |\t";
-			ar[35] = "Target Size                  |\t";
-			ar[37] = "Portal Flags                 |\t";
-			ar[38] = "Portal Picklock DC           |\t";
-			ar[39] = "Portal Trap/Key ID           |\t";
-			ar[41] = "Container Flags              |\t";
-			ar[42] = "Container Lock DC            |\t";
-			ar[43] = "Container Key/Trap ID        |\t";
-			ar[44] = "Cont./NPC Inventory Source   |\t";
-			ar[50] = "Item Flags                   |\t";
-			ar[51] = "Item Weight                  |\t";
-			ar[52] = "Item Value (in copper)       |\t";
-			ar[53] = "Inventory Icon               |\t";
-			ar[55] = "Unidentified Description ID  |\t";
-			ar[59] = "Number of Charges            |\t";
-			ar[61] = "Equipment Slot Flags         |\t";
-			ar[62] = "Object Color (?)             |\t";
-			ar[63] = "Weapon Flags                 |\t";
-			ar[64] = "Weapon Range                 |\t";
-			ar[65] = "Ammo type                    |\t";
-			ar[68] = "Critical Hit Multiplier      |\t";
-			ar[69] = "Damage Type                  |\t";
-			ar[70] = "Damage Dice                  |\t";
-			ar[72] = "Weapon Class                 |\t";
-			ar[73] = "Critical Hit Threat Range    |\t";
-			ar[75] = "Stack Size                   |\t";
-			ar[76] = "Ammo Type                    |\t";
-			ar[79] = "Armor Max Dexterity Bonus    |\t";
-			ar[80] = "Spell Failure                |\t";
-			ar[81] = "Skill Check Penalty          |\t";
-			ar[82] = "Armor Type                   |\t";
-			ar[83] = "Helmet Type                  |\t";
-			ar[86] = "Coin Type                    |\t";
-			ar[89] = "Key ID                       |\t";
-			ar[94] = "Bag of Holding Flags         |\t";
-			ar[99] = "Critter Flags                |\t";
+			ar[  0] = "Line Number                  |\t";
+			ar[  1] = "Object Type                  |\t";
+			//ar[  2] = "Description                  |\t";
+			ar[  6] = "Model Scale (%)              |\t";
+			ar[ 20] = "Object Flags                 |\t";
+			ar[ 21] = "Spell Flags                  |\t";
+			ar[ 23] = "Description ID               |\t";
+			ar[ 24] = "Object Size                  |\t";
+			ar[ 27] = "Material                     |\t";
+			ar[ 30] = "Category (per category.mes)  |\t";
+			ar[ 31] = "Rotation                     |\t";
+			ar[ 32] = "Speed (walk)                 |\t";
+			ar[ 33] = "Speed (run)                  |\t";
+			ar[ 34] = "Object Model                 |\t";
+			ar[ 35] = "Target Size                  |\t";
+			ar[ 37] = "Portal Flags                 |\t";
+			ar[ 38] = "Portal Picklock DC           |\t";
+			ar[ 39] = "Portal Trap/Key ID           |\t";
+			ar[ 41] = "Container Flags              |\t";
+			ar[ 42] = "Container Lock DC            |\t";
+			ar[ 43] = "Container Key/Trap ID        |\t";
+			ar[ 44] = "Cont./NPC Inventory Source   |\t";
+			ar[ 50] = "Item Flags                   |\t";
+			ar[ 51] = "Item Weight                  |\t";
+			ar[ 52] = "Item Value (in copper)       |\t";
+			ar[ 53] = "Inventory Icon               |\t";
+			ar[ 55] = "Unidentified Description ID  |\t";
+			ar[ 59] = "Number of Charges            |\t";
+			ar[ 61] = "Equipment Slot Flags         |\t";
+			ar[ 62] = "Object Color (?)             |\t";
+			ar[ 63] = "Weapon Flags                 |\t";
+			ar[ 64] = "Weapon Range                 |\t";
+			ar[ 65] = "Ammo type                    |\t";
+			ar[ 68] = "Critical Hit Multiplier      |\t";
+			ar[ 69] = "Damage Type                  |\t";
+			ar[ 70] = "Damage Dice                  |\t";
+			ar[ 72] = "Weapon Class                 |\t";
+			ar[ 73] = "Critical Hit Threat Range    |\t";
+			ar[ 75] = "Stack Size                   |\t";
+			ar[ 76] = "Ammo Type                    |\t";
+			ar[ 79] = "Armor Max Dexterity Bonus    |\t";
+			ar[ 80] = "Spell Failure                |\t";
+			ar[ 81] = "Skill Check Penalty          |\t";
+			ar[ 82] = "Armor Type                   |\t";
+			ar[ 83] = "Helmet Type                  |\t";
+			ar[ 86] = "Coin Type                    |\t";
+			ar[ 89] = "Key ID                       |\t";
+			ar[ 94] = "Bag of Holding Flags         |\t";
+			ar[ 99] = "Critter Flags                |\t";
 			ar[101] = "Strength                     |\t";
 			ar[102] = "Dexterity                    |\t";
 			ar[103] = "Constitution                 |\t";
@@ -275,28 +278,21 @@ namespace WorldBuilder
 			ar[332] = "Name (Known)                 |\t";
 			ar[333] = "AI Strategy Type             |\t";
 
-			// + v1.1: smart patcher for newly found proto fields +
 			if (File.Exists("ToEE World Builder.pfr"))
 			{
-				StreamReader sr = new StreamReader("ToEE World Builder.pfr");
-				string proto_patch_name = "";
-				string[] proto_patch_name_arr = null;
+				using (var sr = new StreamReader("ToEE World Builder.pfr"))
+					while (!sr.EndOfStream)
+					{
+						var protoPatchName = sr.ReadLine();
+						if (protoPatchName == "[END PROTO FIELD PATCH]" || protoPatchName == null) break;
 
-				while ((proto_patch_name = sr.ReadLine()) != "[END PROTO FIELD PATCH]")
-				{
-					if (proto_patch_name.Trim() == "")
-						continue;
+						protoPatchName = protoPatchName.Trim();
+						if (protoPatchName.Length == 0 || protoPatchName.Substring(0, 2) == "//") continue;
 
-					if (proto_patch_name.Substring(0, 2) == "//") // comment
-						continue;
-
-					proto_patch_name_arr = proto_patch_name.Split('=');
-					ar[int.Parse(proto_patch_name_arr[0])] = proto_patch_name_arr[1].PadRight(29, ' ') + "|\t";
-				}
-
-				sr.Close();
+						var protoPatchNameArr = protoPatchName.Split('=');
+						ar[int.Parse(protoPatchNameArr[0])] = protoPatchNameArr[1].PadRight(29, ' ') + "|\t";
+					}
 			}
-			// - v1.1: smart patcher for newly found proto fields -
 
 			return ar;
 		}
@@ -309,14 +305,14 @@ namespace WorldBuilder
 		// Template
 		public static ArrayList PRO_Sapri_GetData()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			return ar;
 		}
 
 		public static ArrayList PRO_GetCritterFlagsII()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OCF2_ACTION5_PAUSED");
 			ar.Add("OCF2_ACTION4_PAUSED");
@@ -351,7 +347,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetArmorFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OARF_ARMOR_NONE");
 			ar.Add("OARF_HELM_TYPE_2");
@@ -364,7 +360,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetGenericFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OGF_IS_LOCKPICK");
 			ar.Add("OGF_IS_TRAP_DEVICE");
@@ -375,7 +371,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetSceneryFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OSCF_USE_OPEN_WORLDMAP");
 			ar.Add("OSCF_TAGGED_SCENERY");
@@ -396,7 +392,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetSpellFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OSF_HARDENED_HANDS");
 			ar.Add("OSF_FAMILIAR");
@@ -436,7 +432,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetTrapFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OTF_BUSTED");
 
@@ -445,7 +441,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetAmmoFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OAF_NONE");
 
@@ -454,7 +450,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetFoodFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OFF_NONE");
 
@@ -465,7 +461,7 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetObjectFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OF_RADIUS_SET");
 			ar.Add("OF_TELEPORTED");
@@ -506,7 +502,7 @@ namespace WorldBuilder
 		// NPC Loot Share
 		public static ArrayList PRO_GetNPCLootShare()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("nothing");
 			ar.Add("one_fifth_of_all");
@@ -521,7 +517,7 @@ namespace WorldBuilder
 		// Object Size
 		public static ArrayList PRO_GetObjSize()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("size_clossal");
 			ar.Add("size_gargantuan");
@@ -539,7 +535,7 @@ namespace WorldBuilder
 		// Object Type
 		public static ArrayList PRO_GetObjType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("obj_t_bag");
 			ar.Add("obj_t_trap");
@@ -565,7 +561,7 @@ namespace WorldBuilder
 		// Material
 		public static ArrayList PRO_GetMaterial()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("mat_powder");
 			ar.Add("mat_fire");
@@ -588,7 +584,7 @@ namespace WorldBuilder
 		// Portal flags
 		public static ArrayList PRO_GetPortalFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OPF_OPEN");
 			ar.Add("OPF_NOT_STICKY");
@@ -607,7 +603,7 @@ namespace WorldBuilder
 		// Container flags
 		public static ArrayList PRO_GetContainerFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OCOF_HAS_BEEN_OPENED");
 			ar.Add("OCOF_OPEN");
@@ -629,7 +625,7 @@ namespace WorldBuilder
 		// Item flags
 		public static ArrayList PRO_GetItemFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OIF_NO_TRANSFER");
 			ar.Add("OIF_USES_WAND_ANIM");
@@ -665,7 +661,7 @@ namespace WorldBuilder
 		// Inventory slot flags
 		public static ArrayList PRO_GetInvSlotFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OIF_WEAR_2HAND_REQUIRED");
 			ar.Add("OIF_WEAR_LOCKPICKS");
@@ -691,7 +687,7 @@ namespace WorldBuilder
 		// Weapon flags
 		public static ArrayList PRO_GetWeaponFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OWF_MAGIC_STAFF");
 			ar.Add("OWF_WEAPON_LOADED");
@@ -714,7 +710,7 @@ namespace WorldBuilder
 		// Missile type?
 		public static ArrayList PRO_GetMissileType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("bottle");
 			ar.Add("ball_of_fire");
@@ -740,7 +736,7 @@ namespace WorldBuilder
 		// Damage type
 		public static ArrayList PRO_GetDamageType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("D20DT_MAGIC");
 			ar.Add("D20DT_BLOOD_LOSS");
@@ -769,7 +765,7 @@ namespace WorldBuilder
 		// Weapon class
 		public static ArrayList PRO_GetWeaponClass()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("grenade");
 			ar.Add("grapple");
@@ -838,7 +834,7 @@ namespace WorldBuilder
 		// Ammo Type
 		public static ArrayList PRO_GetAmmoType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("bullet");
 			ar.Add("bolt");
@@ -850,7 +846,7 @@ namespace WorldBuilder
 		// Armor Type
 		public static ArrayList PRO_GetArmorType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("ARMOR_TYPE_SHIELD");
 			ar.Add("ARMOR_TYPE_HEAVY");
@@ -863,7 +859,7 @@ namespace WorldBuilder
 		// Helm Type
 		public static ArrayList PRO_GetHelmType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("HELM_TYPE_LARGE");
 			ar.Add("HELM_TYPE_MEDIUM");
@@ -875,7 +871,7 @@ namespace WorldBuilder
 		// Coin Type
 		public static ArrayList PRO_GetCoinType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Platinum");
 			ar.Add("Gold");
@@ -888,7 +884,7 @@ namespace WorldBuilder
 		// Bag of Holding Flags
 		public static ArrayList PRO_GetBagFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OBF_HOLDING_1000");
 			ar.Add("OBF_HOLDING_500");
@@ -899,7 +895,7 @@ namespace WorldBuilder
 		// Critter Flags
 		public static ArrayList PRO_GetCritterFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("OCF_FATIGUE_LIMITING");
 			ar.Add("OCF_UNUSED_40000000");
@@ -940,7 +936,7 @@ namespace WorldBuilder
 		// Race
 		public static ArrayList PRO_GetRace()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("race_dwarf");
 			ar.Add("race_elf");
@@ -956,7 +952,7 @@ namespace WorldBuilder
 		// Gender
 		public static ArrayList PRO_GetGender()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("female");
 			ar.Add("male");
@@ -967,7 +963,7 @@ namespace WorldBuilder
 		// Alignment
 		public static ArrayList PRO_GetAlignment()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("align_chaotic_evil");
 			ar.Add("align_lawful_evil");
@@ -985,7 +981,7 @@ namespace WorldBuilder
 		// Deity
 		public static ArrayList PRO_GetDeity()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Ralishaz");
 			ar.Add("Pyremius");
@@ -1021,7 +1017,7 @@ namespace WorldBuilder
 		// Domain
 		public static ArrayList PRO_GetDomain()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("WATER");
 			ar.Add("TRICKERY");
@@ -1049,7 +1045,7 @@ namespace WorldBuilder
 		// Positive/Negative
 		public static ArrayList PRO_GetPosNeg()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Positive");
 			ar.Add("Negative");
@@ -1060,7 +1056,7 @@ namespace WorldBuilder
 		// Monster Damage Type
 		public static ArrayList PRO_GetMonsterDamType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Sting");
 			ar.Add("Slam");
@@ -1076,7 +1072,7 @@ namespace WorldBuilder
 		// Hair color
 		public static ArrayList PRO_GetHairColor()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("White");
 			ar.Add("Pink");
@@ -1092,7 +1088,7 @@ namespace WorldBuilder
 		// Hair type
 		public static ArrayList PRO_GetHairType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Ponytail2 (f)");
 			ar.Add("Medium (m)");
@@ -1112,7 +1108,7 @@ namespace WorldBuilder
 		// NPC flags
 		public static ArrayList PRO_GetNPCFlags()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("ONF_EXTRAPLANAR");
 			ar.Add("ONF_BOSS_MONSTER");
@@ -1153,7 +1149,7 @@ namespace WorldBuilder
 		// Creature Type
 		public static ArrayList PRO_GetCreatureType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("mc_type_vermin");
 			ar.Add("mc_type_undead");
@@ -1179,7 +1175,7 @@ namespace WorldBuilder
 		// Creature Subtype
 		public static ArrayList PRO_GetCreatureSubType()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("mc_subtype_water");
 			ar.Add("mc_subtype_slaadi");
@@ -1216,7 +1212,7 @@ namespace WorldBuilder
 		// Class
 		public static ArrayList PRO_GetClass()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Wizard");
 			ar.Add("Sorcerer");
@@ -1234,7 +1230,7 @@ namespace WorldBuilder
 		// Skill
 		public static ArrayList PRO_GetSkill()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Bluff");
 			ar.Add("Climb");
@@ -1269,7 +1265,7 @@ namespace WorldBuilder
 		// Item Properties
 		public static ArrayList PRO_GetItemProps()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			ar.Add("Bardic-Inspire Greatness");
 			ar.Add("Bardic-Suggestion");
@@ -1402,12 +1398,12 @@ namespace WorldBuilder
 
 		public static ArrayList PRO_GetFeats()
 		{
-			ArrayList ar = new ArrayList();
+			var ar = new ArrayList();
 
 			// + v1.4: Universal feat loader by Sapricon +
 			if (File.Exists("ToEE World Builder.ftd"))
 			{
-				StreamReader sr = new StreamReader("ToEE World Builder.ftd");
+				var sr = new StreamReader("ToEE World Builder.ftd");
 				string str = "";
 
 				while ((str = sr.ReadLine()) != null)
