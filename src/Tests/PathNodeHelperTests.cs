@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using WorldBuilder.Helpers;
+using WorldBuilder;
 
 namespace Tests
 {
@@ -18,11 +18,10 @@ namespace Tests
 		[TestCase(0u, 0u, uint.MaxValue, uint.MaxValue, 6074000998.5378858225296820112509d, TestName = "Maximum distance for UInt32 parameters")]
 		public void GetPathLength(uint x1, uint y1, uint x2, uint y2, double expected)
 		{
-			const double epsilon = 1e-11;
+			var node1 = new PathNode(1, x1, y1, 0, 0);
+			var node2 = new PathNode(2, x2, y2, 0, 0);
 
-			var len = PathNodeHelper.GetPathLength(x1, y1, x2, y2);
-			var delta = len - expected;
-			Assert.That(delta, Is.InRange(-epsilon, epsilon));
+			Assert.That(node1.IsNear(node2, expected), Is.True);
 		}
 	}
 }

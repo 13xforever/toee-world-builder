@@ -285,7 +285,7 @@ namespace WorldBuilder.Forms
 					pd_Dest = (PathNode) PathNodeHelper.PathNodes[uint.Parse(destination.Current.ToString())];
 					if (pd_Source.Id != pd_Dest.Id) /* can't back-link to itself */
 					{
-						if (PathNodeHelper.IsNeighboring(PathNodeHelper.GetPathLength(pd_Source.X, pd_Source.Y, pd_Dest.X, pd_Dest.Y)))
+						if (pd_Source.IsNear(pd_Dest, vicinity))
 							goal_list += pd_Dest.Id.ToString() + "::";
 					}
 				}
@@ -297,9 +297,11 @@ namespace WorldBuilder.Forms
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
+		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
+
 		private void experimentalToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			PathNodeHelper.MAX_PATH_LENGTH = 7d;
+			vicinity = 7d;
 			experimentalToolStripMenuItem.Checked = true;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
@@ -313,7 +315,7 @@ namespace WorldBuilder.Forms
 		private void menuItem2_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 19d;
+			vicinity = 19d;
 			menuItem2.Checked = true;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -326,7 +328,7 @@ namespace WorldBuilder.Forms
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 20d;
+			vicinity = 20d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = true;
 			menuItem4.Checked = false;
@@ -339,7 +341,7 @@ namespace WorldBuilder.Forms
 		private void menuItem4_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 21d;
+			vicinity = 21d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = true;
@@ -352,7 +354,7 @@ namespace WorldBuilder.Forms
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 22d;
+			vicinity = 22d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -365,7 +367,7 @@ namespace WorldBuilder.Forms
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 23d;
+			vicinity = 23d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -378,7 +380,7 @@ namespace WorldBuilder.Forms
 		private void menuItem7_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 24d;
+			vicinity = 24d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -391,7 +393,7 @@ namespace WorldBuilder.Forms
 		private void menuItem8_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 25d;
+			vicinity = 25d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;

@@ -1,3 +1,5 @@
+using System;
+
 namespace WorldBuilder
 {
 	/// <summary>
@@ -18,6 +20,15 @@ namespace WorldBuilder
 			Y = y;
 			OffsetX = offsetX;
 			OffsetY = offsetY;
+		}
+
+		public bool IsNear(PathNode otherNode, double vicinity)
+		{
+			double lenX = Math.Abs((long)X - otherNode.X);
+			double lenY = Math.Abs((long)Y - otherNode.Y);
+			var lenH = lenX * lenX + lenY * lenY;
+			var dist = Math.Sqrt(lenH);
+			return dist <= vicinity;
 		}
 	}
 }
