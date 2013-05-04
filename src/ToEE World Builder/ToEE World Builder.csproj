@@ -19,7 +19,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ToEE_World_Builder</RootNamespace>
+    <RootNamespace>WorldBuilder</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
@@ -94,96 +94,125 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AboutForm.cs">
+    <Compile Include="Forms\AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CreateNewSector.Designer.cs">
+      <DependentUpon>CreateNewSector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EmbedInSector.Designer.cs">
+      <DependentUpon>EmbedInSector.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\LinkMOB.Designer.cs">
+      <DependentUpon>LinkMOB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Main.Designer.cs">
+      <DependentUpon>Main.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenMOB.Designer.cs">
+      <DependentUpon>OpenMOB.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\OpenSEC.Designer.cs">
+      <DependentUpon>OpenSEC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PathNodeGen.Designer.cs">
+      <DependentUpon>PathNodeGen.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SectorAnalysis.Designer.cs">
+      <DependentUpon>SectorAnalysis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SectorLookup.Designer.cs">
+      <DependentUpon>SectorLookup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Splash.Designer.cs">
+      <DependentUpon>Splash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreateNewSector.cs">
+    <Compile Include="Forms\CreateNewSector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CreatePartsysHID.cs">
+    <Compile Include="Forms\CreatePartsysHID.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CreatePartsysHID.Designer.cs">
+    <Compile Include="Forms\CreatePartsysHID.Designer.cs">
       <DependentUpon>CreatePartsysHID.cs</DependentUpon>
     </Compile>
-    <Compile Include="DayNightEd.cs">
+    <Compile Include="Forms\DayNightEd.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DayNightEd.Designer.cs">
+    <Compile Include="Forms\DayNightEd.Designer.cs">
       <DependentUpon>DayNightEd.cs</DependentUpon>
     </Compile>
-    <Compile Include="EmbedInSector.cs">
+    <Compile Include="Forms\EmbedInSector.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helper.cs">
+    <Compile Include="Helpers\Helper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InputMOBGUID.cs">
+    <Compile Include="Forms\InputMOBGUID.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="InputMOBGUID.Designer.cs">
+    <Compile Include="Forms\InputMOBGUID.Designer.cs">
       <DependentUpon>InputMOBGUID.cs</DependentUpon>
     </Compile>
-    <Compile Include="LightEditorEx.cs">
+    <Compile Include="Forms\LightEditorEx.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LightEditorEx.Designer.cs">
+    <Compile Include="Forms\LightEditorEx.Designer.cs">
       <DependentUpon>LightEditorEx.cs</DependentUpon>
     </Compile>
-    <Compile Include="LinkMOB.cs">
+    <Compile Include="Forms\LinkMOB.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListInvenSource.cs">
+    <Compile Include="Forms\ListInvenSource.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ListInvenSource.Designer.cs">
+    <Compile Include="Forms\ListInvenSource.Designer.cs">
       <DependentUpon>ListInvenSource.cs</DependentUpon>
     </Compile>
-    <Compile Include="Main.cs">
+    <Compile Include="Forms\Main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OpenMOB.cs">
+    <Compile Include="Forms\OpenMOB.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="OpenSEC.cs">
+    <Compile Include="Forms\OpenSEC.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathNodeAutoGen.cs">
+    <Compile Include="Forms\PathNodeAutoGen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PathNodeAutoGen.Designer.cs">
+    <Compile Include="Forms\PathNodeAutoGen.Designer.cs">
       <DependentUpon>PathNodeAutoGen.cs</DependentUpon>
     </Compile>
-    <Compile Include="PathNodeGen.cs">
+    <Compile Include="Forms\PathNodeGen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PNDHelper.cs">
+    <Compile Include="Helpers\PNDHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ProHelper.cs">
+    <Compile Include="Helpers\ProHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ProtoSearch.cs">
+    <Compile Include="Forms\ProtoSearch.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ProtoSearch.Designer.cs">
+    <Compile Include="Forms\ProtoSearch.Designer.cs">
       <DependentUpon>ProtoSearch.cs</DependentUpon>
     </Compile>
-    <Compile Include="SectorAnalysis.cs">
+    <Compile Include="Forms\SectorAnalysis.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SectorLookup.cs">
+    <Compile Include="Forms\SectorLookup.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Splash.cs">
+    <Compile Include="Forms\Splash.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="SysMsg.cs">
@@ -192,76 +221,70 @@
     <Compile Include="TabReader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="AboutForm.resx">
+    <EmbeddedResource Include="Forms\AboutForm.resx">
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="CreateNewSector.resx">
+    <EmbeddedResource Include="Forms\CreateNewSector.resx">
       <DependentUpon>CreateNewSector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CreatePartsysHID.resx">
+    <EmbeddedResource Include="Forms\CreatePartsysHID.resx">
       <SubType>Designer</SubType>
       <DependentUpon>CreatePartsysHID.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DayNightEd.resx">
+    <EmbeddedResource Include="Forms\DayNightEd.resx">
       <SubType>Designer</SubType>
       <DependentUpon>DayNightEd.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EmbedInSector.resx">
+    <EmbeddedResource Include="Forms\EmbedInSector.resx">
       <DependentUpon>EmbedInSector.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="InputMOBGUID.resx">
+    <EmbeddedResource Include="Forms\InputMOBGUID.resx">
       <SubType>Designer</SubType>
       <DependentUpon>InputMOBGUID.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LightEditorEx.resx">
+    <EmbeddedResource Include="Forms\LightEditorEx.resx">
       <SubType>Designer</SubType>
       <DependentUpon>LightEditorEx.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LinkMOB.resx">
+    <EmbeddedResource Include="Forms\LinkMOB.resx">
       <DependentUpon>LinkMOB.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ListInvenSource.resx">
+    <EmbeddedResource Include="Forms\ListInvenSource.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ListInvenSource.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.resx">
+    <EmbeddedResource Include="Forms\Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="OpenMOB.resx">
+    <EmbeddedResource Include="Forms\OpenMOB.resx">
       <DependentUpon>OpenMOB.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="OpenSEC.resx">
+    <EmbeddedResource Include="Forms\OpenSEC.resx">
       <DependentUpon>OpenSEC.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathNodeAutoGen.resx">
+    <EmbeddedResource Include="Forms\PathNodeAutoGen.resx">
       <SubType>Designer</SubType>
       <DependentUpon>PathNodeAutoGen.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PathNodeGen.resx">
+    <EmbeddedResource Include="Forms\PathNodeGen.resx">
       <DependentUpon>PathNodeGen.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <SubType>Designer</SubType>
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="ProtoSearch.resx">
+    <EmbeddedResource Include="Forms\ProtoSearch.resx">
       <SubType>Designer</SubType>
       <DependentUpon>ProtoSearch.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SectorAnalysis.resx">
+    <EmbeddedResource Include="Forms\SectorAnalysis.resx">
       <DependentUpon>SectorAnalysis.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SectorLookup.resx">
+    <EmbeddedResource Include="Forms\SectorLookup.resx">
       <DependentUpon>SectorLookup.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Splash.resx">
+    <EmbeddedResource Include="Forms\Splash.resx">
       <DependentUpon>Splash.cs</DependentUpon>
     </EmbeddedResource>
-    <Content Include="App.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
