@@ -46,19 +46,19 @@ Package contents
 
 The following folders are distributed with this package:
 
-SRC - includes the source code itself. You need to load ToEE World Builder.sln
+[SRC](src) - includes the source code itself. You need to load ToEE World Builder.sln
       into Visual C# in order to load the project. Also, the latest version of
       whatsnew.txt is located in this folder.
 
-REQUIRED-FILES - contains files that *MUST* be distributed with the ToEE World
+[REQUIRED-FILES](required-files) - contains files that *MUST* be distributed with the ToEE World
                  Builder .NET2 executable, otherwise ToEEWB may behave incorrectly
                  or may cease to work at all.
 
-SUPPLEMENTS - includes the supplementary information that may be useful during
+[SUPPLEMENTS](supplements) - includes the supplementary information that may be useful during
               the development of ToEEWB. Currently it includes a fixed list of
               MOB format properties with their corresponding IDs.
 
-Also, GPL.TXT is included which contains the full text of the General Public
+Also, [GPL.TXT](gpl.txt) is included which contains the full text of the General Public
 License (GPL) version 2, under the terms of which this package is distributed.
 
 Compiling the code
