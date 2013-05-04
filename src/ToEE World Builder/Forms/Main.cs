@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using WorldBuilder.Forms;
 using WorldBuilder.Helpers;
 
 namespace WorldBuilder
@@ -354,8 +355,8 @@ namespace WorldBuilder
 
 		// + Begin MOB Fields +
 		private ArrayList CHEST_INV = new ArrayList();
-		private UInt32 CONTAINER_INV_LIST_IDX;
-		private UInt32 IMPORTED_ENTRY293;
+		private uint CONTAINER_INV_LIST_IDX;
+		private uint IMPORTED_ENTRY293;
 		private ArrayList IMPORTED_ENTRY30 = new ArrayList();
 		private ArrayList IMPORTED_ENTRY40 = new ArrayList();
 		private ArrayList IMPORTED_ENTRY41 = new ArrayList();
@@ -372,15 +373,15 @@ namespace WorldBuilder
 		private byte[] MOB_PROP_SUBINV = new byte[24]; // Used to store NPC substitute inventory object GUID
 		private ArrayList NPC_INV = new ArrayList();
 		private bool NPC_INVENSOURCE_CALLBACK;
-		private UInt32 NPC_INV_LIST_IDX;
+		private uint NPC_INV_LIST_IDX;
 		private ArrayList NPC_WAYPOINTS = new ArrayList(); // v1.3: waypoint sys
-		private UInt32 SAR_POS; // SARC index for containers
-		private UInt32 SAR_POS_ABL; // SARC index for abilities
-		private UInt32 SAR_POS_FCN; // SARC index for factions
-		private UInt32 SAR_POS_MDX; // SARC index for money
-		private UInt32 SAR_POS_NPC; // SARC index for NPCs
-		private UInt32 SAR_POS_STN; // SARC index for standpoints
-		private UInt32 SAR_POS_WAY; // SARC index for waypoints
+		private uint SAR_POS; // SARC index for containers
+		private uint SAR_POS_ABL; // SARC index for abilities
+		private uint SAR_POS_FCN; // SARC index for factions
+		private uint SAR_POS_MDX; // SARC index for money
+		private uint SAR_POS_NPC; // SARC index for NPCs
+		private uint SAR_POS_STN; // SARC index for standpoints
+		private uint SAR_POS_WAY; // SARC index for waypoints
 		private string __MOB_OVERRIDE_NAME = "";
 		// - End MOB Fields -
 
@@ -505,7 +506,7 @@ namespace WorldBuilder
 				IMPORTED_ENTRY73 = new ArrayList();
 				IMPORTED_ENTRY293 = 0;
 
-				UInt32 data;
+				uint data;
 				UInt16 data_16;
 
 				var mob = new FileStream("Mobiles\\" + o.FileToOpen + ".mob", FileMode.Open);
@@ -544,7 +545,7 @@ namespace WorldBuilder
 
 				MOB_GUID_BYTES = r_mob.ReadBytes(24); // GUID
 
-				UInt32 MOB_TYPE_F;
+				uint MOB_TYPE_F;
 				MOB_TYPE_F = r_mob.ReadUInt32(); // Type. Ignored due to being auto-set.
 				data_16 = r_mob.ReadUInt16(); // Number of properties. Ignored due to being auto-detected.
 
@@ -728,7 +729,7 @@ namespace WorldBuilder
 			{
 				w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 				w_mob.Write(MOB_GUID_BYTES);
-				w_mob.Write((Int32) Helper.GEN_GetMobileType(MobType.Text));
+				w_mob.Write((int) Helper.GEN_GetMobileType(MobType.Text));
 				w_mob.Write(Helper.MOB_GetNumberOfProperties(MOB_BITMAP));
 
 				ArrayList BitmapBytes = Helper.MOB_BitmapToBytes(MOB_BITMAP);
@@ -897,8 +898,8 @@ namespace WorldBuilder
 					{
 						case 0:
 							// obj_f_location
-							UInt32 loc_x = UInt32.Parse(LocationX.Text);
-							UInt32 loc_y = UInt32.Parse(LocationY.Text);
+							uint loc_x = uint.Parse(LocationX.Text);
+							uint loc_y = uint.Parse(LocationY.Text);
 							w_mob.Write((byte) 0x01);
 							w_mob.Write(loc_x);
 							w_mob.Write(loc_y);
@@ -915,7 +916,7 @@ namespace WorldBuilder
 							break;
 						case 6:
 							// obj_f_blit_alpha
-							UInt32 alpha = UInt32.Parse(vTransparency.Text);
+							uint alpha = uint.Parse(vTransparency.Text);
 							w_mob.Write(alpha);
 							break;
 						case 7:
@@ -925,27 +926,27 @@ namespace WorldBuilder
 							break;
 						case 21:
 							// obj_f_flags
-							UInt32 objflags = GetObjectFlags();
+							uint objflags = GetObjectFlags();
 							w_mob.Write(objflags);
 							break;
 						case 23:
 							// obj_f_name
-							UInt32 name = UInt32.Parse(vObjName.Text);
+							uint name = uint.Parse(vObjName.Text);
 							w_mob.Write(name);
 							break;
 						case 26:
 							// obj_f_hp_pts
-							UInt32 hp = UInt32.Parse(vHP.Text);
+							uint hp = uint.Parse(vHP.Text);
 							w_mob.Write(hp);
 							break;
 						case 27:
 							// obj_f_hp_adj
-							UInt32 hp_adj = UInt32.Parse(vHPAdj.Text);
+							uint hp_adj = uint.Parse(vHPAdj.Text);
 							w_mob.Write(hp_adj);
 							break;
 						case 28:
 							// obj_f_hp_damage
-							UInt32 hp_dmg = UInt32.Parse(vHPDmg.Text);
+							uint hp_dmg = uint.Parse(vHPDmg.Text);
 							w_mob.Write(hp_dmg);
 							break;
 						case 30:
@@ -1002,7 +1003,7 @@ namespace WorldBuilder
 							break;
 						case 47:
 							// obj_f_secretdoor_effectname
-							UInt32 eff = UInt32.Parse(vEffName.Text);
+							uint eff = uint.Parse(vEffName.Text);
 							w_mob.Write(eff);
 							break;
 						case 48:
@@ -1022,37 +1023,37 @@ namespace WorldBuilder
 							break;
 						case 88:
 							// obj_f_portal_flags
-							UInt32 p_flags = GetPortalFlags();
+							uint p_flags = GetPortalFlags();
 							w_mob.Write(p_flags);
 							break;
 						case 89:
 							// obj_f_portal_lock_dc
-							UInt32 p_dc = UInt32.Parse(vPLockDC.Text);
+							uint p_dc = uint.Parse(vPLockDC.Text);
 							w_mob.Write(p_dc);
 							break;
 						case 90:
 							// obj_f_portal_key_id
-							UInt32 p_key_id = UInt32.Parse(vPKeyID.Text);
+							uint p_key_id = uint.Parse(vPKeyID.Text);
 							w_mob.Write(p_key_id);
 							break;
 						case 91:
 							// obj_f_portal_notify_npc
-							UInt32 notify1 = UInt32.Parse(pNotify1.Text);
+							uint notify1 = uint.Parse(pNotify1.Text);
 							w_mob.Write(notify1);
 							break;
 						case 102:
 							// obj_f_container_flags
-							UInt32 contflags = GetContainerFlags();
+							uint contflags = GetContainerFlags();
 							w_mob.Write(contflags);
 							break;
 						case 103:
 							// obj_f_container_lock_dc
-							UInt32 dc = UInt32.Parse(vLockDC.Text);
+							uint dc = uint.Parse(vLockDC.Text);
 							w_mob.Write(dc);
 							break;
 						case 104:
 							// obj_f_container_key_id
-							UInt32 key_id = UInt32.Parse(vKeyID.Text);
+							uint key_id = uint.Parse(vKeyID.Text);
 							w_mob.Write(key_id);
 							break;
 						case 105:
@@ -1065,27 +1066,27 @@ namespace WorldBuilder
 							break;
 						case 107:
 							// obj_f_container_inventory_source (INVENSOURCE)
-							UInt32 invsrc = UInt32.Parse(vInvenSource.Text);
+							uint invsrc = uint.Parse(vInvenSource.Text);
 							w_mob.Write(invsrc);
 							break;
 						case 108:
 							// obj_f_container_notify_npc
-							UInt32 notify2 = UInt32.Parse(pNotify2.Text);
+							uint notify2 = uint.Parse(pNotify2.Text);
 							w_mob.Write(notify2);
 							break;
 						case 121:
 							// obj_f_scenery_flags
-							UInt32 scenflags = GetSceneryFlags();
+							uint scenflags = GetSceneryFlags();
 							w_mob.Write(scenflags);
 							break;
 						case 126:
 							// obj_f_scenery_teleport_to
-							UInt32 scenery_dest = UInt32.Parse(vTeleport.Text);
+							uint scenery_dest = uint.Parse(vTeleport.Text);
 							w_mob.Write(scenery_dest);
 							break;
 						case 151:
 							// obj_f_item_flags
-							UInt32 itemflags = GetItemFlags();
+							uint itemflags = GetItemFlags();
 							w_mob.Write(itemflags);
 							break;
 						case 152:
@@ -1095,77 +1096,77 @@ namespace WorldBuilder
 							break;
 						case 153:
 							// obj_f_item_weight
-							UInt32 weight = UInt32.Parse(vWeight.Text);
+							uint weight = uint.Parse(vWeight.Text);
 							w_mob.Write(weight);
 							break;
 						case 154:
 							// obj_f_item_worth
-							UInt32 worth = UInt32.Parse(vWorth.Text);
+							uint worth = uint.Parse(vWorth.Text);
 							w_mob.Write(worth);
 							break;
 						case 156:
 							// obj_f_item_inv_location
-							UInt32 slot = UInt32.Parse(vInvSlot.Text);
+							uint slot = uint.Parse(vInvSlot.Text);
 							w_mob.Write(slot);
 							break;
 						case 167:
 							// obj_f_item_quantity
-							UInt32 quantity = UInt32.Parse(vItemAmt.Text);
+							uint quantity = uint.Parse(vItemAmt.Text);
 							w_mob.Write(quantity);
 							break;
 						case 187:
 							// obj_f_weapon_flags
-							UInt32 weapflags = GetWeaponFlags();
+							uint weapflags = GetWeaponFlags();
 							w_mob.Write(weapflags);
 							break;
 						case 210:
 							// obj_f_ammo_quantity
-							UInt32 ammo = UInt32.Parse(vAmmoAmt.Text);
+							uint ammo = uint.Parse(vAmmoAmt.Text);
 							w_mob.Write(ammo);
 							break;
 						case 219:
 							// obj_f_armor_flags
-							UInt32 armorflags = GetArmorFlags();
+							uint armorflags = GetArmorFlags();
 							w_mob.Write(armorflags);
 							break;
 						case 220:
 							// obj_f_armor_ac_adj
-							Int32 acadj = Int32.Parse(vACAdj.Text);
+							int acadj = int.Parse(vACAdj.Text);
 							w_mob.Write(acadj);
 							break;
 						case 221:
 							// obj_f_armor_max_dex_bonus
-							Int32 maxdex = Int32.Parse(vACMaxDex.Text);
+							int maxdex = int.Parse(vACMaxDex.Text);
 							w_mob.Write(maxdex);
 							break;
 						case 222:
 							// obj_f_armor_arcane_spell_failure
-							Int32 sf = Int32.Parse(vSpellFail.Text);
+							int sf = int.Parse(vSpellFail.Text);
 							w_mob.Write(sf);
 							break;
 						case 223:
 							// obj_f_armor_armor_check_penalty
-							Int32 chk = Int32.Parse(vArmorChk.Text);
+							int chk = int.Parse(vArmorChk.Text);
 							w_mob.Write(chk);
 							break;
 						case 230:
 							// obj_f_money_quantity
-							UInt32 mamount = UInt32.Parse(vMoneyQuantity.Text);
+							uint mamount = uint.Parse(vMoneyQuantity.Text);
 							w_mob.Write(mamount);
 							break;
 						case 255:
 							// obj_f_key_key_id
-							UInt32 id = UInt32.Parse(vKeyID2.Text);
+							uint id = uint.Parse(vKeyID2.Text);
 							w_mob.Write(id);
 							break;
 						case 283:
 							// obj_f_critter_flags
-							UInt32 critflags1 = GetCritterFlags1();
+							uint critflags1 = GetCritterFlags1();
 							w_mob.Write(critflags1);
 							break;
 						case 284:
 							// obj_f_critter_flags2
-							UInt32 critflags2 = GetCritterFlags2();
+							uint critflags2 = GetCritterFlags2();
 							w_mob.Write(critflags2);
 							break;
 						case 285:
@@ -1198,32 +1199,32 @@ namespace WorldBuilder
 							break;
 						case 310:
 							// obj_f_critter_inventory_source
-							UInt32 ninvsrc = UInt32.Parse(vNpcInvenSource.Text);
+							uint ninvsrc = uint.Parse(vNpcInvenSource.Text);
 							w_mob.Write(ninvsrc);
 							break;
 						case 313:
 							// obj_f_critter_teleport_dest
 							w_mob.Write((byte) 0x01);
-							w_mob.Write(UInt32.Parse(vTeleX.Text));
-							w_mob.Write(UInt32.Parse(vTeleY.Text));
+							w_mob.Write(uint.Parse(vTeleX.Text));
+							w_mob.Write(uint.Parse(vTeleY.Text));
 							break;
 						case 314:
 							// obj_f_critter_teleport_map
-							w_mob.Write(UInt32.Parse(vTeleMap.Text));
+							w_mob.Write(uint.Parse(vTeleMap.Text));
 							break;
 						case 317:
 							// obj_f_critter_reach
-							UInt32 reach = UInt32.Parse(vReach.Text);
+							uint reach = uint.Parse(vReach.Text);
 							w_mob.Write(reach);
 							break;
 						case 319:
 							// obj_f_critter_levelup_scheme
-							UInt32 scheme = UInt32.Parse(vLevelup.Text);
+							uint scheme = uint.Parse(vLevelup.Text);
 							w_mob.Write(scheme);
 							break;
 						case 353:
 							// obj_f_npc_flags
-							UInt32 npcflags = GetNPCFlags();
+							uint npcflags = GetNPCFlags();
 							w_mob.Write(npcflags);
 							break;
 						case 358:
@@ -1733,12 +1734,12 @@ namespace WorldBuilder
 			else
 				w_mob.Write(SAR_POS_ABL);
 
-			w_mob.Write(Int32.Parse(vSTR.Text));
-			w_mob.Write(Int32.Parse(vDEX.Text));
-			w_mob.Write(Int32.Parse(vCON.Text));
-			w_mob.Write(Int32.Parse(vINT.Text));
-			w_mob.Write(Int32.Parse(vWIS.Text));
-			w_mob.Write(Int32.Parse(vCHA.Text));
+			w_mob.Write(int.Parse(vSTR.Text));
+			w_mob.Write(int.Parse(vDEX.Text));
+			w_mob.Write(int.Parse(vCON.Text));
+			w_mob.Write(int.Parse(vINT.Text));
+			w_mob.Write(int.Parse(vWIS.Text));
+			w_mob.Write(int.Parse(vCHA.Text));
 
 			Helper.GetComp2Ex(w_mob, 6);
 		}
@@ -1985,10 +1986,10 @@ namespace WorldBuilder
 			else
 				w_mob.Write(SAR_POS_MDX);
 
-			w_mob.Write(UInt32.Parse(vMoneyIdx1.Text));
-			w_mob.Write(UInt32.Parse(vMoneyIdx2.Text));
-			w_mob.Write(UInt32.Parse(vMoneyIdx3.Text));
-			w_mob.Write(UInt32.Parse(vMoneyIdx4.Text));
+			w_mob.Write(uint.Parse(vMoneyIdx1.Text));
+			w_mob.Write(uint.Parse(vMoneyIdx2.Text));
+			w_mob.Write(uint.Parse(vMoneyIdx3.Text));
+			w_mob.Write(uint.Parse(vMoneyIdx4.Text));
 
 			Helper.GetComp2Ex(w_mob, 4);
 		}
@@ -2051,7 +2052,7 @@ namespace WorldBuilder
 		{
 			w_mob.Write((byte) 0x01);
 			w_mob.Write(0x04);
-			w_mob.Write((UInt32) (vFactions.Items.Count));
+			w_mob.Write((uint) (vFactions.Items.Count));
 
 			// SARC
 			if (SAR_POS_FCN == 0)
@@ -2065,17 +2066,17 @@ namespace WorldBuilder
 
 			// the structure itself
 			for (int i = 0; i < vFactions.Items.Count; i++)
-				w_mob.Write(UInt32.Parse((string) vFactions.Items[i]));
+				w_mob.Write(uint.Parse((string) vFactions.Items[i]));
 
 			// the post-structure
-			Helper.GetComp2Ex(w_mob, (UInt32) (vFactions.Items.Count));
+			Helper.GetComp2Ex(w_mob, (uint) (vFactions.Items.Count));
 		}
 
 		private void SaveNPCWaypoints(BinaryWriter w_mob)
 		{
 			w_mob.Write((byte) 0x01);
 			w_mob.Write(0x08);
-			w_mob.Write((UInt32) (vWaypoints.Items.Count*8 + 2));
+			w_mob.Write((uint) (vWaypoints.Items.Count*8 + 2));
 
 			// SARC
 			if (SAR_POS_WAY == 0)
@@ -2088,7 +2089,7 @@ namespace WorldBuilder
 				w_mob.Write(SAR_POS_WAY);
 
 			// Pre-structure
-			w_mob.Write((UInt32) (vWaypoints.Items.Count));
+			w_mob.Write((uint) (vWaypoints.Items.Count));
 			w_mob.Write(0x00);
 			w_mob.Write(0x00);
 			w_mob.Write(0x00);
@@ -2100,7 +2101,7 @@ namespace WorldBuilder
 			}
 
 			// Post-structure
-			Helper.GetComp2Ex(w_mob, (UInt32) (vWaypoints.Items.Count*8 + 2));
+			Helper.GetComp2Ex(w_mob, (uint) (vWaypoints.Items.Count*8 + 2));
 		}
 
 		private void SaveNPCStandpoints(BinaryWriter w_mob)
@@ -2129,43 +2130,43 @@ namespace WorldBuilder
 				filler[i] = 0x00;
 
 			// Day point
-			w_mob.Write(UInt32.Parse(vDayMap.Text));
-			//w_mob.Write((UInt32)0x77F442AA);
-			w_mob.Write((UInt32) 0);
-			w_mob.Write(UInt32.Parse(vDayX.Text));
-			w_mob.Write(UInt32.Parse(vDayY.Text));
+			w_mob.Write(uint.Parse(vDayMap.Text));
+			//w_mob.Write((uint)0x77F442AA);
+			w_mob.Write((uint) 0);
+			w_mob.Write(uint.Parse(vDayX.Text));
+			w_mob.Write(uint.Parse(vDayY.Text));
 			w_mob.Write(Single.Parse(vDayOfsX.Text));
 			w_mob.Write(Single.Parse(vDayOfsY.Text));
-			//w_mob.Write((UInt32)204);
-			//w_mob.Write((UInt32)0x0012EB28);
-			w_mob.Write(Int32.Parse(vDayJP.Text));
-			w_mob.Write((UInt32) 0);
+			//w_mob.Write((uint)204);
+			//w_mob.Write((uint)0x0012EB28);
+			w_mob.Write(int.Parse(vDayJP.Text));
+			w_mob.Write((uint) 0);
 			w_mob.Write(filler);
 
 			// Night point
-			w_mob.Write(UInt32.Parse(vNightMap.Text));
-			//w_mob.Write((UInt32)0x77F442AA);
-			w_mob.Write((UInt32) 0);
-			w_mob.Write(UInt32.Parse(vNightX.Text));
-			w_mob.Write(UInt32.Parse(vNightY.Text));
+			w_mob.Write(uint.Parse(vNightMap.Text));
+			//w_mob.Write((uint)0x77F442AA);
+			w_mob.Write((uint) 0);
+			w_mob.Write(uint.Parse(vNightX.Text));
+			w_mob.Write(uint.Parse(vNightY.Text));
 			w_mob.Write(Single.Parse(vNightOfsX.Text));
 			w_mob.Write(Single.Parse(vNightOfsY.Text));
-			//w_mob.Write((UInt32)208);
-			//w_mob.Write((UInt32)0x0012EB28);
-			w_mob.Write(Int32.Parse(vNightJP.Text));
-			w_mob.Write((UInt32) 0);
+			//w_mob.Write((uint)208);
+			//w_mob.Write((uint)0x0012EB28);
+			w_mob.Write(int.Parse(vNightJP.Text));
+			w_mob.Write((uint) 0);
 			w_mob.Write(filler);
 
 			if (pScoutPoint.Checked)
 			{
-				w_mob.Write(UInt32.Parse(vScoutMap.Text));
-				w_mob.Write((UInt32) 0);
-				w_mob.Write(UInt32.Parse(vScoutX.Text));
-				w_mob.Write(UInt32.Parse(vScoutY.Text));
+				w_mob.Write(uint.Parse(vScoutMap.Text));
+				w_mob.Write((uint) 0);
+				w_mob.Write(uint.Parse(vScoutX.Text));
+				w_mob.Write(uint.Parse(vScoutY.Text));
 				w_mob.Write(Single.Parse(vScoutOfsX.Text));
 				w_mob.Write(Single.Parse(vScoutOfsY.Text));
-				w_mob.Write(Int32.Parse(vScoutJP.Text));
-				w_mob.Write((UInt32) 0);
+				w_mob.Write(int.Parse(vScoutJP.Text));
+				w_mob.Write((uint) 0);
 				w_mob.Write(filler);
 			}
 
@@ -2175,9 +2176,9 @@ namespace WorldBuilder
 			else
 				Helper.GetComp2Ex(w_mob, 0x1E);
 
-			//w_mob.Write((UInt32)0x02);
-			//w_mob.Write((UInt32)0x0FFFFF);
-			//w_mob.Write((UInt32)0x00);
+			//w_mob.Write((uint)0x02);
+			//w_mob.Write((uint)0x0FFFFF);
+			//w_mob.Write((uint)0x00);
 		}
 
 		private void LoadNPCStandpoints(BinaryReader r_mob)
@@ -4494,7 +4495,7 @@ namespace WorldBuilder
 
 			w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 			w_mob.Write(ITEM_GUID_BYTES);
-			w_mob.Write((Int32) Helper.GEN_GetMobileType(ITEM_TYPE));
+			w_mob.Write((int) Helper.GEN_GetMobileType(ITEM_TYPE));
 
 			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 0, true); // Location
 			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 21, true); // Flags
@@ -4511,8 +4512,8 @@ namespace WorldBuilder
 
 			// Write properties
 			// obj_f_location
-			UInt32 loc_x = UInt32.Parse(LocationX.Text);
-			UInt32 loc_y = UInt32.Parse(LocationY.Text);
+			uint loc_x = uint.Parse(LocationX.Text);
+			uint loc_y = uint.Parse(LocationY.Text);
 			w_mob.Write((byte) 0x01);
 			w_mob.Write(loc_x);
 			w_mob.Write(loc_y);
@@ -4526,12 +4527,12 @@ namespace WorldBuilder
 				w_mob.Write(vChestInv.Items.Count);
 			else
 			{
-				w_mob.Write(Int32.Parse(vChestInvSlot.Text));
+				w_mob.Write(int.Parse(vChestInvSlot.Text));
 				pChestInvSlot.Checked = false;
 			}
 			// obj_f_money_quantity
 			if (IS_MONEY)
-				w_mob.Write(UInt32.Parse(tChestMoneyAmt.Text));
+				w_mob.Write(uint.Parse(tChestMoneyAmt.Text));
 
 			w_mob.Close();
 			mob.Close();
@@ -4793,7 +4794,7 @@ namespace WorldBuilder
 
 			w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 			w_mob.Write(ITEM_GUID_BYTES);
-			w_mob.Write((Int32) Helper.GEN_GetMobileType(ITEM_TYPE));
+			w_mob.Write((int) Helper.GEN_GetMobileType(ITEM_TYPE));
 
 			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 0, true); // Location
 			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 21, true); // Flags
@@ -4810,8 +4811,8 @@ namespace WorldBuilder
 
 			// Write properties
 			// obj_f_location
-			UInt32 loc_x = UInt32.Parse(LocationX.Text);
-			UInt32 loc_y = UInt32.Parse(LocationY.Text);
+			uint loc_x = uint.Parse(LocationX.Text);
+			uint loc_y = uint.Parse(LocationY.Text);
 			w_mob.Write((byte) 0x01);
 			w_mob.Write(loc_x);
 			w_mob.Write(loc_y);
@@ -4825,12 +4826,12 @@ namespace WorldBuilder
 				w_mob.Write(vNpcInv.Items.Count);
 			else
 			{
-				w_mob.Write(Int32.Parse(vNpcInvSlot.Text));
+				w_mob.Write(int.Parse(vNpcInvSlot.Text));
 				pNpcInvSlot.Checked = false;
 			}
 			// obj_f_money_quantity
 			if (IS_MONEY)
-				w_mob.Write(UInt32.Parse(tNpcMoneyAmt.Text));
+				w_mob.Write(uint.Parse(tNpcMoneyAmt.Text));
 
 			w_mob.Close();
 			mob.Close();
@@ -5502,8 +5503,8 @@ namespace WorldBuilder
 
 				string SX = abs.Substring(0, 4);
 				string SY = abs.Substring(4, 4);
-				int X = Int32.Parse(SX, NumberStyles.HexNumber);
-				int Y = Int32.Parse(SY, NumberStyles.HexNumber);
+				int X = int.Parse(SX, NumberStyles.HexNumber);
+				int Y = int.Parse(SY, NumberStyles.HexNumber);
 
 				if (X > MX)
 					MX = X;
@@ -5545,8 +5546,8 @@ namespace WorldBuilder
 				if (abs.Length != 8)
 					continue;
 
-				int X = Int32.Parse(SX, NumberStyles.HexNumber);
-				int Y = Int32.Parse(SY, NumberStyles.HexNumber);
+				int X = int.Parse(SX, NumberStyles.HexNumber);
+				int Y = int.Parse(SY, NumberStyles.HexNumber);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -5575,8 +5576,8 @@ namespace WorldBuilder
 			if (File.Exists(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt"))
 			{
 				var sr = new StreamReader(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt");
-				SX = Int32.Parse(sr.ReadLine());
-				SY = Int32.Parse(sr.ReadLine());
+				SX = int.Parse(sr.ReadLine());
+				SY = int.Parse(sr.ReadLine());
 				sr.Close();
 			}
 
@@ -5631,8 +5632,8 @@ namespace WorldBuilder
 			if (File.Exists(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt"))
 			{
 				var sr = new StreamReader(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt");
-				SX = Int32.Parse(sr.ReadLine());
-				SY = Int32.Parse(sr.ReadLine());
+				SX = int.Parse(sr.ReadLine());
+				SY = int.Parse(sr.ReadLine());
 				sr.Close();
 			}
 
@@ -5683,8 +5684,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				if (X > MX)
 					MX = X;
@@ -5721,8 +5722,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -5750,8 +5751,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				if (X > MX)
 					MX = X;
@@ -5787,8 +5788,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -5799,10 +5800,10 @@ namespace WorldBuilder
 
 		private void recomb_partial_Click(object sender, EventArgs e)
 		{
-			int LX = Int32.Parse(SX.Text); // Min X coord
-			int LY = Int32.Parse(SY.Text); // Min Y coord
-			int MX = LX + Int32.Parse(PX.Text) - 1; // Max X coord
-			int MY = LY + Int32.Parse(PY.Text) - 1; // Max Y coord
+			int LX = int.Parse(SX.Text); // Min X coord
+			int LY = int.Parse(SY.Text); // Min Y coord
+			int MX = LX + int.Parse(PX.Text) - 1; // Max X coord
+			int MY = LY + int.Parse(PY.Text) - 1; // Max Y coord
 
 			if (OFG.ShowDialog() == DialogResult.Cancel)
 				return;
@@ -5834,8 +5835,8 @@ namespace WorldBuilder
 					string abs = Path.GetFileNameWithoutExtension(file);
 					string _SX = abs.Substring(0, 4);
 					string _SY = abs.Substring(4, 4);
-					int X = Int32.Parse(_SX, NumberStyles.HexNumber);
-					int Y = Int32.Parse(_SY, NumberStyles.HexNumber);
+					int X = int.Parse(_SX, NumberStyles.HexNumber);
+					int Y = int.Parse(_SY, NumberStyles.HexNumber);
 
 					tmp = (Bitmap) Image.FromFile(file);
 					g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -5872,8 +5873,8 @@ namespace WorldBuilder
 			if (File.Exists(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt"))
 			{
 				var sr = new StreamReader(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt");
-				SX = Int32.Parse(sr.ReadLine());
-				SY = Int32.Parse(sr.ReadLine());
+				SX = int.Parse(sr.ReadLine());
+				SY = int.Parse(sr.ReadLine());
 				sr.Close();
 			}
 
@@ -5940,8 +5941,8 @@ namespace WorldBuilder
 
 				string SX = abs.Substring(0, 4);
 				string SY = abs.Substring(4, 4);
-				int X = Int32.Parse(SX, NumberStyles.HexNumber);
-				int Y = Int32.Parse(SY, NumberStyles.HexNumber);
+				int X = int.Parse(SX, NumberStyles.HexNumber);
+				int Y = int.Parse(SY, NumberStyles.HexNumber);
 
 				if (X > MX)
 					MX = X;
@@ -5983,8 +5984,8 @@ namespace WorldBuilder
 				if (abs.Length != 8)
 					continue;
 
-				int X = Int32.Parse(SX, NumberStyles.HexNumber);
-				int Y = Int32.Parse(SY, NumberStyles.HexNumber);
+				int X = int.Parse(SX, NumberStyles.HexNumber);
+				int Y = int.Parse(SY, NumberStyles.HexNumber);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -5995,10 +5996,10 @@ namespace WorldBuilder
 
 		private void button7_Click(object sender, EventArgs e)
 		{
-			int LX = Int32.Parse(SX.Text); // Min X coord
-			int LY = Int32.Parse(SY.Text); // Min Y coord
-			int MX = LX + Int32.Parse(PX.Text) - 1; // Max X coord
-			int MY = LY + Int32.Parse(PY.Text) - 1; // Max Y coord
+			int LX = int.Parse(SX.Text); // Min X coord
+			int LY = int.Parse(SY.Text); // Min Y coord
+			int MX = LX + int.Parse(PX.Text) - 1; // Max X coord
+			int MY = LY + int.Parse(PY.Text) - 1; // Max Y coord
 
 			if (OFG.ShowDialog() == DialogResult.Cancel)
 				return;
@@ -6030,8 +6031,8 @@ namespace WorldBuilder
 					string abs = Path.GetFileNameWithoutExtension(file);
 					string _SX = abs.Substring(0, 4);
 					string _SY = abs.Substring(4, 4);
-					int X = Int32.Parse(_SX, NumberStyles.HexNumber);
-					int Y = Int32.Parse(_SY, NumberStyles.HexNumber);
+					int X = int.Parse(_SX, NumberStyles.HexNumber);
+					int Y = int.Parse(_SY, NumberStyles.HexNumber);
 
 					tmp = (Bitmap) Image.FromFile(file);
 					g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -6077,8 +6078,8 @@ namespace WorldBuilder
 			if (File.Exists(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt"))
 			{
 				var sr = new StreamReader(Path.GetFileNameWithoutExtension(OFG1.FileName) + ".txt");
-				SX = Int32.Parse(sr.ReadLine());
-				SY = Int32.Parse(sr.ReadLine());
+				SX = int.Parse(sr.ReadLine());
+				SY = int.Parse(sr.ReadLine());
 				sr.Close();
 			}
 
@@ -6128,8 +6129,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				if (X > MX)
 					MX = X;
@@ -6166,8 +6167,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -6195,8 +6196,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				if (X > MX)
 					MX = X;
@@ -6232,8 +6233,8 @@ namespace WorldBuilder
 				string abs = Path.GetFileNameWithoutExtension(file);
 				string SX = abs.Substring(2, 3);
 				string SY = abs.Substring(5, 3);
-				int X = Int32.Parse(SX);
-				int Y = Int32.Parse(SY);
+				int X = int.Parse(SX);
+				int Y = int.Parse(SY);
 
 				tmp = (Bitmap) Image.FromFile(file);
 				g_Blt.DrawImage(tmp, 256*(Y - LY), 256*(X - LX));
@@ -6464,11 +6465,11 @@ namespace WorldBuilder
 
 				for (int i = 0; i < Data.Count; i++)
 				{
-					string[] elements = Data[i].ToString().Split('\t');
+					string[] elements = Data[i].Split('\t');
 					lstJumpPoints.Items.Add(elements[0] + ": " + elements[1] + " (Map " + elements[2] + " at X=" + elements[3] + ";Y=" + elements[4] + ")");
 
-					if (Int32.Parse(elements[0]) > OpenJP_Max)
-						OpenJP_Max = Int32.Parse(elements[0]);
+					if (int.Parse(elements[0]) > OpenJP_Max)
+						OpenJP_Max = int.Parse(elements[0]);
 				}
 			}
 		}
@@ -6486,7 +6487,7 @@ namespace WorldBuilder
 
 			var sw = new StreamWriter(new FileStream(OpenJP, FileMode.Create));
 			for (int i = 0; i < Data.Count; i++)
-				sw.WriteLine(Data[i].ToString());
+				sw.WriteLine(Data[i]);
 
 			sw.Close();
 
@@ -6641,23 +6642,23 @@ namespace WorldBuilder
 
 			// Area locations
 			bw.BaseStream.Seek(0x002ACE40, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(TrueNeutral.Text));
+			bw.Write(uint.Parse(TrueNeutral.Text));
 			bw.BaseStream.Seek(0x002ACE44, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(LawfulNeutral.Text));
+			bw.Write(uint.Parse(LawfulNeutral.Text));
 			bw.BaseStream.Seek(0x002ACE48, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(ChaoticNeutral.Text));
+			bw.Write(uint.Parse(ChaoticNeutral.Text));
 			bw.BaseStream.Seek(0x002ACE50, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(NeutralGood.Text));
+			bw.Write(uint.Parse(NeutralGood.Text));
 			bw.BaseStream.Seek(0x002ACE54, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(LawfulGood.Text));
+			bw.Write(uint.Parse(LawfulGood.Text));
 			bw.BaseStream.Seek(0x002ACE58, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(ChaoticGood.Text));
+			bw.Write(uint.Parse(ChaoticGood.Text));
 			bw.BaseStream.Seek(0x002ACE60, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(NeutralEvil.Text));
+			bw.Write(uint.Parse(NeutralEvil.Text));
 			bw.BaseStream.Seek(0x002ACE64, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(LawfulEvil.Text));
+			bw.Write(uint.Parse(LawfulEvil.Text));
 			bw.BaseStream.Seek(0x002ACE68, SeekOrigin.Begin);
-			bw.Write(UInt32.Parse(ChaoticEvil.Text));
+			bw.Write(uint.Parse(ChaoticEvil.Text));
 
 			if (chkEnableDebug.Checked)
 			{
@@ -6816,7 +6817,7 @@ namespace WorldBuilder
 						for (int i = 0; i < lstDesc.Items.Count; i++)
 						{
 							string listidx = lstDesc.Items[i].ToString().Split(':')[0];
-							if (lineID <= Int32.Parse(listidx))
+							if (lineID <= int.Parse(listidx))
 							{
 								targetLine = i;
 								break;
@@ -6837,7 +6838,7 @@ namespace WorldBuilder
 								continue;
 
 							string listidx = desc[i].ToString().Split('{', '}')[1];
-							if (lineID <= Int32.Parse(listidx))
+							if (lineID <= int.Parse(listidx))
 							{
 								// + v1.0: See if there's a comment and an empty line above +
 								int j = i;
@@ -7127,7 +7128,7 @@ namespace WorldBuilder
 					proto_line += lstProtoProps.Items[i].ToString().Split('|')[1].Split('\t')[1];
 			}
 
-			int lineID = Int32.Parse(tProtoID.Text);
+			int lineID = int.Parse(tProtoID.Text);
 			int targetLine = -1;
 			for (int i = 0; i < protos.Count; i++)
 			{
@@ -7135,7 +7136,7 @@ namespace WorldBuilder
 					continue;
 
 				string listidx = protos[i].ToString().Split('\t')[0];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = i;
 					break;
@@ -7161,7 +7162,7 @@ namespace WorldBuilder
 			for (int i = 0; i < lstDesc.Items.Count; i++)
 			{
 				string listidx = lstDesc.Items[i].ToString().Split(':')[0];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = i;
 					break;
@@ -7182,7 +7183,7 @@ namespace WorldBuilder
 					continue;
 
 				string listidx = desc[i].ToString().Split('{', '}')[1];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					// + v1.0: See if there's a comment and an empty line above +
 					int j = i;
@@ -7418,7 +7419,7 @@ namespace WorldBuilder
 							continue;
 
 						string listidx = ldesc[i].ToString().Split('{', '}')[1];
-						if (lineID <= Int32.Parse(listidx))
+						if (lineID <= int.Parse(listidx))
 						{
 							// + v1.0: See if there's a comment and an empty line above +
 							int j = i;
@@ -7496,7 +7497,7 @@ namespace WorldBuilder
 			}
 
 
-			if (Int32.Parse(tDescID.Text) < 20000)
+			if (int.Parse(tDescID.Text) < 20000)
 			{
 				MessageBox.Show(
 					"Descriptions with numbers under 20000 are reserved for prototypes and must be added together with a prototype. Please use a prototype editor mode to create a prototype with this ID first. The description entry will be added automatically and could be changed later at any time.",
@@ -7511,7 +7512,7 @@ namespace WorldBuilder
 			for (int i = 0; i < lstDesc.Items.Count; i++)
 			{
 				string listidx = lstDesc.Items[i].ToString().Split(':')[0];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = i;
 					break;
@@ -7531,7 +7532,7 @@ namespace WorldBuilder
 					continue;
 
 				string listidx = desc[j].ToString().Split('{', '}')[1];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					// + v1.0: See if there's a comment and an empty line above +
 					int i = j;
@@ -7583,7 +7584,7 @@ namespace WorldBuilder
 			for (int i = 0; i < lstDesc.Items.Count; i++)
 			{
 				string listidx = lstDesc.Items[i].ToString().Split(':')[0];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = i;
 					break;
@@ -7601,7 +7602,7 @@ namespace WorldBuilder
 					continue;
 
 				string listidx = desc[j].ToString().Split('{', '}')[1];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = j;
 					break;
@@ -7620,7 +7621,7 @@ namespace WorldBuilder
 					continue;
 
 				string listidx = ldesc[k].ToString().Split('{', '}')[1];
-				if (lineID <= Int32.Parse(listidx))
+				if (lineID <= int.Parse(listidx))
 				{
 					targetLine = k;
 					break;
@@ -7669,9 +7670,9 @@ namespace WorldBuilder
 				return;
 
 			var bw = new BinaryWriter(new FileStream(MapPrp, FileMode.Create));
-			bw.Write(UInt64.Parse(tArtEntry.Text));
-			bw.Write(UInt64.Parse(tMapWidth.Text)*64);
-			bw.Write(UInt64.Parse(tMapWidth.Text)*64);
+			bw.Write(ulong.Parse(tArtEntry.Text));
+			bw.Write(ulong.Parse(tMapWidth.Text)*64);
+			bw.Write(ulong.Parse(tMapWidth.Text)*64);
 			bw.Close();
 			MessageBox.Show("Saved.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -7725,7 +7726,7 @@ namespace WorldBuilder
 			try
 			{
 				var bw = new BinaryWriter(new FileStream(GlobalLit, FileMode.Create));
-				bw.Write(UInt32.Parse(tGLT1.Text));
+				bw.Write(uint.Parse(tGLT1.Text));
 				bw.Write(tGLT2.SelectedIndex);
 				bw.Write(Single.Parse(tGLTRed.Text));
 				bw.Write(Single.Parse(tGLTGreen.Text));
@@ -8069,12 +8070,12 @@ namespace WorldBuilder
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x0C, SeekOrigin.Begin);
 						Int16 proto_id = readobj.ReadInt16();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
-						UInt32 type = readobj.ReadUInt32();
+						uint type = readobj.ReadUInt32();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
 						long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
 						readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
-						UInt32 x_coord = readobj.ReadUInt32();
-						UInt32 y_coord = readobj.ReadUInt32();
+						uint x_coord = readobj.ReadUInt32();
+						uint y_coord = readobj.ReadUInt32();
 						// + GUID +
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x1C, SeekOrigin.Begin);
 						string proto_guid = Helper.GEN_ConvertBytesToStringGUID(readobj.ReadBytes(24));
@@ -9546,12 +9547,12 @@ namespace WorldBuilder
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x0C, SeekOrigin.Begin);
 					Int16 proto_id = readobj.ReadInt16();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
-					UInt32 type = readobj.ReadUInt32();
+					uint type = readobj.ReadUInt32();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
 					long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
 					readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
-					UInt32 x_coord = readobj.ReadUInt32();
-					UInt32 y_coord = readobj.ReadUInt32();
+					uint x_coord = readobj.ReadUInt32();
+					uint y_coord = readobj.ReadUInt32();
 					// + GUID +
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x1C, SeekOrigin.Begin);
 					string proto_guid = Helper.GEN_ConvertBytesToStringGUID(readobj.ReadBytes(24));
@@ -10609,10 +10610,10 @@ namespace WorldBuilder
 				string Path_Par2 = PathInfo_A[0].Split('(', ')', ',')[2].Trim();
 				string Path_Par3 = PathInfo_A[1].Split('(', ')', ',')[1].Trim();
 				string Path_Par4 = PathInfo_A[1].Split('(', ')', ',')[2].Trim();
-				bw.Write(UInt32.Parse(Path_Par1));
-				bw.Write(UInt32.Parse(Path_Par2));
-				bw.Write(UInt32.Parse(Path_Par3));
-				bw.Write(UInt32.Parse(Path_Par4));
+				bw.Write(uint.Parse(Path_Par1));
+				bw.Write(uint.Parse(Path_Par2));
+				bw.Write(uint.Parse(Path_Par3));
+				bw.Write(uint.Parse(Path_Par4));
 
 				int opcodes_in_path = ((ArrayList) WM_Paths[i]).Count;
 				bw.Write(opcodes_in_path);

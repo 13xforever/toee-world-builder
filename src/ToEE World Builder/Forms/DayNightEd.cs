@@ -137,19 +137,19 @@ namespace WorldBuilder
 				return;
 
 			var node = (NXD) nxd_nodes[lstMOBs.SelectedIndex];
-			node.cur_map_id = UInt32.Parse(DefMap.Text);
-			node.day_map_id = UInt32.Parse(DayMap.Text);
-			node.day_x = UInt32.Parse(DayX.Text);
+			node.cur_map_id = uint.Parse(DefMap.Text);
+			node.day_map_id = uint.Parse(DayMap.Text);
+			node.day_x = uint.Parse(DayX.Text);
 			;
-			node.day_y = UInt32.Parse(DayY.Text);
+			node.day_y = uint.Parse(DayY.Text);
 			node.day_ofsx = Single.Parse(DayOfsX.Text);
 			node.day_ofsy = Single.Parse(DayOfsY.Text);
 			;
 
-			node.night_map_id = UInt32.Parse(NightMap.Text);
-			node.night_x = UInt32.Parse(NightX.Text);
+			node.night_map_id = uint.Parse(NightMap.Text);
+			node.night_x = uint.Parse(NightX.Text);
 			;
-			node.night_y = UInt32.Parse(NightY.Text);
+			node.night_y = uint.Parse(NightY.Text);
 			node.night_ofsx = Single.Parse(NightOfsX.Text);
 			node.night_ofsy = Single.Parse(NightOfsY.Text);
 
@@ -178,19 +178,19 @@ namespace WorldBuilder
 			{
 				var node = new NXD();
 				node.G_GUID = lm.LinkGUID;
-				node.cur_map_id = UInt32.Parse(DefMap.Text);
-				node.day_map_id = UInt32.Parse(DayMap.Text);
-				node.day_x = UInt32.Parse(DayX.Text);
+				node.cur_map_id = uint.Parse(DefMap.Text);
+				node.day_map_id = uint.Parse(DayMap.Text);
+				node.day_x = uint.Parse(DayX.Text);
 				;
-				node.day_y = UInt32.Parse(DayY.Text);
+				node.day_y = uint.Parse(DayY.Text);
 				node.day_ofsx = Single.Parse(DayOfsX.Text);
 				node.day_ofsy = Single.Parse(DayOfsY.Text);
 				;
 
-				node.night_map_id = UInt32.Parse(NightMap.Text);
-				node.night_x = UInt32.Parse(NightX.Text);
+				node.night_map_id = uint.Parse(NightMap.Text);
+				node.night_x = uint.Parse(NightX.Text);
 				;
-				node.night_y = UInt32.Parse(NightY.Text);
+				node.night_y = uint.Parse(NightY.Text);
 				node.night_ofsx = Single.Parse(NightOfsX.Text);
 				node.night_ofsy = Single.Parse(NightOfsY.Text);
 
@@ -273,17 +273,17 @@ namespace WorldBuilder
 		private struct NXD // a transition node
 		{
 			public byte[] G_GUID; // must be 24 bytes long, 128-bit 0x02 + GUID
-			public UInt32 cur_map_id;
-			public UInt32 day_map_id;
+			public uint cur_map_id;
+			public uint day_map_id;
 			public float day_ofsx;
 			public float day_ofsy;
-			public UInt32 day_x;
-			public UInt32 day_y;
-			public UInt32 night_map_id;
+			public uint day_x;
+			public uint day_y;
+			public uint night_map_id;
 			public float night_ofsx;
 			public float night_ofsy;
-			public UInt32 night_x;
-			public UInt32 night_y;
+			public uint night_x;
+			public uint night_y;
 		}
 	}
 }

@@ -15,8 +15,8 @@ namespace WorldBuilder
 		Key,
 		Written,
 		Generic,
-		PC,
-		NPC,
+		Pc,
+		Npc,
 		Trap,
 		Bag
 	}

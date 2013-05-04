@@ -29,10 +29,10 @@ namespace WorldBuilder
 			try
 			{
 				lstSecs.Items.Clear();
-				int _fromX = Int32.Parse(fromX.Text);
-				int _fromY = Int32.Parse(fromY.Text);
-				int _toX = Int32.Parse(toX.Text);
-				int _toY = Int32.Parse(toY.Text);
+				int _fromX = int.Parse(fromX.Text);
+				int _fromY = int.Parse(fromY.Text);
+				int _toX = int.Parse(toX.Text);
+				int _toY = int.Parse(toY.Text);
 				int SX = 0;
 				int SY = 0;
 				string secname = "";

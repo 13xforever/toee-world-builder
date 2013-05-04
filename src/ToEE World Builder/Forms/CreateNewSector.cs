@@ -25,22 +25,22 @@ namespace WorldBuilder
 			if (rbObjCoords.Checked)
 			{
 				// Make sec name from object coordinates
-				CX = Int32.Parse(ObjX.Text);
-				CY = Int32.Parse(ObjY.Text);
+				CX = int.Parse(ObjX.Text);
+				CY = int.Parse(ObjY.Text);
 				FileToOpen = Helper.SEC_GetSectorCorrespondence(CX, CY).ToString();
 				Helper.Sec_GetMinMax(FileToOpen, ref minY, ref maxY, ref minX, ref maxX);
 			}
 			else
 			{
-				if (UInt64.Parse(SecX.Text) > 31 || UInt64.Parse(SecY.Text) > 31 || UInt64.Parse(SecX.Text) < 0 || UInt64.Parse(SecY.Text) < 0)
+				if (ulong.Parse(SecX.Text) > 31 || ulong.Parse(SecY.Text) > 31 || ulong.Parse(SecX.Text) < 0 || ulong.Parse(SecY.Text) < 0)
 				{
 					MessageBox.Show("Illegal value entered for sector coordinates! (Note: in ToEE the sector coordinates usually don't go past 15)", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					FileToOpen = "";
 					return;
 				}
 
-				CX = Int32.Parse(SecX.Text);
-				CY = Int32.Parse(SecY.Text);
+				CX = int.Parse(SecX.Text);
+				CY = int.Parse(SecY.Text);
 				FileToOpen = Helper.SEC_GetSecNameFromXY(CX, CY).ToString();
 				Helper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(FileToOpen), ref minY, ref maxY, ref minX, ref maxX);
 			}

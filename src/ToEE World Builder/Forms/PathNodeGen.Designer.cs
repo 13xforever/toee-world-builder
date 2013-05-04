@@ -1,12 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.IO;
-using System.Text.RegularExpressions;
+﻿using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class PathNodeGen
 	{

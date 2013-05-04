@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace WorldBuilder.Helpers
+namespace WorldBuilder
 {
 	/// <summary>
 	/// A class that can be used to load and parse TAB files

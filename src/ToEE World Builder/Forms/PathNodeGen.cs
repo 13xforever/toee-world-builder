@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class PathNodeGen : Form
 	{
@@ -18,11 +18,11 @@ namespace WorldBuilder
 		{
 			if (OpenPND.ShowDialog() == DialogResult.OK)
 			{
-				PNDHelper.CURRENT_TOP_ID = 0;
+				PathNodeHelper.CURRENT_TOP_ID = 0;
 				lstNodes.Items.Clear();
 				lstLinks.Items.Clear();
-				PNDHelper.PathNodes.Clear();
-				PNDHelper.PathNodeGoals.Clear();
+				PathNodeHelper.PathNodes.Clear();
+				PathNodeHelper.PathNodeGoals.Clear();
 
 				var br = new BinaryReader(new FileStream(OpenPND.FileName, FileMode.Open));
 				uint num_nodes = br.ReadUInt32(); // get the # of nodes
@@ -30,20 +30,15 @@ namespace WorldBuilder
 				for (int i = 0; i < num_nodes; i++)
 				{
 					// Parse each node
-					var p = new PNDHelper.PathNode();
-					p.ID = br.ReadUInt32();
-					p.X = br.ReadUInt32();
-					p.Y = br.ReadUInt32();
-					p.OfsX = br.ReadSingle();
-					p.OfsY = br.ReadSingle();
+					var p = br.ReadPathNode();
 
 					// Add to the list and to the hashtable
-					PNDHelper.PathNodes.Add(p.ID, p);
-					lstNodes.Items.Add("ID #" + p.ID.ToString() + ": (" + p.X.ToString() + ", " + p.Y.ToString() + ")");
+					PathNodeHelper.PathNodes.Add(p.Id, p);
+					lstNodes.Items.Add("ID #" + p.Id.ToString() + ": (" + p.X.ToString() + ", " + p.Y.ToString() + ")");
 
 					// Check if we need to modify the max ID available
-					if (p.ID > PNDHelper.CURRENT_TOP_ID)
-						PNDHelper.CURRENT_TOP_ID = p.ID;
+					if (p.Id > PathNodeHelper.CURRENT_TOP_ID)
+						PathNodeHelper.CURRENT_TOP_ID = p.Id;
 
 					uint num_goals = br.ReadUInt32();
 					string goals = "";
@@ -52,26 +47,26 @@ namespace WorldBuilder
 						// Process each goal
 						goals += br.ReadUInt32().ToString() + "::";
 					}
-					PNDHelper.PathNodeGoals.Add(p.ID, goals);
+					PathNodeHelper.PathNodeGoals.Add(p.Id, goals);
 				}
 				br.Close();
-				PNDHelper.CURRENT_TOP_ID++; // increase to set to a new possible value
+				PathNodeHelper.CURRENT_TOP_ID++; // increase to set to a new possible value
 
-				PNDHelper.PND_HAS_CHANGED = false;
-				PNDHelper.PND_MODE_ACTIVE = true;
+				PathNodeHelper.PND_HAS_CHANGED = false;
+				PathNodeHelper.PND_MODE_ACTIVE = true;
 				SetInterfaceState(true);
 			}
 		}
 
 		private void btnSavePND_Click(object sender, EventArgs e)
 		{
-			if (!PNDHelper.PND_MODE_ACTIVE)
+			if (!PathNodeHelper.PND_MODE_ACTIVE)
 			{
 				MessageBox.Show("No path nodes to save!", "Nothing to do", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
-			if (PNDHelper.PND_HAS_CHANGED)
+			if (PathNodeHelper.PND_HAS_CHANGED)
 			{
 				if (
 					MessageBox.Show(
@@ -85,23 +80,23 @@ namespace WorldBuilder
 			{
 				// TODO: save back the path nodes here
 				var bw = new BinaryWriter(new FileStream(SavePND.FileName, FileMode.Create));
-				bw.Write((uint) PNDHelper.PathNodes.Count); // # of path nodes
+				bw.Write((uint) PathNodeHelper.PathNodes.Count); // # of path nodes
 
-				var NodeStack = new Stack(PNDHelper.PathNodes.Keys);
+				var NodeStack = new Stack(PathNodeHelper.PathNodes.Keys);
 				IEnumerator WalkNodes = NodeStack.GetEnumerator();
 
 				while (WalkNodes.MoveNext())
 				{
-					var p = (PNDHelper.PathNode) PNDHelper.PathNodes[uint.Parse(WalkNodes.Current.ToString())];
-					bw.Write(p.ID);
+					var p = (PathNode) PathNodeHelper.PathNodes[uint.Parse(WalkNodes.Current.ToString())];
+					bw.Write(p.Id);
 					bw.Write(p.X);
 					bw.Write(p.Y);
-					bw.Write(p.OfsX);
-					bw.Write(p.OfsY);
+					bw.Write(p.OffsetX);
+					bw.Write(p.OffsetY);
 
 					// Write out the number of goals and the list of goals
 					// (neighboring destinations)
-					string[] goals = str_to_array(PNDHelper.PathNodeGoals[p.ID].ToString());
+					string[] goals = str_to_array(PathNodeHelper.PathNodeGoals[p.Id].ToString());
 					bw.Write(goals.GetUpperBound(0));
 					foreach (string goal in goals)
 					{
@@ -116,19 +111,19 @@ namespace WorldBuilder
 
 		private void btnNewPND_Click(object sender, EventArgs e)
 		{
-			if (PNDHelper.PND_MODE_ACTIVE)
+			if (PathNodeHelper.PND_MODE_ACTIVE)
 			{
 				if (MessageBox.Show("Are you sure you want to create a new path node data file?", "Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 					return;
 			}
 
-			PNDHelper.CURRENT_TOP_ID = 0;
+			PathNodeHelper.CURRENT_TOP_ID = 0;
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			PNDHelper.PathNodes.Clear();
-			PNDHelper.PathNodeGoals.Clear();
-			PNDHelper.PND_HAS_CHANGED = false;
-			PNDHelper.PND_MODE_ACTIVE = true;
+			PathNodeHelper.PathNodes.Clear();
+			PathNodeHelper.PathNodeGoals.Clear();
+			PathNodeHelper.PND_HAS_CHANGED = false;
+			PathNodeHelper.PND_MODE_ACTIVE = true;
 			SetInterfaceState(true);
 		}
 
@@ -174,22 +169,22 @@ namespace WorldBuilder
 				return;
 
 			uint ID = GetID(lstNodes.Items[lstNodes.SelectedIndex].ToString());
-			var p = (PNDHelper.PathNode) PNDHelper.PathNodes[ID];
+			var p = (PathNode) PathNodeHelper.PathNodes[ID];
 			NodeX.Text = p.X.ToString();
 			NodeY.Text = p.Y.ToString();
-			NodeOfsX.Text = p.OfsX.ToString();
-			NodeOfsY.Text = p.OfsY.ToString();
+			NodeOfsX.Text = p.OffsetX.ToString();
+			NodeOfsY.Text = p.OffsetY.ToString();
 
 			lstLinks.Items.Clear();
-			string[] goals = str_to_array(PNDHelper.PathNodeGoals[ID].ToString());
+			string[] goals = str_to_array(PathNodeHelper.PathNodeGoals[ID].ToString());
 			foreach (string goal in goals)
 			{
 				if (goal.Trim() != "")
 				{
 					try
 					{
-						var dest = (PNDHelper.PathNode) PNDHelper.PathNodes[uint.Parse(goal)];
-						lstLinks.Items.Add("ID #" + dest.ID.ToString() + ": (" + dest.X.ToString() + ", " + dest.Y.ToString() + ")");
+						var dest = (PathNode) PathNodeHelper.PathNodes[uint.Parse(goal)];
+						lstLinks.Items.Add("ID #" + dest.Id.ToString() + ": (" + dest.X.ToString() + ", " + dest.Y.ToString() + ")");
 					}
 					catch (Exception)
 					{
@@ -226,55 +221,39 @@ namespace WorldBuilder
 				return;
 
 			lstLinks.Items.Clear();
-			PNDHelper.PND_HAS_CHANGED = true;
+			PathNodeHelper.PND_HAS_CHANGED = true;
 			uint ID = GetID(lstNodes.Items[lstNodes.SelectedIndex].ToString());
-			PNDHelper.PathNodes.Remove(ID);
-			PNDHelper.PathNodeGoals.Remove(ID);
+			PathNodeHelper.PathNodes.Remove(ID);
+			PathNodeHelper.PathNodeGoals.Remove(ID);
 			lstNodes.Items.RemoveAt(lstNodes.SelectedIndex);
 		}
 
 		private void btnAddNode_Click(object sender, EventArgs e)
 		{
 			// Adding a path node must update the PND_HAS_CHANGED flag
-			IEnumerator PathKey = PNDHelper.PathNodes.Keys.GetEnumerator();
+			IEnumerator PathKey = PathNodeHelper.PathNodes.Keys.GetEnumerator();
 			while (PathKey.MoveNext())
 			{
-				var p = (PNDHelper.PathNode) PNDHelper.PathNodes[uint.Parse(PathKey.Current.ToString())];
+				var p = (PathNode) PathNodeHelper.PathNodes[uint.Parse(PathKey.Current.ToString())];
 				if (p.X == uint.Parse(NodeX.Text) && p.Y == uint.Parse(NodeY.Text))
 				{
-					MessageBox.Show("Error: A path node with the given (X,Y) coordinates already exists! [#" + p.ID.ToString() + "]", "A Node Already Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+					MessageBox.Show("Error: A path node with the given (X,Y) coordinates already exists! [#" + p.Id.ToString() + "]", "A Node Already Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					return;
 				}
 			}
 
-			PNDHelper.PND_HAS_CHANGED = true;
-			var p1 = new PNDHelper.PathNode();
-			p1.ID = PNDHelper.CURRENT_TOP_ID;
-			p1.X = uint.Parse(NodeX.Text);
-			p1.Y = uint.Parse(NodeY.Text);
-			try
-			{
-				p1.OfsX = float.Parse(NodeOfsX.Text);
-			}
-			catch (Exception)
-			{
+			PathNodeHelper.PND_HAS_CHANGED = true;
+			float offX, offY;
+			if (!float.TryParse(NodeOfsX.Text, out offX))
 				MessageBox.Show("Offset X didn't have a valid floating point value. It was reset to 0", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				p1.OfsX = 0;
-			}
-			try
-			{
-				p1.OfsY = float.Parse(NodeOfsY.Text);
-			}
-			catch (Exception)
-			{
+			if (!float.TryParse(NodeOfsY.Text, out offY))
 				MessageBox.Show("Offset Y didn't have a valid floating point value. It was reset to 0", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				p1.OfsY = 0;
-			}
-			PNDHelper.PathNodes.Add(p1.ID, p1);
-			PNDHelper.PathNodeGoals.Add(p1.ID, ""); // empty set of links
-			lstNodes.Items.Add("ID #" + p1.ID.ToString() + ": (" + p1.X.ToString() + ", " + p1.Y.ToString() + ")");
+			var p1 = new PathNode(PathNodeHelper.CURRENT_TOP_ID, uint.Parse(NodeX.Text), uint.Parse(NodeY.Text), offX, offY);
+			PathNodeHelper.PathNodes.Add(p1.Id, p1);
+			PathNodeHelper.PathNodeGoals.Add(p1.Id, ""); // empty set of links
+			lstNodes.Items.Add(string.Format("ID #{0}: ({1}, {2})", p1.Id, p1.X, p1.Y));
 			lstNodes.SelectedIndex = lstNodes.Items.Count - 1;
-			PNDHelper.CURRENT_TOP_ID++;
+			PathNodeHelper.CURRENT_TOP_ID++;
 		}
 
 		private void btnGeneratePND_Click(object sender, EventArgs e)
@@ -285,42 +264,42 @@ namespace WorldBuilder
 					"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
-			PNDHelper.PathNodeGoals.Clear(); // clear the old list
+			PathNodeHelper.PathNodeGoals.Clear(); // clear the old list
 
-			var NodeStack = new Stack(PNDHelper.PathNodes.Keys);
+			var NodeStack = new Stack(PathNodeHelper.PathNodes.Keys);
 			IEnumerator p = NodeStack.GetEnumerator();
-			var NodeStackDest = new Stack(PNDHelper.PathNodes.Keys);
+			var NodeStackDest = new Stack(PathNodeHelper.PathNodes.Keys);
 			IEnumerator destination = NodeStackDest.GetEnumerator();
 
-			var pd_Source = new PNDHelper.PathNode();
-			var pd_Dest = new PNDHelper.PathNode();
+			var pd_Source = new PathNode();
+			var pd_Dest = new PathNode();
 			string goal_list = "";
 
 			while (p.MoveNext()) /* first walkover: source nodes */
 			{
-				pd_Source = (PNDHelper.PathNode) PNDHelper.PathNodes[uint.Parse(p.Current.ToString())];
+				pd_Source = (PathNode) PathNodeHelper.PathNodes[uint.Parse(p.Current.ToString())];
 				goal_list = "";
 
 				while (destination.MoveNext()) /* second walkover: destinations */
 				{
-					pd_Dest = (PNDHelper.PathNode) PNDHelper.PathNodes[uint.Parse(destination.Current.ToString())];
-					if (pd_Source.ID != pd_Dest.ID) /* can't back-link to itself */
+					pd_Dest = (PathNode) PathNodeHelper.PathNodes[uint.Parse(destination.Current.ToString())];
+					if (pd_Source.Id != pd_Dest.Id) /* can't back-link to itself */
 					{
-						if (PNDHelper.IsNeighboring(PNDHelper.GetPathLength(pd_Source.X, pd_Source.Y, pd_Dest.X, pd_Dest.Y)))
-							goal_list += pd_Dest.ID.ToString() + "::";
+						if (PathNodeHelper.IsNeighboring(PathNodeHelper.GetPathLength(pd_Source.X, pd_Source.Y, pd_Dest.X, pd_Dest.Y)))
+							goal_list += pd_Dest.Id.ToString() + "::";
 					}
 				}
 				destination.Reset();
-				PNDHelper.PathNodeGoals.Add(pd_Source.ID, goal_list);
+				PathNodeHelper.PathNodeGoals.Add(pd_Source.Id, goal_list);
 			}
 
-			PNDHelper.PND_HAS_CHANGED = false;
+			PathNodeHelper.PND_HAS_CHANGED = false;
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
 		private void experimentalToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			PNDHelper.MAX_PATH_LENGTH = 7.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 7.0F;
 			experimentalToolStripMenuItem.Checked = true;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
@@ -334,7 +313,7 @@ namespace WorldBuilder
 		private void menuItem2_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 19.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 19.0F;
 			menuItem2.Checked = true;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -347,7 +326,7 @@ namespace WorldBuilder
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 20.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 20.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = true;
 			menuItem4.Checked = false;
@@ -360,7 +339,7 @@ namespace WorldBuilder
 		private void menuItem4_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 21.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 21.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = true;
@@ -373,7 +352,7 @@ namespace WorldBuilder
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 22.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 22.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -386,7 +365,7 @@ namespace WorldBuilder
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 23.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 23.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -399,7 +378,7 @@ namespace WorldBuilder
 		private void menuItem7_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 24.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 24.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -412,7 +391,7 @@ namespace WorldBuilder
 		private void menuItem8_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PNDHelper.MAX_PATH_LENGTH = 25.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 25.0F;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -438,13 +417,13 @@ namespace WorldBuilder
 					return;
 
 				// New PND file
-				PNDHelper.CURRENT_TOP_ID = 0;
+				PathNodeHelper.CURRENT_TOP_ID = 0;
 				lstNodes.Items.Clear();
 				lstLinks.Items.Clear();
-				PNDHelper.PathNodes.Clear();
-				PNDHelper.PathNodeGoals.Clear();
-				PNDHelper.PND_HAS_CHANGED = false;
-				PNDHelper.PND_MODE_ACTIVE = true;
+				PathNodeHelper.PathNodes.Clear();
+				PathNodeHelper.PathNodeGoals.Clear();
+				PathNodeHelper.PND_HAS_CHANGED = false;
+				PathNodeHelper.PND_MODE_ACTIVE = true;
 				SetInterfaceState(true);
 
 				int blocked_so_far = 0;

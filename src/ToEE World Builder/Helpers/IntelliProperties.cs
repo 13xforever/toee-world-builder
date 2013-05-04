@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
-using WorldBuilder.Helpers;
 
-namespace WorldBuilder
+namespace WorldBuilder.Helpers
 {
 	public static class IntelliProperties
 	{
@@ -126,7 +125,7 @@ namespace WorldBuilder
 							"obj_t_projectile",
 							"obj_t_scenery",
 							"obj_t_container",
-							"obj_t_portal",
+							"obj_t_portal"
 						};
 
 		private static readonly string[] ObjectFlags = new[]
@@ -162,7 +161,7 @@ namespace WorldBuilder
 							"OF_TEXT",
 							"OF_FLAT",
 							"OF_OFF",
-							"OF_DESTROYED",
+							"OF_DESTROYED"
 						};
 
 		private static readonly string[] SpellFlags = new []
@@ -198,7 +197,7 @@ namespace WorldBuilder
 							"OSF_BODY_OF_EARTH",
 							"OSF_BODY_OF_FIRE",
 							"OSF_FLOATING",
-							"OSF_INVISIBLE",
+							"OSF_INVISIBLE"
 						};
 
 		private static readonly string[] ObjectSize = new [] {"size_clossal", "size_gargantuan", "size_huge", "size_large", "size_medium", "size_small", "size_tiny", "size_fine", "size_none"};
@@ -219,7 +218,7 @@ namespace WorldBuilder
 							"OCOF_NEVER_LOCKED",
 							"OCOF_MAGICALLY_HELD",
 							"OCOF_JAMMED",
-							"OCOF_LOCKED",
+							"OCOF_LOCKED"
 						};
 
 		private static readonly string[] SceneryFlags = new []
@@ -236,7 +235,7 @@ namespace WorldBuilder
 							"OSCF_MARKS_TOWNMAP",
 							"OSCF_NOCTURNAL",
 							"OSCF_BUSTED",
-							"OSCF_NO_AUTO_ANIMATE",
+							"OSCF_NO_AUTO_ANIMATE"
 						};
 
 		private static readonly string[] ItemFlags = new []
@@ -267,7 +266,7 @@ namespace WorldBuilder
 							"OIF_NO_PICKPOCKET",
 							"OIF_IS_MAGICAL",
 							"OIF_WONT_SELL",
-							"OIF_IDENTIFIED",
+							"OIF_IDENTIFIED"
 						};
 
 		private static readonly string[] InventorySlotFlags = new []
@@ -288,7 +287,7 @@ namespace WorldBuilder
 							"OIF_WEAR_UNUSED_1",
 							"OIF_WEAR_GLOVES",
 							"OIF_WEAR_NECKLACE",
-							"OIF_WEAR_HELMET",
+							"OIF_WEAR_HELMET"
 						};
 
 		private static readonly string[] WeaponFlags = new []
@@ -306,7 +305,7 @@ namespace WorldBuilder
 							"OWF_UNUSED_1",
 							"OWF_SILENT",
 							"OWF_LOUD",
-							"OWF_TWO_HANDED",
+							"OWF_TWO_HANDED"
 						};
 
 		private static readonly string[] MissileType = new[]
@@ -327,7 +326,7 @@ namespace WorldBuilder
 							"magic_missile",
 							"bullet",
 							"bolt",
-							"arrow",
+							"arrow"
 						};
 
 		private static readonly string[] DamageType = new []
@@ -351,7 +350,7 @@ namespace WorldBuilder
 							"D20DT_SLASHING",
 							"D20DT_PIERCING",
 							"D20DT_BLUDGEONING",
-							"D20DT_UNSPECIFIED",
+							"D20DT_UNSPECIFIED"
 						};
 
 		private static readonly string[] WeaponClass = new []
@@ -415,7 +414,7 @@ namespace WorldBuilder
 							"punching_dagger",
 							"unarmed_strike_small_being",
 							"unarmed_strike_medium_sized_being",
-							"gauntlet",
+							"gauntlet"
 						};
 
 		private static readonly string[] AmmoFlags = new [] {"OAF_NONE"};
@@ -461,7 +460,7 @@ namespace WorldBuilder
 							"OCF_UNUSED_00000008",
 							"OCF_EXPERIENCE_AWARDED",
 							"OCF_MOVING_SILENTLY",
-							"OCF_IS_CONCEALED",
+							"OCF_IS_CONCEALED"
 						};
 
 		private static readonly string[] CritterFlags2 = new[]
@@ -492,7 +491,7 @@ namespace WorldBuilder
 							"OCF2_FATIGUE_DRAINING",
 							"OCF2_USING_BOOMERANG",
 							"OCF2_AUTO_ANIMATES",
-							"OCF2_ITEM_STOLEN",
+							"OCF2_ITEM_STOLEN"
 						};
 
 		private static readonly string[] Race = new [] {"race_dwarf", "race_elf", "race_gnome", "race_halfelf", "race_halforc", "race_halfling", "race_human"};
@@ -508,7 +507,7 @@ namespace WorldBuilder
 							"align_neutral_good",
 							"align_chaotic_neutral",
 							"align_lawful_neutral",
-							"align_true_neutral",
+							"align_true_neutral"
 						};
 
 		private static readonly string[] Deity = new []
@@ -539,7 +538,7 @@ namespace WorldBuilder
 							"Ehlonna",
 							"Corellon Larethian",
 							"Boccob",
-							"No Deity",
+							"No Deity"
 						};
 
 		private static readonly string[] Domain = new []
@@ -562,7 +561,7 @@ namespace WorldBuilder
 							"DEATH",
 							"CHAOS",
 							"ANIMAL",
-							"NONE",
+							"NONE"
 						};
 
 		private static readonly string[] PositiveAndNegative =  new [] {"Positive", "Negative"};
@@ -603,7 +602,7 @@ namespace WorldBuilder
 							"ONF_AI_WAIT_HERE",
 							"ONF_WAYPOINTS_NIGHT",
 							"ONF_WAYPOINTS_DAY",
-							"ONF_EX_FOLLOWER",
+							"ONF_EX_FOLLOWER"
 						};
 
 		private static readonly string[] CreatureType = new []
@@ -624,7 +623,7 @@ namespace WorldBuilder
 							"mc_type_construct",
 							"mc_type_beast",
 							"mc_type_animal",
-							"mc_type_aberration",
+							"mc_type_aberration"
 						};
 
 		private static readonly string[] CreatureSubType = new []
@@ -656,7 +655,7 @@ namespace WorldBuilder
 							"mc_subtype_cold",
 							"mc_subtype_extraplaner",
 							"mc_subtype_aquatic",
-							"mc_subtype_air",
+							"mc_subtype_air"
 						};
 
 		private static readonly string[] NpcLootShare = new [] {"nothing", "one_fifth_of_all", "one_third_of_all", "all_arcane_scrolls_nothing_else", "half_share_money_only", "normal"};
@@ -690,7 +689,7 @@ namespace WorldBuilder
 							"Survival",
 							"Swim",
 							"Tumble",
-							"Use Magic Device",
+							"Use Magic Device"
 						};
 
 		private static readonly string[] ItemProperties = new []
@@ -819,7 +818,7 @@ namespace WorldBuilder
 							"Monster Stirge",
 							"Monster Bonus Damage",
 							"Monster Damage Type",
-							"Monster Banshee Charisma Drain",
+							"Monster Banshee Charisma Drain"
 						};
 
 		private static readonly string[] Feats;

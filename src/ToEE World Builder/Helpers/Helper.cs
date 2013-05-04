@@ -205,10 +205,10 @@ namespace WorldBuilder.Helpers
 				case MobTypes.Generic:
 					Num_Blocks = 9;
 					break;
-				case MobTypes.PC:
+				case MobTypes.Pc:
 					Num_Blocks = 11;
 					break;
-				case MobTypes.NPC:
+				case MobTypes.Npc:
 					Num_Blocks = 13;
 					break;
 				case MobTypes.Trap:
@@ -386,13 +386,13 @@ namespace WorldBuilder.Helpers
 		/// <summary>
 		///     Sizeable array positioning function. Experimental.
 		/// </summary>
-		public static UInt32 MOB_GenerateSARC(bool s_mode)
+		public static uint MOB_GenerateSARC(bool s_mode)
 		{
 			if (s_mode)
 			{
 				// we have to generate the SARC data
 
-				UInt32 sa_mem_index = 0;
+				uint sa_mem_index = 0;
 				string sa_str = "";
 				string[] sa_str_arr = null;
 
@@ -406,12 +406,12 @@ namespace WorldBuilder.Helpers
 						continue;
 
 					sa_str_arr = sa_str.Split('=');
-					sa_mem_index = UInt32.Parse(sa_str_arr[1]);
+					sa_mem_index = uint.Parse(sa_str_arr[1]);
 				}
 				sr.Close();
 
 				// modify and write back
-				UInt32 sa_mem_indexA = sa_mem_index + (UInt32) (new Random().Next(5, 8));
+				uint sa_mem_indexA = sa_mem_index + (uint) (new Random().Next(5, 8));
 				if (sa_mem_indexA > 0x1BFF) sa_mem_indexA = 0x1661;
 
 				var sw = new StreamWriter("ToEE World Builder.sar");
@@ -466,9 +466,9 @@ namespace WorldBuilder.Helpers
 				case "obj_t_generic":
 					return MobTypes.Generic;
 				case "obj_t_pc":
-					return MobTypes.PC;
+					return MobTypes.Pc;
 				case "obj_t_npc":
-					return MobTypes.NPC;
+					return MobTypes.Npc;
 				case "obj_t_trap":
 					return MobTypes.Trap;
 				case "obj_t_bag":
@@ -516,7 +516,7 @@ namespace WorldBuilder.Helpers
 		/// <summary>
 		///     a 64-bit version of <see cref="GEN_UInt32_To_Bitmap" />
 		/// </summary>
-		public static string GEN_UInt64_To_Bitmap(UInt64 Flags)
+		public static string GEN_UInt64_To_Bitmap(ulong Flags)
 		{
 			string BITMAP = "";
 
@@ -535,9 +535,9 @@ namespace WorldBuilder.Helpers
 			return BITMAP;
 		}
 
-		public static UInt64 GEN_GetComp2(int number)
+		public static ulong GEN_GetComp2(int number)
 		{
-			return (UInt64) (Math.Pow(2, number) - 1);
+			return (ulong) (Math.Pow(2, number) - 1);
 		}
 
 		public static string GEN_ConvertBytesToStringGUID(byte[] GUID_bytes)
@@ -568,7 +568,7 @@ namespace WorldBuilder.Helpers
 		}
 
 		/// <summary>
-		///     Convert an UInt32 flag value into a set of bytes
+		///     Convert an uint flag value into a set of bytes
 		///     (for sector wall flag setup routine)
 		/// </summary>
 		public static byte[] GEN_ConvertFlagsToByteArray(uint flags)
@@ -742,7 +742,7 @@ namespace WorldBuilder.Helpers
 		public static ArrayList SectorObjects = new ArrayList();
 		public static ArrayList SectorLightsChunk = new ArrayList();
 
-		public static UInt32 SEC_GetSecNameFromXY(int Sec_X, int Sec_Y)
+		public static uint SEC_GetSecNameFromXY(int Sec_X, int Sec_Y)
 		{
 			int X = Sec_X*4;
 			int Y = Sec_Y;
@@ -754,7 +754,7 @@ namespace WorldBuilder.Helpers
 			return U;
 		}
 
-		public static UInt32 SEC_GetSectorCorrespondence(int World_Y, int World_X)
+		public static uint SEC_GetSectorCorrespondence(int World_Y, int World_X)
 		{
 			uint u = 0;
 
@@ -774,8 +774,8 @@ namespace WorldBuilder.Helpers
 
 			for (int i = 0; i < 4096; i++)
 			{
-				w_sec.Write((UInt64) 2); // Sector tile data
-				w_sec.Write((UInt64) 0);
+				w_sec.Write((ulong) 2); // Sector tile data
+				w_sec.Write((ulong) 0);
 			}
 
 			w_sec.Write(1);
@@ -1267,19 +1267,19 @@ namespace WorldBuilder.Helpers
 			public float angle; // light angle
 			public byte blue; // blue
 			public Vector3 direction; // direction of the light
-			public UInt32 flags; // light flags
+			public uint flags; // light flags
 			public byte green; // green
-			public UInt64 handle; // must always be 0x0?
+			public ulong handle; // must always be 0x0?
 			public float height; // offset Z (height)
 			public float ofs_x; // offset X
 			public float ofs_y; // offset Y
 			public byte padding1; // padding area (has no effect)
-			public UInt32 padding2; // padding area (has no effect)
+			public uint padding2; // padding area (has no effect)
 			public float range; // light range
 			public byte red; // red
-			public UInt32 type; // light type
-			public UInt32 x; // coordinate X
-			public UInt32 y; // coordinate Y
+			public uint type; // light type
+			public uint x; // coordinate X
+			public uint y; // coordinate Y
 		}
 
 		/// <summary>
@@ -1315,7 +1315,7 @@ namespace WorldBuilder.Helpers
 			public PartSys partsys2; // secondary light particle system
 			public float range; // light range
 			public byte red; // red
-			public UInt32 type; // light type
+			public uint type; // light type
 		}
 
 		/// <summary>
@@ -1323,8 +1323,8 @@ namespace WorldBuilder.Helpers
 		/// </summary>
 		public struct PartSys
 		{
-			public UInt32 hash_id; // hash ID for the particle system name
-			public UInt32 id; // ID of the particle system
+			public uint hash_id; // hash ID for the particle system name
+			public uint id; // ID of the particle system
 		}
 
 		/// <summary>

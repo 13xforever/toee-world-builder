@@ -35,16 +35,16 @@ namespace WorldBuilder
 				{
 					var br = new BinaryReader(new FileStream(mob, FileMode.Open));
 					br.BaseStream.Seek(0x06, SeekOrigin.Begin);
-					UInt32 compat = br.ReadUInt32();
+					uint compat = br.ReadUInt32();
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
 					Int16 proto_id = br.ReadInt16();
 					br.BaseStream.Seek(0x34, SeekOrigin.Begin);
-					UInt32 type = br.ReadUInt32();
+					uint type = br.ReadUInt32();
 					br.BaseStream.Seek(0x3A, SeekOrigin.Begin);
 					long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
 					br.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
-					UInt32 x_coord = br.ReadUInt32();
-					UInt32 y_coord = br.ReadUInt32();
+					uint x_coord = br.ReadUInt32();
+					uint y_coord = br.ReadUInt32();
 
 					br.Close();
 

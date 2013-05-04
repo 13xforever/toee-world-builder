@@ -89,6 +89,7 @@
     <Reference Include="System.Drawing">
       <Name>System.Drawing</Name>
     </Reference>
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Windows.Forms">
       <Name>System.Windows.Forms</Name>
     </Reference>
@@ -136,8 +137,9 @@
     <Compile Include="Helpers\IntelliProperties.cs" />
     <Compile Include="Helpers\Maybe.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
-    <Compile Include="Helpers\MobTypes.cs" />
-    <Compile Include="Helpers\TriState.cs" />
+    <Compile Include="PathNode.cs" />
+    <Compile Include="MobTypes.cs" />
+    <Compile Include="TriState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -202,7 +204,7 @@
     <Compile Include="Forms\PathNodeGen.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Helpers\PNDHelper.cs">
+    <Compile Include="Helpers\PathNodeHelper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\Prototypes.cs">
