@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using WorldBuilder.Helpers;
@@ -9,6 +8,7 @@ namespace WorldBuilder
 	{
 		static IntelliProperties()
 		{
+			Empty = new string[0];
 			Feats = ReadFeats();
 		}
 
@@ -16,38 +16,37 @@ namespace WorldBuilder
 		{
 			switch (idx)
 			{
-				case  1: return ObjectType;
-				case 20: return ObjectFlags;
-				case 21: return SpellFlags;
-				case 24: return ObjectSize;
-				case 27: return Material;
-				case 37: return PortalFlags;
-				case 41: return ContainerFlags;
-				case 46: return SceneryFlags;
-				case 50: return ItemFlags;
-				case 61: return InventorySlotFlags;
-				case 63: return WeaponFlags;
-				case 65: return MissileType;
-				case 69: return DamageType;
-				case 72: return WeaponClass;
-				case 74: return AmmoFlags;
-				case 76: return AmmoType;
-				case 77: return ArmorFlags;
-				case 82: return ArmorType;
-				case 83: return HelmType;
-				case 86: return CoinType;
-				case 87: return FoodFlags;
-				case 94: return BagOfHoldingFlags;
-				case 96: return GenericFlags;
-				case 99: return CritterFlags;
+				case   1: return ObjectType;
+				case  20: return ObjectFlags;
+				case  21: return SpellFlags;
+				case  24: return ObjectSize;
+				case  27: return Material;
+				case  37: return PortalFlags;
+				case  41: return ContainerFlags;
+				case  46: return SceneryFlags;
+				case  50: return ItemFlags;
+				case  61: return InventorySlotFlags;
+				case  63: return WeaponFlags;
+				case  65: return MissileType;
+				case  69: return DamageType;
+				case  72: return WeaponClass;
+				case  74: return AmmoFlags;
+				case  76: return AmmoType;
+				case  77: return ArmorFlags;
+				case  82: return ArmorType;
+				case  83: return HelmType;
+				case  86: return CoinType;
+				case  87: return FoodFlags;
+				case  94: return BagOfHoldingFlags;
+				case  96: return GenericFlags;
+				case  99: return CritterFlags;
 				case 100: return CritterFlags2;
 				case 108: return Race;
 				case 109: return Gender;
 				case 113: return Alignment;
 				case 114: return Deity;
-				case 115: // DOMAIN 1
-				case 116: // DOMAIN 2
-					return Domain;
+				case 115:
+				case 116: return Domain;
 				case 117: return PositiveAndNegative;
 				case 134:
 				case 138:
@@ -105,7 +104,7 @@ namespace WorldBuilder
 				case 265:
 				case 266:
 				case 267: return Feats;
-				default : return new string[0];
+				default : return Empty;
 			}
 		}
 
@@ -823,6 +822,7 @@ namespace WorldBuilder
 						};
 
 		private static readonly string[] Feats;
+		private static readonly string[] Empty;
 
 		private static string[] ReadFeats()
 		{
@@ -833,14 +833,14 @@ namespace WorldBuilder
 			{
 				var stream = MiscHelper.GetResourceStreamThatEndsWith(".ftd");
 				if (stream == null)
-					return new string[0];
+					return Empty;
 
 				reader = new StreamReader(stream);
 			}
 			using (reader)
 			{
 				var result = new List<string>();
-				string str = "";
+				string str;
 				while ((str = reader.ReadLine()) != null)
 					result.Add(str.Split('\t')[1].Trim());
 				return result.ToArray();
