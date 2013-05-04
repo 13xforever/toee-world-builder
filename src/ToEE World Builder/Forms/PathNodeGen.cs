@@ -299,7 +299,7 @@ namespace WorldBuilder.Forms
 
 		private void experimentalToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			PathNodeHelper.MAX_PATH_LENGTH = 7.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 7d;
 			experimentalToolStripMenuItem.Checked = true;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
@@ -313,7 +313,7 @@ namespace WorldBuilder.Forms
 		private void menuItem2_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 19.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 19d;
 			menuItem2.Checked = true;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -326,7 +326,7 @@ namespace WorldBuilder.Forms
 		private void menuItem3_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 20.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 20d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = true;
 			menuItem4.Checked = false;
@@ -339,7 +339,7 @@ namespace WorldBuilder.Forms
 		private void menuItem4_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 21.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 21d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = true;
@@ -352,7 +352,7 @@ namespace WorldBuilder.Forms
 		private void menuItem5_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 22.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 22d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -365,7 +365,7 @@ namespace WorldBuilder.Forms
 		private void menuItem6_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 23.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 23d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -378,7 +378,7 @@ namespace WorldBuilder.Forms
 		private void menuItem7_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 24.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 24d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
@@ -391,7 +391,7 @@ namespace WorldBuilder.Forms
 		private void menuItem8_Click(object sender, EventArgs e)
 		{
 			experimentalToolStripMenuItem.Checked = false;
-			PathNodeHelper.MAX_PATH_LENGTH = 25.0F;
+			PathNodeHelper.MAX_PATH_LENGTH = 25d;
 			menuItem2.Checked = false;
 			menuItem3.Checked = false;
 			menuItem4.Checked = false;
