@@ -140,7 +140,7 @@ namespace WorldBuilder
 			{
 				lstResult.Items.Clear();
 
-				//ArrayList a = ProtoHelper.GetColumnNames();
+				//ArrayList a = Prototypes.GetColumnNames();
 				for (int i = 0; i < protos_complete.Count; i++)
 				{
 					string s_Proto = protos_complete[i].ToString();

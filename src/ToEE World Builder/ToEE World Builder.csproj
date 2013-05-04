@@ -133,6 +133,7 @@
     <Compile Include="Forms\Splash.Designer.cs">
       <DependentUpon>Splash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\IntelliProperties.cs" />
     <Compile Include="Helpers\Maybe.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
     <Compile Include="Helpers\MobTypes.cs" />
@@ -204,7 +205,7 @@
     <Compile Include="Helpers\PNDHelper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Helpers\ProtoHelper.cs">
+    <Compile Include="Helpers\Prototypes.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Forms\ProtoSearch.cs">
@@ -298,10 +299,9 @@
       <Link>Resources\ToEE World Builder.aim</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="..\..\required-files\ToEE World Builder.ftd">
+    <EmbeddedResource Include="..\..\required-files\ToEE World Builder.ftd">
       <Link>Resources\ToEE World Builder.ftd</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
+    </EmbeddedResource>
     <None Include="..\..\required-files\ToEE World Builder.opc">
       <Link>Resources\ToEE World Builder.opc</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

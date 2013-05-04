@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
@@ -6717,7 +6719,7 @@ namespace WorldBuilder
 		{
 			// Load prototype properties
 			lstProtoProps.Items.Clear();
-			var columnNames = ProtoHelper.GetColumnNames();
+			var columnNames = Prototypes.GetColumnNames();
 
 			// Set proto ID
 			tProtoID.Text = CurProto.Items[CurProto.SelectedIndex].ToString().Split('#')[1];
@@ -6745,196 +6747,10 @@ namespace WorldBuilder
 
 			// Set the value field
 			tPropValue.Text = lstProtoProps.Items[lstProtoProps.SelectedIndex].ToString().Split('|')[1].Split('\t')[1];
-
-			// TODO: IntelliProperties
 			IntelliProp.Items.Clear();
-			var ar_ip = new ArrayList();
-
-			switch (lstProtoProps.SelectedIndex)
-			{
-				case 1: // OBJECT TYPE
-					ar_ip = ProtoHelper.PRO_GetObjType();
-					break;
-				case 20: // OBJECT FLAGS (OF_*)
-					ar_ip = ProtoHelper.PRO_GetObjectFlags();
-					break;
-				case 21: // SPELL FLAGS
-					ar_ip = ProtoHelper.PRO_GetSpellFlags();
-					break;
-				case 24: // OBJECT SIZE
-					ar_ip = ProtoHelper.PRO_GetObjSize();
-					break;
-				case 27: // MATERIAL
-					ar_ip = ProtoHelper.PRO_GetMaterial();
-					break;
-				case 37: // PORTAL FLAGS
-					ar_ip = ProtoHelper.PRO_GetPortalFlags();
-					break;
-				case 41: // CONTAINER FLAGS
-					ar_ip = ProtoHelper.PRO_GetContainerFlags();
-					break;
-				case 46: // SCENERY FLAGS
-					ar_ip = ProtoHelper.PRO_GetSceneryFlags();
-					break;
-				case 50: // ITEM FLAGS
-					ar_ip = ProtoHelper.PRO_GetItemFlags();
-					break;
-				case 61: // EQUIPMENT SLOT FLAGS
-					ar_ip = ProtoHelper.PRO_GetInvSlotFlags();
-					break;
-				case 63: // WEAPON FLAGS
-					ar_ip = ProtoHelper.PRO_GetWeaponFlags();
-					break;
-				case 65: // MISSILE TYPE
-					ar_ip = ProtoHelper.PRO_GetMissileType();
-					break;
-				case 69: // DAMAGE TYPE
-					ar_ip = ProtoHelper.PRO_GetDamageType();
-					break;
-				case 72: // WEAPON CLASS
-					ar_ip = ProtoHelper.PRO_GetWeaponClass();
-					break;
-				case 74: // AMMO FLAGS
-					ar_ip = ProtoHelper.PRO_GetAmmoFlags();
-					break;
-				case 76: // AMMO TYPE
-					ar_ip = ProtoHelper.PRO_GetAmmoType();
-					break;
-				case 77: // ARMOR FLAGS
-					ar_ip = ProtoHelper.PRO_GetArmorFlags();
-					break;
-				case 82: // ARMOR TYPE
-					ar_ip = ProtoHelper.PRO_GetArmorType();
-					break;
-				case 83: // HELM TYPE
-					ar_ip = ProtoHelper.PRO_GetHelmType();
-					break;
-				case 86: // COIN TYPE
-					ar_ip = ProtoHelper.PRO_GetCoinType();
-					break;
-				case 87: // FOOD FLAGS
-					ar_ip = ProtoHelper.PRO_GetFoodFlags();
-					break;
-				case 94: // BAG FLAGS
-					ar_ip = ProtoHelper.PRO_GetBagFlags();
-					break;
-				case 96: // GENERIC FLAGS
-					ar_ip = ProtoHelper.PRO_GetGenericFlags();
-					break;
-				case 99: // CRITTER FLAGS
-					ar_ip = ProtoHelper.PRO_GetCritterFlags();
-					break;
-				case 100: // CRITTER FLAGS 2
-					ar_ip = ProtoHelper.PRO_GetCritterFlagsII();
-					break;
-				case 108: // RACE
-					ar_ip = ProtoHelper.PRO_GetRace();
-					break;
-				case 109: // GENDER
-					ar_ip = ProtoHelper.PRO_GetGender();
-					break;
-				case 113: // ALIGNMENT
-					ar_ip = ProtoHelper.PRO_GetAlignment();
-					break;
-				case 114: // DEITY
-					ar_ip = ProtoHelper.PRO_GetDeity();
-					break;
-				case 115: // DOMAIN 1
-				case 116: // DOMAIN 2
-					ar_ip = ProtoHelper.PRO_GetDomain();
-					break;
-				case 117: // POS/NEG
-					ar_ip = ProtoHelper.PRO_GetPosNeg();
-					break;
-				case 134:
-				case 138:
-				case 142:
-				case 146: // MONSTER DAMAGE TYPE
-					ar_ip = ProtoHelper.PRO_GetMonsterDamType();
-					break;
-				case 148: // HAIR COLOR
-					ar_ip = ProtoHelper.PRO_GetHairColor();
-					break;
-				case 149: // HAIR TYPE
-					ar_ip = ProtoHelper.PRO_GetHairType();
-					break;
-				case 152: // NPC FLAGS
-					ar_ip = ProtoHelper.PRO_GetNPCFlags();
-					break;
-				case 163: // CREATURE TYPE
-					ar_ip = ProtoHelper.PRO_GetCreatureType();
-					break;
-				case 164: // CREATURE SUBTYPE
-					ar_ip = ProtoHelper.PRO_GetCreatureSubType();
-					break;
-				case 165: // NPC LOOT SHARE
-					ar_ip = ProtoHelper.PRO_GetNPCLootShare();
-					break;
-				case 166: // TRAP FLAGS
-					ar_ip = ProtoHelper.PRO_GetTrapFlags();
-					break;
-				case 228:
-				case 230:
-				case 232:
-				case 234:
-				case 236: // CHARACTER CLASS
-					ar_ip = ProtoHelper.PRO_GetClass();
-					break;
-				case 238:
-				case 240:
-				case 242:
-				case 244:
-				case 246:
-				case 248:
-				case 250:
-				case 252:
-				case 254:
-				case 256: // CHARACTER SKILLS
-					ar_ip = ProtoHelper.PRO_GetSkill();
-					break;
-				case 168:
-				case 171:
-				case 174:
-				case 177:
-				case 180:
-				case 183:
-				case 186:
-				case 189:
-				case 192:
-				case 195:
-				case 198:
-				case 201:
-				case 204:
-				case 207:
-				case 210:
-				case 213:
-				case 216:
-				case 219:
-				case 222:
-				case 225: // PROPERTIES
-					ar_ip = ProtoHelper.PRO_GetItemProps();
-					break;
-				case 258:
-				case 259:
-				case 260:
-				case 261:
-				case 262:
-				case 263:
-				case 264:
-				case 265:
-				case 266:
-				case 267: // FEATS
-					ar_ip = ProtoHelper.PRO_GetFeats();
-					break;
-				default:
-					break;
-			}
-
-			if (ar_ip.Count > 0)
-			{
-				for (int i = 0; i < ar_ip.Count; i++)
-					IntelliProp.Items.Add(ar_ip[i]);
-			}
+			var propertiesList = IntelliProperties.Get(lstProtoProps.SelectedIndex);
+			if (propertiesList.Length > 0)
+				IntelliProp.Items.AddRange(propertiesList);
 		}
 
 		private void btnIPInsert_Click(object sender, EventArgs e)

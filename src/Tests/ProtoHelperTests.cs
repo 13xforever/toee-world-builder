@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using WorldBuilder;
+using WorldBuilder.Helpers;
 
 namespace Tests
 {
@@ -14,8 +15,8 @@ namespace Tests
 		[Test, Explicit("Obsolete after refactoring")]
 		public void GetColumnNames()
 		{
-			var defaultResult = ProtoHelper.GetColumnNames();
-			var patchedResult = ProtoHelper.GetColumnNames(@"D:\Programs\ToEEWB\Source Code\required-files\ToEE World Builder.pfr");
+			var defaultResult = Prototypes.GetColumnNames();
+			var patchedResult = Prototypes.GetColumnNames(@"D:\Programs\ToEEWB\Source Code\required-files\ToEE World Builder.pfr");
 			Assert.That(patchedResult, Is.EqualTo(defaultResult));
 		}
 
