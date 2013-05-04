@@ -1,0 +1,436 @@
+Release v1.7 Patchlevel 5s .NET2 Edition - Feb 28 2006
+------------------------------------------------------
+
+- various MOB codec improvements
+- added "NPC Generators" tab to the object editor, in order to support NPC monster
+  generators. Generators are marked by the ONF_GENERATOR flag. Parameters of the
+  generator should be set on the "NPC Generators" tab. The generator NPC will generate
+  NPCs after a certain period of time.
+- added support for "Scout Point" standpoint, which can be used to set up a
+  location where NPC should run to if he senses danger.
+- added support for obj_f_critter_gender and obj_f_critter_race.
+
+Release v1.7 Patchlevel 5r .NET2 Edition - Feb 20 2006
+------------------------------------------------------
+
+- added the "Clean Inventory" button to both containers and NPCs. It allows to
+  remove all items from the inventory with just one click. [Thanks to Cerulean
+  the Blue for suggesting]
+- added the "Delete" button to the "open MOB" screen, that allows to delete a
+  mobile object from your hard disk drive. Note that right now it doesn't delete
+  associated mobile objects, so you'll need to clean their inventories etc.
+  manually first. [Thanks to Cerulean the Blue for suggesting]
+
+Release v1.7 Patchlevel 5q .NET2 Edition - Feb 10 2006
+------------------------------------------------------
+
+- corrected the subtile positions in tile structure (now they are correct)
+- !!! IMPORTANT !!!: Rewrote the SVB support. Now the SVBs are supported by the
+  sector analyzer and the sector painter as they should be. No more 3 layer
+  mirroring or hard-to-predict coords, everything is 1:1.
+- !!! IMPORTANT !!!: Updated the Sector Painter mode, added SVB overlay quick
+  options. These options will allow to paint SVBed tiles OVER the existing tile
+  configuration, so you can simply paint the blocking/flyover/etc. tiles first,
+  and then paint SVB tiles OVER them without ruining the initial configuration
+  of the tile.
+- !!! IMPORTANT !!!: Removed support for SVBs in Editor's Assistant Tool (ed.py)
+  because it was broken. There is no way I can implement SVBs in ed.py at the
+  moment. If I'll think of a way to do it I'll definitely do it. For now, please
+  use ToEEWB's Visual Sector Painter to paint SVBed areas.
+
+Release v1.7 Patchlevel 5p .NET2 Edition - Feb 9 2006
+-----------------------------------------------------
+
+- included the "Fill from InvenSource" button for NPC and container inventories.
+  Currently the only thing it doesn't support is jewelry. This function can be
+  used to automatically fill the NPC/container's inventory (loot only) from an
+  invensource.mes entry.
+
+Release v1.7 Patchlevel 5o .NET2 Edition - Feb 8 2006
+-----------------------------------------------------
+
+- improved the MOB codec, now it loads and saves back Calmert without problems.
+- added the "NPC Levelup Scheme" property to the list of supported MOB props
+  (whatever it does).
+
+Release v1.7 Patchlevel 5n .NET2 Edition - Feb 6 2006
+-----------------------------------------------------
+
+- fixed and expanded the standpoint support. Now, standpoints are moved to
+  NPC/Critters 2 tab of the object editor. X/Y offsets and Jump Point IDs
+  are now supported. Also, standpoints that don't use jump points must now
+  have their Jump Point ID fields set to -1.
+
+Release v1.7 Patchlevel 5m .NET2 Edition - Feb 3 2006
+-----------------------------------------------------
+
+- added complete support for "NPC Factions" property in the MOB object editor.
+  It's located on the new "NPC/Critters 2" tab of the object editor. It can be
+  used to override the NPC factions from the protos.tab.
+
+Release v1.7 Patchlevel 5l .NET2 Edition - Feb 1 2006
+-----------------------------------------------------
+
+- updated the visual sector analyzer/painter tool so it gives a detailed
+  breakdown of SVB bits that are set for each tile (different colors are used
+  for each of extend, end, base, and archway flags)
+
+Release v1.7 Patchlevel 5k .NET2 Edition - Feb 1 2006
+-----------------------------------------------------
+
+- fixed the Secret Door support!!! Now, the secret door DC will work correctly!
+  You can use any value from 0 to 127 for DC, that should open new possibilities!
+  Special thanks to Steve Moret for clarifications that helped me fix this!!!
+
+Release v1.7 Patchlevel 5j .NET2 Edition - Jan 30 2006
+------------------------------------------------------
+
+- fixed the positions of all secret door flags in the object editor.
+
+Release v1.7 Patchlevel 5i .NET2 Edition - Jan 28 2006
+------------------------------------------------------
+
+- now the waypoint editor will show the selected waypoint properties when
+  a waypoint is selected in the editor.
+
+Release v1.7 Patchlevel 5h .NET2 Edition - Jan 27 2006
+------------------------------------------------------
+
+- not released to public. Internal release that was used to test certain
+  possible future tweaks.
+
+Release v1.7 Patchlevel 5g .NET2 Edition - Jan 27 2006
+------------------------------------------------------
+
+- added support for delay and rotation to NPC waypoints. Just use the
+  corresponding fields to specify these parameters. A waypoint delay is how
+  long the NPC should wait before proceeding to the next waypoint. Probably
+  in milliseconds (e.g. 1000 = approx. 1 sec).
+
+Release v1.7 Patchlevel 5f .NET2 Edition - Jan 25 2006
+------------------------------------------------------
+
+- improved SVB support in the sector editor, made a much more detailed comment
+  about meaning of SVB flags, and actually 'named' the SVB flags in the editor.
+
+Release v1.7 Patchlevel 5e .NET2 Edition - Jan 24 2006
+------------------------------------------------------
+
+- improved the MOB codec so it will NOT corrupt the data in mobile objects'
+  standpoints, substitute inventory container, and various other properties
+  EVEN if the loaded MOB file has weirdly aligned waypoint structure in it.
+  Also, improved the codec so it's able to parse more leftover properties
+  without failing to load the mobile object.
+- implemented the day/night transitions (daynight.nxd) file editor that can
+  be used to specify MOBs that need to be in different places during the day
+  and during the night.
+
+Release v1.7 Patchlevel 5d .NET2 Edition - Jan 23 2006
+------------------------------------------------------
+
+- implemented a button to create particle system hash IDs in the light
+  editor automatically.
+- improved the MOB codec to support more MOB files.
+
+Release v1.7 Patchlevel 5c .NET2 Edition - Jan 22 2006
+------------------------------------------------------
+
+- implemented the complete sector light editor with full support of all
+  light types and properties. Use "Tools -> Sector Light Editor" (Ctrl+E)
+  in order to launch it.
+- the old "Lights" tab in the Sector Editor has been removed, so DON'T
+  look for a light editor there! Use the tools menu instead.
+- fixed the help menu for the animated waypoint IDs (thanks for pointing
+  out my mistakes goes to Allyx).
+
+Release v1.7 Patchlevel 5b1 .NET2 Edition - Jan 21 2006
+-------------------------------------------------------
+
+- once again corrected the support for animated waypoints. Please check
+  the "help" menu about the anim ids again.
+- modified the global.lit editor to support all fields. Now, no more
+  unknowns here.
+
+Release v1.7 Patchlevel 5b .NET2 Edition - Jan 19 2006
+------------------------------------------------------
+
+- corrected and modified support for animated waypoints, now up to
+  8 animations per waypoint are supported. Also, "long" anim IDs were
+  shown incorrectly before (they aren't that "long" in fact :))
+- added the new help menu concerning waypoint animation IDs that displays
+  all known anim IDs that can be used for almost any object out there.
+
+Release v1.7 Patchlevel 5a .NET2 Edition - Jan 17 2006
+------------------------------------------------------
+
+- added support for animated waypoints
+
+Release v1.7 Patchlevel 5 .NET2 Edition - Nov 27 2005
+-----------------------------------------------------
+
+- ported all of the code (except for the unused add-in system) to .NET 2.0
+- considerably optimized the time it takes ToEEWB to perform different operations,
+  including loading time (which now only takes 1-2 seconds to perform) and the
+  2D graphics operations.
+- made the application use Windows Visual Styles and Office 2003 style menus
+
+Release v1.7 Patchlevel 5 - Sep 30 2005
+---------------------------------------
+
+- added the "Tolerance" option to the path node generator, allowing to set the
+  maximum distance between the path nodes to generate links (see "Tolerance ->
+  What is Tolerance?" in Path Node Generator for more information).
+
+Release v1.7 Patchlevel 4 - Sep 29 2005
+---------------------------------------
+
+- this release should really be 1.8 or 2.0, but I'm a lazy bum to make all the
+  necessary Co8 thread updates to update it to another major version :)))
+- added a simple add-in system that will allow to plug in other programs into
+  ToEEWB easily (to be used much more later).
+- updated the Editor's Helper Script to version 5.1 (added the secloc command
+  to find out the information about the current sector your character is in)
+- added a path node editor/generator (support for pathnode.pnd files).
+- added a new tutorial for using the path node generator.
+- fixed some menu labels and some window texts.
+
+Release v1.7 Patchlevel 3 - Sep 23 2005
+---------------------------------------
+
+- fixed a critical bug that caused the 2D map splitter to act incorrectly
+  on certain irregular large maps
+
+Release v1.7 Patchlevel 2 - Sep 23 2005
+---------------------------------------
+
+- updated ToEEFE Pro included in this package to version 3.1
+- made a unified installation package including all changes since v1.7.1
+
+Release v1.7 Patchlevel 1 - Sep 05 2005
+---------------------------------------
+
+- added some newly revealed protos.tab fields and clarified some of the previously
+  unknown entries in protos.tab. Entries that were confirmed to be useless were
+  marked as "Unused" instead of "Unknown".
+- added descriptions to all movement opcodes in the world map path editor (will
+  make things a LOT easier!)
+- updated the Editor's Helper Script to version 5.0 (new version fixes a minor
+  bug and also adds the SVB area painter).
+
+Release v1.7 Final - Aug 20 2005
+--------------------------------
+
+- added the world map paths (worldmap_ui_paths.bin) editor.
+- added some new properties to object editor.
+- NOTE: from now on, ToEEWB is able to read almost every MOB file from the
+  game. However, loading NPC MOBs can still mess things up, so PLEASE load
+  the original game NPCs *only* for viewing, do NOT edit/save them back, or
+  you risk corrupting a lot of things! You may also see some entries incorrectly,
+  such as waypoints, standpoints, substitute inventory container.
+
+Release v1.6 - Aug 14 2005
+--------------------------
+
+- heavily updated the visual sector analyzer (added the paint mode and remember
+  for object mode, made it display the coordinates in a more proper way (right
+  to left, up to down since it's the way coords are stored)
+- added more error prediction
+
+Release v1.5 - Aug 12 2005
+--------------------------
+
+- added the visual sector analyzer tool
+- made minor code corrections
+
+Release v1.4 - Aug 9 2005
+-------------------------
+
+- added TONS of new and updated protos.tab fields, thanks to Sapricon.
+- added new properties to object editor: item worth, item weight, NPC reach,
+NPC teleport destination/map, NPC standpoints. ONF_WANDERS can also make the
+creature wander around its standpoint randomly within 4 tiles (at least it was
+so in Arcanum).
+
+Release v1.3 - Aug 7 2005
+-------------------------
+
+- added a NPC waypoint editor. In order to make the NPC use the defined waypoints,
+  you *must* define the ONF_WAYPOINTS_DAY and/or ONF_WAYPOINTS_NIGHT npc flags!!
+
+Release v1.2 - Aug 6 2005
+-------------------------
+
+- all bugfixes that were released after v1.1 as hot updates are included.
+- corrected the way static object extraction works: now, if the file with the
+  certain GUID already exists, ToEEWB will prompt to overwrite/not overwrite
+  that file.
+
+Release v1.1 - Jul 30 2005
+--------------------------
+
+- added some more previously unknown entry descriptions to prototype editor.
+- added a new mode to the sector editor: static object manager. Using this mode
+  you can view a list of embedded static objects, extract any static object and
+  save it as a .mob to edit it later and re-embed, and delete static objects
+  from sectors.
+- added *a lot* of properties to the object editor (check them out! the mobile
+  object editor is now a lot more powerful than before!)
+- updated ToEE Editor's Assistant Script to version 3.0. Please read the manual.
+- completely rewrote the compatibility system. Now you can attempt to load any
+  MOB file, including the ones from the game, but if the editor can't yet handle
+  the file you will be told about that and the loading will be canceled.
+- updated the GUID/object ID generation system that now generates a lot more
+  unique identifiers for mobile and static objects.
+- Important: added a new switch in configuration (extended ToEE .mob compati-
+  bility mode). This mode aims at creating more compatible files for the game
+  so that two different objects have a much much smaller chance to overlap
+  each other in the game memory. 
+- added a smart patcher for proto field names. Newly discovered proto fields
+  can easily be added via modification of "ToEE World Builder.pfr" file (use
+  any text editor to edit it).
+- added two new tutorials: creating secret doors and creating areas with water.
+- removed a useless switch "remove GUID after saving" in the object embedding
+  window (it stopped being useful back in public beta 1 patchlevel 3 when the
+  sector GUID type became autodetectable).
+- extra error prediction for loading incompatible mobile objects into the object
+  editor. Now, in case a critical error occurs while loading an incompatible .mob
+  file, an error message will be given stating that the loading cannot continue
+  to avoid data corruption, and the .mob loading will be canceled.
+- added a lot of extra error prediction to mob loading/saving routines.
+- fixed the position of obj_f_dispatcher field in a mobile object structure.
+- fixed a minor bug in description comment detection that very rarely caused
+  the description to end up at a wrong line in the mes file (it's no biggie, but
+  I decided to fix it anyway).
+
+Release v1.0 - Jul 26 2005
+--------------------------
+
+- rewrote the tile editor to support all existing wall/passability flags.
+- added support for SVB (sector visibility blocking) files to the tile editor.
+- added support for HSD (negative height/water tiles) files to the tile editor.
+- added a light editor mode to the sector editor (still very limited and stuff
+  is mostly unknown there, plus it can only edit just a couple types of light
+  (though it can be enough for most modding tasks).
+- added a global lighting (global.lit) editor to the Map Properties tab. It's
+  still limited since not all fields are known (well, all fields can be edited,
+  but a lot of them are marked as "unknown").
+- added more properties to the object editor: model scale, Z offset, hit points,
+  hit points damage, speed (walk and run), and door/portal lock DC/key ID/flags.
+- added an "area cleaner" mode to map properties editor - a tool that will
+  assist getting rid of original map information when developing your own
+  maps.
+- updated the map.prp editor: excluded the previously unknown entry which has
+  proven to be non-existent (art/ground.mes reference is now 64bit as it's
+  supposed to be).
+- added a configuration option to either save empty svb/hsd files to disk or to
+  remove them in case they become empty (set to "don't save" by default).
+- added an editor assistant script to the "tools" (it's a Python script for the
+  game that simplifies the task of finding out game coordinates and teleporting
+  to different locations). NOTE: it's a different version than the one that was
+  released as a standalone script. Make sure you read the manual!
+- made some clarifications and additions to the prototype editor.
+- added a new tutorial: creating invisible mobile objects that spawn particle-
+  based special FX.
+- added some more documents so that end users can get a good grip on the editor
+  a lot faster.
+- modified the installation documentation a little (to be more specific).
+- added some new sections to the huge module building tutorial.
+- updated ToEE Frontend Professional distributed with ToEEWB to v3.0 Release.
+- modified the way description.mes is saved in order to make sure that the
+  comments are post-parsed and saved correctly every time.
+- increased the error prediction level in mob loading/saving routine.
+- made a check for sector coordinate legality (so they don't go far beyond
+  allowed values).
+- fixed a rare, but serious bug in memory cleanup routine that caused sectors
+  to become corrupt sometimes (if a sector editor was used for a long time and
+  several sec files were loaded and saved back to disk).
+- fixed a cruel bug that led to corruption of data in sectors with incompatible
+  (unknown yet) light structures.
+- fixed a potential crash: it's now impossible to add a description with ID
+  lesser than 20000 without adding a corresponding prototype first (to prevent
+  in-game and editor errors).
+- fixed a potential crash: 2D map recombiner would crash if a file was found 
+  with incorrectly formatted file name (now such file names are ignored).
+- fixed a bug in the DLL editor that caused the console debug output to be
+  enabled every time a DLL is loaded, no matter its state in the library.
+- fixed some minor bugs in description editor.
+- clarified certain message boxes and window texts.
+- modified credits screen to include all people who helped me with the project.
+- added icons to both TOEEWB and TOEEFE.
+- minor code modifications to remove certain internal inconsistencies (probably
+  won't make a lot of sense to end users).
+
+RC1 - Jul 17 2005
+-----------------
+
+- corrected some mistypes in window texts and message boxes.
+- updated the tile editor a little bit.
+- fixed some very minor bugs.
+- added a comprehensive module building tutorial.     
+- now ToEEWB comes with both ToEE Front-end v2.2 Simple Edition and the new
+  ToEE Front-end v3.0RC1 Professional Edition that has support for multiple
+  modules on a single ToEE installation.
+
+Beta R2 - Jul 12 2005
+---------------------
+
+- added the "tile editor" mode to the sector editor. It allows a modder to
+  modify footstep sounds for different coordinates, and also create blocked
+  (impassable) areas that either obstruct or don't obstruct player's vision.
+- various minor modifications, mainly to remove internal code inconsistencies.
+- updated ToEE Frontend included with this version of the ToEEWB to version 2.2
+  (read about the updates in the corresponding thread)
+- now ToEEWB comes with all the tutorials that were released.
+
+Beta R1.3 - Jul 10 2005
+-----------------------
+
+- modified the sector saving routine to attempt the prevention of a memory leak
+  bug with sectors. Technically ToEEWB now uses a 'safer' type 0x00 GUID for
+  sector memory allocation instead of the previously used type 0x02 GUID which
+  seems to work well only for mobile (mob) objects.
+
+Beta R1.2 - Jul 9 2005
+----------------------
+
+- added proper credits, both to the editor itself and to whatsnew.txt
+- modified the container load/save routine. NOTE: The container/NPC mob files
+  will now be auto-saved when you add or remove items to them! This is done to
+  prevent accidental data corruption.
+- updated the loading routine to detect duplicate entries in description.mes
+  and long_description.mes and provide an error message instead of crashing the
+  loader (which used to lead to critical errors if the crash message was ignored)
+- modified the tab/mes loader so that it doesn't fail to load prototypes EVEN
+  if duplicate entries are found in tab/mes files.
+- IMPORTANT: modified some aspects of compatibility system when saving MOB and
+  SEC files. This could lead to less errors when saving mob/sec files. However,
+  the side effect of this is that all MOB files created with previous betas of
+  ToEEWB will be marked as INCOMPATIBLE. However, it's still OK to open them
+  in the forced mode (you won't encounter any problems).
+- now ToEE World Builder comes together with the new version of ToEE Front-end
+  (version 2.0). I added support for Drifter's Max HP patch in version 2.0.
+
+Beta R1.1 - Jul 9 2005
+----------------------
+
+- fixed a bug in the sector autodetect routine that failed on larger maps
+- fixed a bug with sector coordinates not being displayed correctly
+- disabled certain debug functions (should make the editor a little faster)
+- disabled a confusing debug menu that sometimes could cause crashes if used
+
+Beta R1 - Jul 7 2005
+--------------------
+
+- initial public beta release
+
+==================
+ToEE World Builder Dev Team
+
+Credits:
+~~~~~~~~
+
+Developers: Agetian
+Researchers: Agetian, Dulcaoin
+Very special thanks: Steve Moret
+Thanks for beta-testing: Allyx, Morpheus, Shiningted, Sapricon
+Thanks for inspiring me to make this editor: Livonya

@@ -1,0 +1,5 @@
+// List of available add-ins, in the form <AddinName>=<AddinExecutable>
+// The list must end with the [END ADDIN LIST] line, otherwise ToEEWB will crash
+// Add-ins (executables) must be located in the Addins folder.
+
+[END ADDIN LIST]

@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C# Express 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ToEE World Builder NET2", "ToEE World Builder NET2.csproj", "{DA7AEA60-646C-4F04-97AA-326EA81CE26F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DA7AEA60-646C-4F04-97AA-326EA81CE26F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DA7AEA60-646C-4F04-97AA-326EA81CE26F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DA7AEA60-646C-4F04-97AA-326EA81CE26F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DA7AEA60-646C-4F04-97AA-326EA81CE26F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

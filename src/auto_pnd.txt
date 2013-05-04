@@ -1,0 +1,1 @@
+Use 15-tile distance and a 25-tile join tolerance for best results.

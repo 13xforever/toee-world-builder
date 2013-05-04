@@ -1,0 +1,27 @@
+// Opcodes for ToEEWB world map path editor.
+// First four meaningful lines are used for four parameters in WMP editor.
+// Next lines stand for individual opcodes (used in path data).
+// Do NOT delete comments and an empty line below the comments! There is no
+// real parser for this file, so you'll screw things up by doing so!
+
+From X:
+From Y:
+To X:
+To Y:
+#0 (Unused)
+#1 (Unused)
+#2 (Unused)
+#3 (Unused)
+#4 (Unused)
+Move North
+Move South 
+Move West
+Move East
+Move Northwest
+Move Northeast
+Move Southwest
+Move Southeast
+Stay
+#14 (Unused)
+#15 (Unused)
+[END INTERNAL PATCH]

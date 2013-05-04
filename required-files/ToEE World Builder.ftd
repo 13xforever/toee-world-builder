@@ -1,0 +1,648 @@
+0	Acrobatic
+1	Agile
+2	Alertness
+3	Animal Affinity
+4	Armor Proficiency (light)
+5	Armor Proficiency (medium)
+6	Armor Proficiency (heavy)
+7	Athletic
+8	Augment Summoning
+9	Blind-fight
+10	Brew Potion
+11	Cleave
+12	Combat Casting
+13	Combat Expertise
+14	Craft Magic Arms and Armor
+15	Craft Rod
+16	Craft Staff
+17	Craft Wand
+18	Craft Wondrous Item
+19	Deceitful
+20	Deft Hands
+21	Diehard
+22	Diligent
+23	Deflect Arrows
+24	Dodge
+25	Empower Spell
+26	Endurance
+27	Enlarge Spell
+28	Eschew Materials
+29	Exotic Weapon Proficiency (Halfling Kama)
+30	Exotic Weapon Proficiency (Kukri)
+31	Exotic Weapon Proficiency (Halfling Nunchaku)
+32	Exotic Weapon Proficiency (Halfling Siangham)
+33	Exotic Weapon Proficiency (Kama)
+34	Exotic Weapon Proficiency (Nunchaku)
+35	Exotic Weapon Proficiency (Siangham)
+36	Exotic Weapon Proficiency (Bastard Sword)
+37	Exotic Weapon Proficiency (Dwarven Waraxe)
+38	Exotic Weapon Proficiency (Gnome Hooked Hammer)
+39	Exotic Weapon Proficiency (Orc Double Axe)
+40	Exotic Weapon Proficiency (Spike Chain)
+41	Exotic Weapon Proficiency (Dire Flail)
+42	Exotic Weapon Proficiency (Two-bladed Sword)
+43	Exotic Weapon Proficiency (Dwarven Urgrosh)
+44	Exotic Weapon Proficiency (Hand Crossbow)
+45	Exotic Weapon Proficiency (Shuriken)
+46	Exotic Weapon Proficiency (Whip)
+47	Exotic Weapon Proficiency (Repeating Crossbow)
+48	Exotic Weapon Proficiency (Net)
+49	Extend Spell
+50	Extra Turning
+51	Far Shot
+52	Forge Ring
+53	Great Cleave
+54	Great Fortitude
+55	Greater Spell Focus (Abjuration)
+56	Greater Spell Focus (Conjuration)
+57	Greater Spell Focus (Divination)
+58	Greater Spell Focus (Enchantment)
+59	Greater Spell Focus (Evocation)
+60	Greater Spell Focus (Illusion)
+61	Greater Spell Focus (Necromancy)
+62	Greater Spell Focus (Transmutation)
+63	Greater Spell Penetration
+64	Greater Two Weapon Fighting
+65	Greater Weapon Focus (Gauntlet)
+66	Greater Weapon Focus (Unarmed strike - medium-sized being)
+67	Greater Weapon Focus (Unarmed strike - small being)
+68	Greater Weapon Focus (Dagger)
+69	Greater Weapon Focus (Punching Dagger)
+70	Greater Weapon Focus (Spiked Gauntlet)
+71	Greater Weapon Focus (Light Mace)
+72	Greater Weapon Focus (Sickle)
+73	Greater Weapon Focus (Club)
+74	Greater Weapon Focus (Shortspear)
+75	Greater Weapon Focus (Heavy mace)
+76	Greater Weapon Focus (Morningstar)
+77	Greater Weapon Focus (Quarterstaff)
+78	Greater Weapon Focus (Spear)
+79	Greater Weapon Focus (Light Crossbow)
+80	Greater Weapon Focus (Dart)
+81	Greater Weapon Focus (Sling)
+82	Greater Weapon Focus (Heavy Crossbow)
+83	Greater Weapon Focus (Javelin)
+84	Greater Weapon Focus (Throwing Axe)
+85	Greater Weapon Focus (Light Hammer)
+86	Greater Weapon Focus (Handaxe)
+87	Greater Weapon Focus (Light Lance)
+88	Greater Weapon Focus (Light Pick)
+89	Greater Weapon Focus (Sap)
+90	Greater Weapon Focus (Short Sword)
+91	Greater Weapon Focus (Battleaxe)
+92	Greater Weapon Focus (Light Flail)
+93	Greater Weapon Focus (Heavy Lance)
+94	Greater Weapon Focus (Longsword)
+95	Greater Weapon Focus (Heavy Pick)
+96	Greater Weapon Focus (Rapier)
+97	Greater Weapon Focus (Scimitar)
+98	Greater Weapon Focus (Trident)
+99	Greater Weapon Focus (Warhammer)
+100	Greater Weapon Focus (Falchion)
+101	Greater Weapon Focus (Heavy Flail)
+102	Greater Weapon Focus (Glaive)
+103	Greater Weapon Focus (Greataxe)
+104	Greater Weapon Focus (Greatclub)
+105	Greater Weapon Focus (Greatsword)
+106	Greater Weapon Focus (Guisarme)
+107	Greater Weapon Focus (Halberd)
+108	Greater Weapon Focus (Longspear)
+109	Greater Weapon Focus (Ranseur)
+110	Greater Weapon Focus (Scythe)
+111	Greater Weapon Focus (Shortbow)
+112	Greater Weapon Focus (Composite Shortbow)
+113	Greater Weapon Focus (Longbow)
+114	Greater Weapon Focus (Composite Longbow)
+115	Greater Weapon Focus (Halfling Kama)
+116	Greater Weapon Focus (Kukri)
+117	Greater Weapon Focus (Halfling Nunchaku)
+118	Greater Weapon Focus (Halfling Siangham)
+119	Greater Weapon Focus (Kama)
+120	Greater Weapon Focus (Nunchaku)
+121	Greater Weapon Focus (Siangham)
+122	Greater Weapon Focus (Bastard Sword)
+123	Greater Weapon Focus (Dwarven Waraxe)
+124	Greater Weapon Focus (Gnome Hooked Hammer)
+125	Greater Weapon Focus (Orc Double Axe)
+126	Greater Weapon Focus (Spike Chain)
+127	Greater Weapon Focus (Dire Flail)
+128	Greater Weapon Focus (Two-bladed Sword)
+129	Greater Weapon Focus (Dwarven Urgrosh)
+130	Greater Weapon Focus (Hand Crossbow)
+131	Greater Weapon Focus (Shuriken)
+132	Greater Weapon Focus (Whip)
+133	Greater Weapon Focus (Repeating Crossbow)
+134	Greater Weapon Focus (Net)
+135	Greater Weapon Focus (Grapple)
+136	Greater Weapon Focus (Ray)
+137	Greater Weapon Specialization
+138	Heighten Spell
+139	Improved Bull Rush
+140	Improved Counterspell
+141	Improved Critical (Gauntlet)
+142	Improved Critical (Unarmed strike - medium-sized being)
+143	Improved Critical (Unarmed strike - small being)
+144	Improved Critical (Dagger)
+145	Improved Critical (Punching Dagger)
+146	Improved Critical (Spiked Gauntlet)
+147	Improved Critical (Light Mace)
+148	Improved Critical (Sickle)
+149	Improved Critical (Club)
+150	Improved Critical (Shortspear)
+151	Improved Critical (Heavy mace)
+152	Improved Critical (Morningstar)
+153	Improved Critical (Quarterstaff)
+154	Improved Critical (Spear)
+155	Improved Critical (Light Crossbow)
+156	Improved Critical (Dart)
+157	Improved Critical (Sling)
+158	Improved Critical (Heavy Crossbow)
+159	Improved Critical (Javelin)
+160	Improved Critical (Throwing Axe)
+161	Improved Critical (Light Hammer)
+162	Improved Critical (Handaxe)
+163	Improved Critical (Light Lance)
+164	Improved Critical (Light Pick)
+165	Improved Critical (Sap)
+166	Improved Critical (Short Sword)
+167	Improved Critical (Battleaxe)
+168	Improved Critical (Light Flail)
+169	Improved Critical (Heavy Lance)
+170	Improved Critical (Longsword)
+171	Improved Critical (Heavy Pick)
+172	Improved Critical (Rapier)
+173	Improved Critical (Scimitar)
+174	Improved Critical (Trident)
+175	Improved Critical (Warhammer)
+176	Improved Critical (Falchion)
+177	Improved Critical (Heavy Flail)
+178	Improved Critical (Glaive)
+179	Improved Critical (Greataxe)
+180	Improved Critical (Greatclub)
+181	Improved Critical (Greatsword)
+182	Improved Critical (Guisarme)
+183	Improved Critical (Halberd)
+184	Improved Critical (Longspear)
+185	Improved Critical (Ranseur)
+186	Improved Critical (Scythe)
+187	Improved Critical (Shortbow)
+188	Improved Critical (Composite Shortbow)
+189	Improved Critical (Longbow)
+190	Improved Critical (Composite Longbow)
+191	Improved Critical (Halfling Kama)
+192	Improved Critical (Kukri)
+193	Improved Critical (Halfling Nunchaku)
+194	Improved Critical (Halfling Siangham)
+195	Improved Critical (Kama)
+196	Improved Critical (Nunchaku)
+197	Improved Critical (Siangham)
+198	Improved Critical (Bastard Sword)
+199	Improved Critical (Dwarven Waraxe)
+200	Improved Critical (Gnome Hooked Hammer)
+201	Improved Critical (Orc Double Axe)
+202	Improved Critical (Spike Chain)
+203	Improved Critical (Dire Flail)
+204	Improved Critical (Two-bladed Sword)
+205	Improved Critical (Dwarven Urgrosh)
+206	Improved Critical (Hand Crossbow)
+207	Improved Critical (Shuriken)
+208	Improved Critical (Whip)
+209	Improved Critical (Repeating Crossbow)
+210	Improved Critical (Net)
+211	Improved Disarm
+212	Improved Feint
+213	Improved Grapple
+214	Improved Initiative
+215	Improved Overrun
+216	Improved Shield Bash
+217	Improved Trip
+218	Improved Two-Weapon Fighting
+219	Improved Turning
+220	Improved Unarmed Strike
+221	Improved Uncanny Dodge
+222	Investigator
+223	Iron Will
+224	Leadership
+225	Lightning Reflexes
+226	Magical Affinity
+227	Manyshot
+228	Martial Weapon Proficiency (Throwing Axe)
+229	Martial Weapon Proficiency (Light Hammer)
+230	Martial Weapon Proficiency (Handaxe)
+231	Martial Weapon Proficiency (Light Lance)
+232	Martial Weapon Proficiency (Light Pick)
+233	Martial Weapon Proficiency (Sap)
+234	Martial Weapon Proficiency (Short Sword)
+235	Martial Weapon Proficiency (Battleaxe)
+236	Martial Weapon Proficiency (Light Flail)
+237	Martial Weapon Proficiency (Heavy Lance)
+238	Martial Weapon Proficiency (Longsword)
+239	Martial Weapon Proficiency (Heavy Pick)
+240	Martial Weapon Proficiency (Rapier)
+241	Martial Weapon Proficiency (Scimitar)
+242	Martial Weapon Proficiency (Trident)
+243	Martial Weapon Proficiency (Warhammer)
+244	Martial Weapon Proficiency (Falchion)
+245	Martial Weapon Proficiency (Heavy Flail)
+246	Martial Weapon Proficiency (Glaive)
+247	Martial Weapon Proficiency (Greataxe)
+248	Martial Weapon Proficiency (Greatclub)
+249	Martial Weapon Proficiency (Greatsword)
+250	Martial Weapon Proficiency (Guisarme)
+251	Martial Weapon Proficiency (Halberd)
+252	Martial Weapon Proficiency (Longspear)
+253	Martial Weapon Proficiency (Ranseur)
+254	Martial Weapon Proficiency (Scythe)
+255	Martial Weapon Proficiency (Shortbow)
+256	Martial Weapon Proficiency (Composite Shortbow)
+257	Martial Weapon Proficiency (Longbow)
+258	Martial Weapon Proficiency (Composite Longbow)
+259	Maximize Spell
+260	Mobility
+261	Mounted Archery
+262	Mounted Combat
+263	Natural Spell
+264	Negotiator
+265	Nimble Fingers
+266	Persuasive
+267	Point Blank Shot
+268	Power Attack
+269	Precise Shot
+270	Quick Draw
+271	Quicken Spell
+272	Rapid Shot
+273	Rapid Reload
+274	Ride-by Attack
+275	Running
+276	Scribe Scroll
+277	Self Sufficient
+278	Shield Proficiency
+279	Shot on the Run
+280	Silent Spell
+281	Simple Weapon Proficiency
+282	Skill Focus (Alchemy)
+283	Skill Focus (Animal Empathy)
+284	Skill Focus (Appraise)
+285	Skill Focus (Balance)
+286	Skill Focus (Bluff)
+287	Skill Focus (Climb)
+288	Skill Focus (Concentration)
+289	Skill Focus (Craft)
+290	Skill Focus (Decipher Script)
+291	Skill Focus (Diplomacy)
+292	Skill Focus (Disable Device)
+293	Skill Focus (Disguise)
+294	Skill Focus (Escape Artist)
+295	Skill Focus (Forgery)
+296	Skill Focus (Gather Information)
+297	Skill Focus (Handle Animal)
+298	Skill Focus (Heal)
+299	Skill Focus (Hide)
+300	Skill Focus (Innuendo)
+301	Skill Focus (Intimidate)
+302	Skill Focus (Intuit Direction)
+303	Skill Focus (Jump)
+304	Skill Focus (Knowledge)
+305	Skill Focus (Listen)
+306	Skill Focus (Move Silently)
+307	Skill Focus (Open Lock)
+308	Skill Focus (Performance)
+309	Skill Focus (Pick Pocket)
+310	Skill Focus (Profession)
+311	Skill Focus (Read Lips)
+312	Skill Focus (Ride)
+313	Skill Focus (Scry)
+314	Skill Focus (Search)
+315	Skill Focus (Sense Motive)
+316	Skill Focus (Speak Language)
+317	Skill Focus (Spellcraft)
+318	Skill Focus (Spot)
+319	Skill Focus (Swim)
+320	Skill Focus (Tumble)
+321	Skill Focus (Use Device)
+322	Skill Focus (Use Rope)
+323	Skill Focus (Survival)
+324	Snatch Arrows
+325	Spell Focus (Abjuration)
+326	Spell Focus (Conjuration)
+327	Spell Focus (Divination)
+328	Spell Focus (Enchantment)
+329	Spell Focus (Evocation)
+330	Spell Focus (Illusion)
+331	Spell Focus (Necromancy)
+332	Spell Focus (Transmutation)
+333	Spell Mastery
+334	Spell Penetration
+335	Spirited Charge
+336	Spring Attack
+338	Still Spell
+339	Stunning Fist
+337	Stealthy
+340	Sunder
+341	Toughness
+342	Tower Shield Proficiency
+343	Track
+344	Trample
+345	Two-Weapon Fighting
+346	Two-Weapon Defense
+347	Weapon Finesse (Gauntlet)
+348	Weapon Finesse (Unarmed strike - medium-sized being)
+349	Weapon Finesse (Unarmed strike - small being)
+350	Weapon Finesse (Dagger)
+351	Weapon Finesse (Punching Dagger)
+352	Weapon Finesse (Spiked Gauntlet)
+353	Weapon Finesse (Light Mace)
+354	Weapon Finesse (Sickle)
+355	Weapon Finesse (Club)
+356	Weapon Finesse (Shortspear)
+357	Weapon Finesse (Heavy mace)
+358	Weapon Finesse (Morningstar)
+359	Weapon Finesse (Quarterstaff)
+360	Weapon Finesse (Spear)
+361	Weapon Finesse (Light Crossbow)
+362	Weapon Finesse (Dart)
+363	Weapon Finesse (Sling)
+364	Weapon Finesse (Heavy Crossbow)
+365	Weapon Finesse (Javelin)
+366	Weapon Finesse (Throwing Axe)
+367	Weapon Finesse (Light Hammer)
+368	Weapon Finesse (Handaxe)
+369	Weapon Finesse (Light Lance)
+370	Weapon Finesse (Light Pick)
+371	Weapon Finesse (Sap)
+372	Weapon Finesse (Short Sword)
+373	Weapon Finesse (Battleaxe)
+374	Weapon Finesse (Light Flail)
+375	Weapon Finesse (Heavy Lance)
+376	Weapon Finesse (Longsword)
+377	Weapon Finesse (Heavy Pick)
+378	Weapon Finesse (Rapier)
+379	Weapon Finesse (Scimitar)
+380	Weapon Finesse (Trident)
+381	Weapon Finesse (Warhammer)
+382	Weapon Finesse (Falchion)
+383	Weapon Finesse (Heavy Flail)
+384	Weapon Finesse (Glaive)
+385	Weapon Finesse (Greataxe)
+386	Weapon Finesse (Greatclub)
+387	Weapon Finesse (Greatsword)
+388	Weapon Finesse (Guisarme)
+389	Weapon Finesse (Halberd)
+390	Weapon Finesse (Longspear)
+391	Weapon Finesse (Ranseur)
+392	Weapon Finesse (Scythe)
+393	Weapon Finesse (Shortbow)
+394	Weapon Finesse (Composite Shortbow)
+395	Weapon Finesse (Longbow)
+396	Weapon Finesse (Composite Longbow)
+397	Weapon Finesse (Halfling Kama)
+398	Weapon Finesse (Kukri)
+399	Weapon Finesse (Halfling Nunchaku)
+400	Weapon Finesse (Halfling Siangham)
+401	Weapon Finesse (Kama)
+402	Weapon Finesse (Nunchaku)
+403	Weapon Finesse (Siangham)
+404	Weapon Finesse (Bastard Sword)
+405	Weapon Finesse (Dwarven Waraxe)
+406	Weapon Finesse (Gnome Hooked Hammer)
+407	Weapon Finesse (Orc Double Axe)
+408	Weapon Finesse (Spike Chain)
+409	Weapon Finesse (Dire Flail)
+410	Weapon Finesse (Two-bladed Sword)
+411	Weapon Finesse (Dwarven Urgrosh)
+412	Weapon Finesse (Hand Crossbow)
+413	Weapon Finesse (Shuriken)
+414	Weapon Finesse (Whip)
+415	Weapon Finesse (Repeating Crossbow)
+416	Weapon Finesse (Net)
+417	Weapon Focus (Gauntlet)
+418	Weapon Focus (Unarmed strike - medium-sized being)
+419	Weapon Focus (Unarmed strike - small being)
+420	Weapon Focus (Dagger)
+421	Weapon Focus (Punching Dagger)
+422	Weapon Focus (Spiked Gauntlet)
+423	Weapon Focus (Light Mace)
+424	Weapon Focus (Sickle)
+425	Weapon Focus (Club)
+426	Weapon Focus (Shortspear)
+427	Weapon Focus (Heavy mace)
+428	Weapon Focus (Morningstar)
+429	Weapon Focus (Quarterstaff)
+430	Weapon Focus (Spear)
+431	Weapon Focus (Light Crossbow)
+432	Weapon Focus (Dart)
+433	Weapon Focus (Sling)
+434	Weapon Focus (Heavy Crossbow)
+435	Weapon Focus (Javelin)
+436	Weapon Focus (Throwing Axe)
+437	Weapon Focus (Light Hammer)
+438	Weapon Focus (Handaxe)
+439	Weapon Focus (Light Lance)
+440	Weapon Focus (Light Pick)
+441	Weapon Focus (Sap)
+442	Weapon Focus (Short Sword)
+443	Weapon Focus (Battleaxe)
+444	Weapon Focus (Light Flail)
+445	Weapon Focus (Heavy Lance)
+446	Weapon Focus (Longsword)
+447	Weapon Focus (Heavy Pick)
+448	Weapon Focus (Rapier)
+449	Weapon Focus (Scimitar)
+450	Weapon Focus (Trident)
+451	Weapon Focus (Warhammer)
+452	Weapon Focus (Falchion)
+453	Weapon Focus (Heavy Flail)
+454	Weapon Focus (Glaive)
+455	Weapon Focus (Greataxe)
+456	Weapon Focus (Greatclub)
+457	Weapon Focus (Greatsword)
+458	Weapon Focus (Guisarme)
+459	Weapon Focus (Halberd)
+460	Weapon Focus (Longspear)
+461	Weapon Focus (Ranseur)
+462	Weapon Focus (Scythe)
+463	Weapon Focus (Shortbow)
+464	Weapon Focus (Composite Shortbow)
+465	Weapon Focus (Longbow)
+466	Weapon Focus (Composite Longbow)
+467	Weapon Focus (Halfling Kama)
+468	Weapon Focus (Kukri)
+469	Weapon Focus (Halfling Nunchaku)
+470	Weapon Focus (Halfling Siangham)
+471	Weapon Focus (Kama)
+472	Weapon Focus (Nunchaku)
+473	Weapon Focus (Siangham)
+474	Weapon Focus (Bastard Sword)
+475	Weapon Focus (Dwarven Waraxe)
+476	Weapon Focus (Gnome Hooked Hammer)
+477	Weapon Focus (Orc Double Axe)
+478	Weapon Focus (Spike Chain)
+479	Weapon Focus (Dire Flail)
+480	Weapon Focus (Two-bladed Sword)
+481	Weapon Focus (Dwarven Urgrosh)
+482	Weapon Focus (Hand Crossbow)
+483	Weapon Focus (Shuriken)
+484	Weapon Focus (Whip)
+485	Weapon Focus (Repeating Crossbow)
+486	Weapon Focus (Net)
+487	Weapon Focus (Grapple)
+488	Weapon Focus (Ray)
+489	Weapon Specialization (Gauntlet)
+490	Weapon Specialization (Unarmed strike - medium-sized being)
+491	Weapon Specialization (Unarmed strike - small being)
+492	Weapon Specialization (Dagger)
+493	Weapon Specialization (Punching Dagger)
+494	Weapon Specialization (Spiked Gauntlet)
+495	Weapon Specialization (Light Mace)
+496	Weapon Specialization (Sickle)
+497	Weapon Specialization (Club)
+498	Weapon Specialization (Shortspear)
+499	Weapon Specialization (Heavy mace)
+500	Weapon Specialization (Morningstar)
+501	Weapon Specialization (Quarterstaff)
+502	Weapon Specialization (Spear)
+503	Weapon Focus (Light Crossbow)
+504	Weapon Focus (Dart)
+505	Weapon Focus (Sling)
+506	Weapon Focus (Heavy Crossbow)
+507	Weapon Focus (Javelin)
+508	Weapon Specialization (Throwing Axe)
+509	Weapon Specialization (Light Hammer)
+510	Weapon Specialization (Handaxe)
+511	Weapon Specialization (Light Lance)
+512	Weapon Specialization (Light Pick)
+513	Weapon Specialization (Sap)
+514	Weapon Specialization (Short Sword)
+515	Weapon Specialization (Battleaxe)
+516	Weapon Specialization (Light Flail)
+517	Weapon Specialization (Heavy Lance)
+518	Weapon Specialization (Longsword)
+519	Weapon Specialization (Heavy Pick)
+520	Weapon Specialization (Rapier)
+521	Weapon Specialization (Scimitar)
+522	Weapon Specialization (Trident)
+523	Weapon Specialization (Warhammer)
+524	Weapon Specialization (Falchion)
+525	Weapon Specialization (Heavy Flail)
+526	Weapon Specialization (Glaive)
+527	Weapon Specialization (Greataxe)
+528	Weapon Specialization (Greatclub)
+529	Weapon Specialization (Greatsword)
+530	Weapon Specialization (Guisarme)
+531	Weapon Specialization (Halberd)
+532	Weapon Specialization (Longspear)
+533	Weapon Specialization (Ranseur)
+534	Weapon Specialization (Scythe)
+535	Weapon Specialization (Shortbow)
+536	Weapon Specialization (Composite Shortbow)
+537	Weapon Specialization (Longbow)
+538	Weapon Specialization (Composite Longbow)
+539	Weapon Specialization (Halfling Kama)
+540	Weapon Specialization (Kukri)
+541	Weapon Specialization (Halfling Nunchaku)
+542	Weapon Specialization (Halfling Siangham)
+543	Weapon Specialization (Kama)
+544	Weapon Specialization (Nunchaku)
+545	Weapon Specialization (Siangham)
+546	Weapon Specialization (Bastard Sword)
+547	Weapon Specialization (Dwarven Waraxe)
+548	Weapon Specialization (Gnome Hooked Hammer)
+549	Weapon Specialization (Orc Double Axe)
+550	Weapon Specialization (Spike Chain)
+551	Weapon Specialization (Dire Flail)
+552	Weapon Specialization (Two-bladed Sword)
+553	Weapon Specialization (Dwarven Urgrosh)
+554	Weapon Specialization (Hand Crossbow)
+555	Weapon Specialization (Shuriken)
+556	Weapon Specialization (Whip)
+557	Weapon Specialization (Repeating Crossbow)
+558	Weapon Specialization (Net)
+559	Weapon Specialization (Grapple)
+560	feat whirlwind attack
+561	feat barbarian rage
+562	feat stunning attacks
+563	feat wholeness of body
+564	feat lay on hands
+565	feat smite evil
+566	feat remove disease
+567	feat detect evil
+568	feat aura of courage
+569	feat divine health
+570	feat divine grace
+571	feat special mount
+572	feat code of conduct
+573	feat associates
+574	feat defensive roll
+575	feat turn undead
+576	feat rebuke undead
+577	feat domain power
+578	feat spontaneous casting cure
+579	feat spontaneous casting inflict
+580	feat combat reflexes
+581	feat martial weapon proficiency all
+582	feat simple weapon proficiency druid
+583	feat simple weapon proficiency monk
+584	feat simple weapon proficiency rogue
+585	feat simple weapon proficiency wizard
+586	feat simple weapon proficiency elf
+587	feat uncanny dodge
+588	feat fast movement
+589	feat bardic music
+590	feat bardic knowledge
+591	feat nature sense
+592	feat woodland stride
+593	feat trackless step
+594	feat resist natures lure
+595	feat wild shape
+596	feat venom immunity
+597	feat armor proficiency druid
+598	feat flurry of blows
+599	feat evasion
+600	feat still mind
+601	feat purity of body
+602	feat improved evasion
+603	feat ki strike
+604	feat sneak attack
+605	feat traps
+606	feat crippling strike
+607	feat opportunist
+608	feat skill mastery
+609	feat slippery mind
+610	feat call familiar
+611	feat favored enemy aberration
+612	feat favored enemy animal
+613	feat favored enemy beast
+614	feat favored enemy construct
+615	feat favored enemy dragon
+616	feat favored enemy elemental
+617	feat favored enemy fey
+618	feat favored enemy giant
+619	feat favored enemy magical beast
+620	feat favored enemy monsterous humanoid
+621	feat favored enemy ooze
+622	feat favored enemy plant
+623	feat favored enemy shapechanger
+624	feat favored enemy undead
+625	feat favored enemy vermin
+626	feat favored enemy outsider evil
+627	feat favored enemy outsider good
+628	feat favored enemy outsider lawful
+629	feat favored enemy outsider chaotic
+630	feat favored enemy humanoid goblinoid
+631	feat favored enemy humanoid reptilian
+632	feat favored enemy humanoid dwarf
+633	feat favored enemy humanoid elf
+634	feat favored enemy humanoid gnoll
+635	feat favored enemy humanoid gnome
+636	feat favored enemy humanoid halfling
+637	feat favored enemy humanoid orc
+638	feat favored enemy humanoid human
+639	feat ambidexterity ranger
+640	feat two weapon fighting ranger
+641	feat improved two weapon fighting ranger
+642	feat animal companion
+643	feat ranger two weapon style
+644	feat ranger archery style
+645	feat widen spell
+646	feat ranger rapid shot
+647	feat ranger manyshot
