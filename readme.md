@@ -21,10 +21,10 @@ Requirements
 
 In order to successfully compile ToEE World Builder .NET2, you need the following software:
 
-* [Microsoft .NET Framework v4.0](http://www.microsoft.com/net/download) or newer
-* [Microsoft Visual Studio 2010](http://www.microsoft.com/visualstudio/eng/downloads) or newer (Express Edition is free)
+* [Microsoft .NET Framework 4.0 Redistributable](http://www.microsoft.com/net/download) or newer is **needed** (pre-installed on Windows 8)
+* [Microsoft Visual Studio 2010](http://www.microsoft.com/visualstudio/eng/downloads) or newer is **recommended** (includes .NET redistributable)
 
-Note that other IDEs supporting C# 4.0 _may_ be able to build the ToEEWB successfully, but this was never tested.
+Note that Express Edition is free. Other IDEs supporting C# 4.0 _may_ be able to build the ToEEWB successfully, but this was never tested.
 
 Note before you start modifying
 -------------------------------
@@ -47,7 +47,9 @@ Also, [gpl.txt](gpl.txt) is included which contains the full text of the General
 Compiling the code
 ------------------
 
-After loading `ToEE World Builder.sln` solution file into the Visual Studio IDE you may choose the **Build solution** option to create an executable.
+If you have Visual Studio 2010 or newer, you can open `ToEE World Builder.sln` solution file and then choose to **Build solution** option to create an executable.
+
+If you only have .NET 4.0 or newer, you can build solution from command line. Just run `%systemroot%\Microsoft.NET\Framework\v4.0.30319\msbuild.exe "ToEE World Builder.sln"` command from `src` directory.
 
 Support
 -------
