@@ -1,7 +1,7 @@
-ToEE World Builder .NET2 version 2.0.5a Open-Source Edition
-==========================================================
+ToEE World Builder version 2.0.5a Open-Source Edition
+=====================================================
 
-Copyright &copy; 2005-2013    Michael Kamensky, all rights reserved.
+Copyright &copy; 2005-2013 Michael Kamensky, all rights reserved.
 
 ---
 
@@ -27,8 +27,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 This package includes the source code and all required files needed to
 build a redistributable package of the ToEE World Builder .NET2.
 
-Requirements:
--------------
+Requirements
+------------
 
 In order to successfully compile ToEE World Builder .NET2, you need the
 following software:
