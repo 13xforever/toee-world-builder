@@ -1,40 +1,17 @@
-// ToEE World Builder .NET2 version 2.0.0 Open-Source Edition
-// Copyright (C) 2005-2006    Michael Kamensky, all rights reserved.
-//
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 2 of the License, or
-// (at your option) any later version.
-//
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-
-using System;
 using System.Collections;
 using System.IO;
 
 namespace WorldBuilder
 {
-	/// <summary>
-	/// Helper class for protos editor
-	/// </summary>
-	public class ProHelper
+	public static class ProHelper
 	{
-		public ProHelper(){}
-
-        // Default column names, loaded before the patch file is parsed
+		// Default column names, loaded before the patch file is parsed
 		public static ArrayList PRO_GetColumnNames()
 		{
 			ArrayList ar = new ArrayList();
 
-			for (int i=0; i<334; i++)
-				ar.Add(("Unknown #"+(i+1).ToString().PadRight(20,' ')+"|\t"));
+			for (int i = 0; i < 334; i++)
+				ar.Add(("Unknown #" + (i + 1).ToString().PadRight(20, ' ') + "|\t"));
 
 			ar[0] = "Line Number                  |\t";
 			ar[1] = "Object Type                  |\t";
@@ -51,7 +28,7 @@ namespace WorldBuilder
 			ar[33] = "Speed (run)                  |\t";
 			ar[34] = "Object Model                 |\t";
 			ar[35] = "Target Size                  |\t";
-            ar[37] = "Portal Flags                 |\t";
+			ar[37] = "Portal Flags                 |\t";
 			ar[38] = "Portal Picklock DC           |\t";
 			ar[39] = "Portal Trap/Key ID           |\t";
 			ar[41] = "Container Flags              |\t";
@@ -61,9 +38,9 @@ namespace WorldBuilder
 			ar[50] = "Item Flags                   |\t";
 			ar[51] = "Item Weight                  |\t";
 			ar[52] = "Item Value (in copper)       |\t";
-            ar[53] = "Inventory Icon               |\t";
+			ar[53] = "Inventory Icon               |\t";
 			ar[55] = "Unidentified Description ID  |\t";
-            ar[59] = "Number of Charges            |\t";
+			ar[59] = "Number of Charges            |\t";
 			ar[61] = "Equipment Slot Flags         |\t";
 			ar[62] = "Object Color (?)             |\t";
 			ar[63] = "Weapon Flags                 |\t";
@@ -73,7 +50,7 @@ namespace WorldBuilder
 			ar[69] = "Damage Type                  |\t";
 			ar[70] = "Damage Dice                  |\t";
 			ar[72] = "Weapon Class                 |\t";
-            ar[73] = "Critical Hit Threat Range    |\t";
+			ar[73] = "Critical Hit Threat Range    |\t";
 			ar[75] = "Stack Size                   |\t";
 			ar[76] = "Ammo Type                    |\t";
 			ar[79] = "Armor Max Dexterity Bonus    |\t";
@@ -159,7 +136,7 @@ namespace WorldBuilder
 			ar[193] = "Property 9 Param. 1          |\t";
 			ar[194] = "Property 9 Param. 2          |\t";
 			ar[195] = "Property 10 Type             |\t";
-			ar[196] = "Property 10 Param. 1         |\t"; 
+			ar[196] = "Property 10 Param. 1         |\t";
 			ar[197] = "Property 10 Param. 2         |\t";
 			ar[198] = "Property 11 Type             |\t";
 			ar[199] = "Property 11 Param. 1         |\t";
@@ -314,7 +291,7 @@ namespace WorldBuilder
 						continue;
 
 					proto_patch_name_arr = proto_patch_name.Split('=');
-					ar[int.Parse(proto_patch_name_arr[0])] = proto_patch_name_arr[1].PadRight(29, ' ')+"|\t";
+					ar[int.Parse(proto_patch_name_arr[0])] = proto_patch_name_arr[1].PadRight(29, ' ') + "|\t";
 				}
 
 				sr.Close();
@@ -462,7 +439,7 @@ namespace WorldBuilder
 			ArrayList ar = new ArrayList();
 
 			ar.Add("OTF_BUSTED");
-			
+
 			return ar;
 		}
 
@@ -471,7 +448,7 @@ namespace WorldBuilder
 			ArrayList ar = new ArrayList();
 
 			ar.Add("OAF_NONE");
-			
+
 			return ar;
 		}
 
@@ -480,7 +457,7 @@ namespace WorldBuilder
 			ArrayList ar = new ArrayList();
 
 			ar.Add("OFF_NONE");
-			
+
 			return ar;
 		}
 
@@ -891,7 +868,7 @@ namespace WorldBuilder
 			ar.Add("HELM_TYPE_LARGE");
 			ar.Add("HELM_TYPE_MEDIUM");
 			ar.Add("HELM_TYPE_SMALL");
-	
+
 			return ar;
 		}
 
@@ -975,7 +952,7 @@ namespace WorldBuilder
 
 			return ar;
 		}
-	
+
 		// Gender
 		public static ArrayList PRO_GetGender()
 		{
@@ -1432,8 +1409,8 @@ namespace WorldBuilder
 			{
 				StreamReader sr = new StreamReader("ToEE World Builder.ftd");
 				string str = "";
-				
-				while ((str=sr.ReadLine())!=null)
+
+				while ((str = sr.ReadLine()) != null)
 				{
 					ar.Add(str.Split('\t')[1].Trim());
 				}
