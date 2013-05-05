@@ -9,10 +9,14 @@ namespace WorldBuilder.Forms
 {
 	public partial class PathNodeGen : Form
 	{
+		private readonly Control[] controls;
+		private readonly Tuple<ToolStripMenuItem, double>[] vicinitySwitch;
+		private PathNodeCollection nodeCollection;
+
 		public PathNodeGen()
 		{
 			InitializeComponent();
-			controls = new Control[] { btnGeneratePND, btnSavePND, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY };
+			controls = new Control[] {btnGeneratePND, btnSavePND, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY};
 			vicinitySwitch = new[]
 								{
 									Tuple.Create(toleranceMenuItem1,  7d),
@@ -27,9 +31,6 @@ namespace WorldBuilder.Forms
 			nodeCollection = new PathNodeCollection(nodeCollection);
 		}
 
-		private readonly Control[] controls;
-		private PathNodeCollection nodeCollection;
-
 		private void OnOpenPndFileClick(object sender, EventArgs e)
 		{
 			if (OpenPND.ShowDialog() != DialogResult.OK) return;
@@ -37,10 +38,10 @@ namespace WorldBuilder.Forms
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
 			//todo: do something about vicinity, as it bothers me right now (i.e. reset Tolerance menu as needed)
-			var vicinity = nodeCollection.NeighbourhoodVicinity;
+			double vicinity = nodeCollection.NeighbourhoodVicinity;
 			nodeCollection = PathNodeCollection.Read(OpenPND.FileName);
 			nodeCollection.NeighbourhoodVicinity = vicinity;
-			foreach (var node in nodeCollection.SortedValues)
+			foreach (PathNode node in nodeCollection.SortedValues)
 				lstNodes.Items.Add(node);
 			EnableInterface(true);
 		}
@@ -85,12 +86,9 @@ namespace WorldBuilder.Forms
 			EnableInterface(true);
 		}
 
-		/// <summary>
-		/// Modify the PND generator interface state
-		/// </summary>
- 		private void EnableInterface(bool enabled)
+		private void EnableInterface(bool enabled)
 		{
-			foreach (var control in controls)
+			foreach (Control control in controls)
 				control.Enabled = enabled;
 		}
 
@@ -115,7 +113,7 @@ namespace WorldBuilder.Forms
 			var node = (PathNode)lstNodes.Items[lstNodes.SelectedIndex];
 			DisplayNode(node);
 			lstLinks.Items.Clear();
-			foreach (var goal in nodeCollection.GetSortedGoalsFor(node.Id))
+			foreach (uint goal in nodeCollection.GetSortedGoalsFor(node.Id))
 				lstLinks.Items.Add(nodeCollection[goal]);
 		}
 
@@ -124,20 +122,12 @@ namespace WorldBuilder.Forms
 			if (lstLinks.SelectedIndex == -1)
 				return;
 
-			//todo: fix this logic of node inconsistency handling; this shouldn't happen if at all possible
-			if (lstLinks.Items[lstLinks.SelectedIndex] == null)
-			{
-				MessageBox.Show("This link cannot be resolved (its destination was possibly removed). Please click the \"Generate\" button to generate the path node links.", "Unresolved Link", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-				return;
-			}
-
 			lstNodes.SelectedIndex = lstNodes.Items.IndexOf(lstLinks.Items[lstLinks.SelectedIndex]);
 			lstNodes.Focus();
 		}
 
 		private void OnDeleteNodeClick(object sender, EventArgs e)
 		{
-			// Deleting a path node must update the IsDirty flag
 			if (lstNodes.SelectedIndex == -1)
 				return;
 
@@ -169,7 +159,7 @@ namespace WorldBuilder.Forms
 
 			if (!errors)
 			{
-				var existingNode = nodeCollection[newX, newY];
+				PathNode existingNode = nodeCollection[newX, newY];
 				if (existingNode != null)
 				{
 					errorMessage.AppendFormat("Error: A path node with the given (X,Y) coordinates already exists! [#{0}]", existingNode.Id).AppendLine();
@@ -213,8 +203,6 @@ namespace WorldBuilder.Forms
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private readonly Tuple<ToolStripMenuItem, double>[] vicinitySwitch;
-
 		private void OnChangeToleranceClick(object sender, EventArgs e)
 		{
 			foreach (var tuple in vicinitySwitch)
@@ -251,7 +239,6 @@ namespace WorldBuilder.Forms
 
 		private void OnAutogeneratePathClick(object sender, EventArgs e)
 		{
-
 			//todo: clean up after converting return values to uint?
 			var autoGenDlg = new PathNodeAutoGen();
 			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.r_Step == -1) return;
@@ -264,8 +251,8 @@ namespace WorldBuilder.Forms
 
 			// Generate automated path nodes
 			//todo: move to PathNodeCollection after dealing with IsAvailableTile as OnAddNodeClick is hot
-			for (var x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
-				for (var y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
+			for (int x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
+				for (int y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
 					if (IsAvailableTile(x, y))
 					{
 						DisplayNode(x, y, 0f, 0f);
@@ -312,7 +299,7 @@ namespace WorldBuilder.Forms
 					LightEditorEx.LoadLightFromSEC(reader);
 				int distX = x - minX;
 				int distY = y - minY;
-				int skipLength = (distY * 64 + distX) * 16;
+				int skipLength = (distY*64 + distX)*16;
 				stream.Seek(skipLength, SeekOrigin.Current);
 				return reader.ReadUInt64() <= 32;
 			}
@@ -340,7 +327,7 @@ namespace WorldBuilder.Forms
 					else
 						MessageBox.Show("Please create a path node file first! (e.g. click 'New' or 'Open')",
 										"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					try { File.Delete(Helper.InteropPath); } catch { }
+					try { File.Delete(Helper.InteropPath); } catch {}
 					return;
 			}
 		}
