@@ -122,11 +122,11 @@ namespace WorldBuilder
 				using (var writer = new BinaryWriter(new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)))
 				{
 					writer.Write((uint) Count);
-					foreach (var id in nodes.Keys.OrderBy(key => key))
+					foreach (var id in nodes.Keys.OrderByDescending(key => key))
 					{
 						writer.WritePathNode(nodes[id]);
 						writer.Write(goals[id].Count);
-						foreach (var goal in goals[id].OrderBy(key => key))
+						foreach (var goal in goals[id].OrderByDescending(key => key))
 							writer.Write(goal);
 					}
 				}
