@@ -207,28 +207,6 @@ namespace WorldBuilder
 				return;
 			}
 
-			// Initialize the Mobile Properties hash table
-			// for (int i=0; i<512; i++)
-			//	Properties.Add(i, null);
-
-			// Load up add-ins
-			if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\ToEE World Builder.aim"))
-			{
-				var sr = new StreamReader("ToEE World Builder.aim");
-				string st = "";
-				while ((st = sr.ReadLine()) != "[END ADDIN LIST]")
-				{
-					if (st.Trim() == "")
-						continue;
-					if (st.Substring(0, 1) == "/")
-						continue;
-
-					string[] aim_data = st.Split('=');
-					mnuAddins.MenuItems.Add(aim_data[0], CallAddin);
-				}
-				sr.Close();
-			}
-
 			// Load PROTOS, DESCRIPTION, and LONG_DESCRIPTION files
 			var f_protos = new StreamReader("protos.tab");
 			var f_desc = new StreamReader("description.mes");
