@@ -34,6 +34,8 @@ namespace WorldBuilder.Forms
 		{
 			if (OpenPND.ShowDialog() != DialogResult.OK) return;
 
+			lstNodes.Items.Clear();
+			lstLinks.Items.Clear();
 			//todo: do something about vicinity, as it bothers me right now (i.e. reset Tolerance menu as needed)
 			var vicinity = nodeCollection.NeighbourhoodVicinity;
 			nodeCollection = PathNodeCollection.Read(OpenPND.FileName);
@@ -255,11 +257,13 @@ namespace WorldBuilder.Forms
 			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.r_Step == -1) return;
 
 			// New PND file
+			lstNodes.Items.Clear();
+			lstLinks.Items.Clear();
 			nodeCollection = new PathNodeCollection(nodeCollection);
 			EnableInterface(true);
 
 			// Generate automated path nodes
-			//todo: move to PathNodeCollection after dealing with IsAvailableTile
+			//todo: move to PathNodeCollection after dealing with IsAvailableTile as OnAddNodeClick is hot
 			for (var x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
 				for (var y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
 					if (IsAvailableTile(x, y))
