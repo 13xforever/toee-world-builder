@@ -11,10 +11,7 @@ namespace WorldBuilder
 		public int r_TX = -1;
 		public int r_TY = -1;
 
-		public PathNodeAutoGen()
-		{
-			InitializeComponent();
-		}
+		public PathNodeAutoGen() { InitializeComponent(); }
 
 		private void btnOK_Click(object sender, EventArgs e)
 		{

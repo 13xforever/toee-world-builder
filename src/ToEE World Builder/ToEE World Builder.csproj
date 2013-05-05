@@ -136,6 +136,7 @@
     <Compile Include="Helpers\IntelliProperties.cs" />
     <Compile Include="Helpers\Maybe.cs" />
     <Compile Include="Helpers\MiscHelper.cs" />
+    <Compile Include="PathNodeCollection.cs" />
     <Compile Include="PathNode.cs" />
     <Compile Include="MobTypes.cs" />
     <Compile Include="TriState.cs" />

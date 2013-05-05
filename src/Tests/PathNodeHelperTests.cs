@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System.Collections.Generic;
+using System.Linq;
+using NUnit.Framework;
 using WorldBuilder;
 
 namespace Tests
@@ -22,6 +24,18 @@ namespace Tests
 			var node2 = new PathNode(2, x2, y2, 0, 0);
 
 			Assert.That(node1.IsNear(node2, expected), Is.True);
+		}
+
+		[Test]
+		public void SaveThroughStackVoodo()
+		{
+			var collection = new[] {1, 2, 3, 4, 5};
+			var stack = new Stack<int>(collection);
+			var e = stack.GetEnumerator();
+			e.MoveNext();
+
+			Assert.That(e.Current, Is.EqualTo(collection.Last()));
+			Assert.That(stack.AsEnumerable(), Is.EqualTo(collection.Reverse()));
 		}
 	}
 }

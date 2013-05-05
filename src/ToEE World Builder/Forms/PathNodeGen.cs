@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.IO;
-using System.Text.RegularExpressions;
+using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
@@ -12,208 +12,126 @@ namespace WorldBuilder.Forms
 		public PathNodeGen()
 		{
 			InitializeComponent();
+			controls = new Control[] { btnGeneratePND, btnSavePND, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY };
+			vicinitySwitch = new[]
+								{
+									Tuple.Create(experimentalToolStripMenuItem, 7d),
+									Tuple.Create(menuItem2, 19d),
+									Tuple.Create(menuItem3, 20d),
+									Tuple.Create(menuItem4, 21d),
+									Tuple.Create(menuItem5, 22d),
+									Tuple.Create(menuItem6, 23d),
+									Tuple.Create(menuItem7, 24d),
+									Tuple.Create(menuItem8, 25d),
+								};
+			nodeCollection = new PathNodeCollection(nodeCollection);
 		}
 
-		private void btnOpenPND_Click(object sender, EventArgs e)
+		private readonly Control[] controls;
+		private PathNodeCollection nodeCollection;
+
+		private void OnOpenPndFileClick(object sender, EventArgs e)
 		{
-			if (OpenPND.ShowDialog() == DialogResult.OK)
-			{
-				PathNodeHelper.CURRENT_TOP_ID = 0;
-				lstNodes.Items.Clear();
-				lstLinks.Items.Clear();
-				PathNodeHelper.PathNodes.Clear();
-				PathNodeHelper.PathNodeGoals.Clear();
+			if (OpenPND.ShowDialog() != DialogResult.OK) return;
 
-				var br = new BinaryReader(new FileStream(OpenPND.FileName, FileMode.Open));
-				uint num_nodes = br.ReadUInt32(); // get the # of nodes
-
-				for (int i = 0; i < num_nodes; i++)
-				{
-					// Parse each node
-					var p = br.ReadPathNode();
-
-					// Add to the list and to the hashtable
-					PathNodeHelper.PathNodes.Add(p.Id, p);
-					lstNodes.Items.Add("ID #" + p.Id.ToString() + ": (" + p.X.ToString() + ", " + p.Y.ToString() + ")");
-
-					// Check if we need to modify the max ID available
-					if (p.Id > PathNodeHelper.CURRENT_TOP_ID)
-						PathNodeHelper.CURRENT_TOP_ID = p.Id;
-
-					uint num_goals = br.ReadUInt32();
-					string goals = "";
-					for (int j = 0; j < num_goals; j++)
-					{
-						// Process each goal
-						goals += br.ReadUInt32().ToString() + "::";
-					}
-					PathNodeHelper.PathNodeGoals.Add(p.Id, goals);
-				}
-				br.Close();
-				PathNodeHelper.CURRENT_TOP_ID++; // increase to set to a new possible value
-
-				PathNodeHelper.PND_HAS_CHANGED = false;
-				PathNodeHelper.PND_MODE_ACTIVE = true;
-				SetInterfaceState(true);
-			}
+			var newCollection = PathNodeCollection.Read(OpenPND.FileName);
+			newCollection.NeighbourhoodVicinity = nodeCollection.NeighbourhoodVicinity;
+			foreach (var node in nodeCollection.Values)
+				lstNodes.Items.Add(node); //todo: check that it renders properly
+			EnableInterface(true);
 		}
 
-		private void btnSavePND_Click(object sender, EventArgs e)
+		private void OnSavePndFileClick(object sender, EventArgs e)
 		{
-			if (!PathNodeHelper.PND_MODE_ACTIVE)
+			if (nodeCollection == null)
 			{
 				MessageBox.Show("No path nodes to save!", "Nothing to do", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
-			if (PathNodeHelper.PND_HAS_CHANGED)
+			if (nodeCollection.IsDirty)
 			{
-				if (
-					MessageBox.Show(
-						"Warning: The path nodes have changed since the last time they were saved. It means that certain links may have been invalidated or become unusable. It is recommended that you click the \"Generate\" button before saving the path nodes, otherwise you may experience strange behavior or CTDs in the game. Are you sure you want to save the path node data without generating node links (not recommended)?",
-						"Please confirm precarious operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+				if (MessageBox.Show("Warning: The path nodes have changed since the last time they were saved. " +
+									"It means that certain links may have been invalidated or become unusable. " +
+									"It is recommended that you click the \"Generate\" button before saving the path nodes, " +
+									"otherwise you may experience strange behavior or CTDs in the game. " +
+									"Are you sure you want to save the path node data without generating node links (not recommended)?",
+									"Please confirm precarious operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 					return;
 			}
 
 			SavePND.FileName = "pathnode.pnd";
-			if (SavePND.ShowDialog() == DialogResult.OK)
-			{
-				// TODO: save back the path nodes here
-				var bw = new BinaryWriter(new FileStream(SavePND.FileName, FileMode.Create));
-				bw.Write((uint) PathNodeHelper.PathNodes.Count); // # of path nodes
+			if (SavePND.ShowDialog() != DialogResult.OK) return;
 
-				var NodeStack = new Stack(PathNodeHelper.PathNodes.Keys);
-				IEnumerator WalkNodes = NodeStack.GetEnumerator();
-
-				while (WalkNodes.MoveNext())
-				{
-					var p = (PathNode) PathNodeHelper.PathNodes[uint.Parse(WalkNodes.Current.ToString())];
-					bw.Write(p.Id);
-					bw.Write(p.X);
-					bw.Write(p.Y);
-					bw.Write(p.OffsetX);
-					bw.Write(p.OffsetY);
-
-					// Write out the number of goals and the list of goals
-					// (neighboring destinations)
-					string[] goals = str_to_array(PathNodeHelper.PathNodeGoals[p.Id].ToString());
-					bw.Write(goals.GetUpperBound(0));
-					foreach (string goal in goals)
-					{
-						if (goal != "")
-							bw.Write(uint.Parse(goal));
-					}
-				}
-				bw.Close();
-				MessageBox.Show("Path Node Data Saved.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
-			}
+			nodeCollection.Save(SavePND.FileName);
+			MessageBox.Show("Path Node Data Saved.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private void btnNewPND_Click(object sender, EventArgs e)
+		private void OnNewPndFileClick(object sender, EventArgs e)
 		{
-			if (PathNodeHelper.PND_MODE_ACTIVE)
-			{
-				if (MessageBox.Show("Are you sure you want to create a new path node data file?", "Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
-					return;
-			}
+			if (nodeCollection == null) return;
 
-			PathNodeHelper.CURRENT_TOP_ID = 0;
-			lstNodes.Items.Clear();
-			lstLinks.Items.Clear();
-			PathNodeHelper.PathNodes.Clear();
-			PathNodeHelper.PathNodeGoals.Clear();
-			PathNodeHelper.PND_HAS_CHANGED = false;
-			PathNodeHelper.PND_MODE_ACTIVE = true;
-			SetInterfaceState(true);
+			if (MessageBox.Show("Are you sure you want to create a new path node data file?",
+								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+				return;
+
+			nodeCollection = new PathNodeCollection(nodeCollection);
+			EnableInterface(true);
 		}
 
-		// Modify the PND generator interface state
-		private void SetInterfaceState(bool state)
+		/// <summary>
+		/// Modify the PND generator interface state
+		/// </summary>
+ 		private void EnableInterface(bool enabled)
 		{
-			btnGeneratePND.Enabled = state;
-			btnSavePND.Enabled = state;
-			btnAddNode.Enabled = state;
-			btnDelNode.Enabled = state;
-			btnGotoPND.Enabled = state;
-			NodeX.Enabled = state;
-			NodeY.Enabled = state;
-			NodeOfsX.Enabled = state;
-			NodeOfsY.Enabled = state;
+			foreach (var control in controls)
+				control.Enabled = enabled;
 		}
 
-		// Get an ID number of a path node from the string tag in the node list
-		private uint GetID(string id_tag)
+		private void DisplayNode(long x, long y, double offsetX, double offsetY)
 		{
-			return uint.Parse(id_tag.Split('#')[1].Split(':')[0]);
+			NodeX.Text = x.ToString();
+			NodeY.Text = y.ToString();
+			NodeOfsX.Text = offsetX.ToString();
+			NodeOfsY.Text = offsetY.ToString();
 		}
 
-		// Split the goals into individual strings
-		public static string[] str_to_array(string data)
+		private void DisplayNode(PathNode node)
 		{
-			string[] arr = null;
-
-			try
-			{
-				arr = Regex.Split(data, "::");
-			}
-			catch (ArgumentException)
-			{
-			}
-
-			return arr;
+			DisplayNode(node.X, node.Y, node.OffsetX, node.OffsetY);
 		}
 
-		private void lstNodes_SelectedIndexChanged(object sender, EventArgs e)
+		private void OnSelectedNodeChanged(object sender, EventArgs e)
 		{
 			if (lstNodes.SelectedIndex == -1)
 				return;
 
-			uint ID = GetID(lstNodes.Items[lstNodes.SelectedIndex].ToString());
-			var p = (PathNode) PathNodeHelper.PathNodes[ID];
-			NodeX.Text = p.X.ToString();
-			NodeY.Text = p.Y.ToString();
-			NodeOfsX.Text = p.OffsetX.ToString();
-			NodeOfsY.Text = p.OffsetY.ToString();
-
+			var node = (PathNode)lstNodes.Items[lstNodes.SelectedIndex];
+			DisplayNode(node);
 			lstLinks.Items.Clear();
-			string[] goals = str_to_array(PathNodeHelper.PathNodeGoals[ID].ToString());
-			foreach (string goal in goals)
-			{
-				if (goal.Trim() != "")
-				{
-					try
-					{
-						var dest = (PathNode) PathNodeHelper.PathNodes[uint.Parse(goal)];
-						lstLinks.Items.Add("ID #" + dest.Id.ToString() + ": (" + dest.X.ToString() + ", " + dest.Y.ToString() + ")");
-					}
-					catch (Exception)
-					{
-						// Invalidated link
-						MessageBox.Show("One of the links to this node has been invalidated (possibly deleted). You must click \"Generate\" to generate the path node links again.", "Invalid link found", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-						lstLinks.Items.Add("ID #??: UNRESOLVED, PLEASE CLICK \"GENERATE\"");
-					}
-				}
-			}
+			foreach (var goal in nodeCollection.GetGoalsFor(node.Id))
+				lstLinks.Items.Add(nodeCollection[goal]);
 		}
 
-		private void btnGotoPND_Click(object sender, EventArgs e)
+		private void OnJumpToNodeClick(object sender, EventArgs e)
 		{
 			if (lstLinks.SelectedIndex == -1)
 				return;
 
-			if (lstLinks.Items[lstLinks.SelectedIndex].ToString() == "ID #??: UNRESOLVED, PLEASE CLICK \"GENERATE\"")
+			//todo: fix this logic of node inconsistency handling; this shouldn't happen if at all possible
+			if (lstLinks.Items[lstLinks.SelectedIndex] == null)
 			{
 				MessageBox.Show("This link cannot be resolved (its destination was possibly removed). Please click the \"Generate\" button to generate the path node links.", "Unresolved Link", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
 			}
 
-			lstNodes.SelectedIndex = lstNodes.Items.IndexOf(lstLinks.Items[lstLinks.SelectedIndex].ToString());
+			lstNodes.SelectedIndex = lstNodes.Items.IndexOf(lstLinks.Items[lstLinks.SelectedIndex]);
 			lstNodes.Focus();
 		}
 
-		private void btnDelNode_Click(object sender, EventArgs e)
+		private void OnDeleteNodeClick(object sender, EventArgs e)
 		{
-			// Deleting a path node must update the PND_HAS_CHANGED flag
+			// Deleting a path node must update the IsDirty flag
 			if (lstNodes.SelectedIndex == -1)
 				return;
 
@@ -221,398 +139,169 @@ namespace WorldBuilder.Forms
 				return;
 
 			lstLinks.Items.Clear();
-			PathNodeHelper.PND_HAS_CHANGED = true;
-			uint ID = GetID(lstNodes.Items[lstNodes.SelectedIndex].ToString());
-			PathNodeHelper.PathNodes.Remove(ID);
-			PathNodeHelper.PathNodeGoals.Remove(ID);
+			var node = (PathNode)lstNodes.Items[lstNodes.SelectedIndex];
+			nodeCollection.Remove(node);
 			lstNodes.Items.RemoveAt(lstNodes.SelectedIndex);
 		}
 
-		private void btnAddNode_Click(object sender, EventArgs e)
+		private void OnAddNodeClick(object sender, EventArgs e)
 		{
-			// Adding a path node must update the PND_HAS_CHANGED flag
-			IEnumerator PathKey = PathNodeHelper.PathNodes.Keys.GetEnumerator();
-			while (PathKey.MoveNext())
+			uint newX, newY;
+			bool errors = false;
+			var errorMessage = new StringBuilder();
+
+			if (!uint.TryParse(NodeX.Text, out newX))
 			{
-				var p = (PathNode) PathNodeHelper.PathNodes[uint.Parse(PathKey.Current.ToString())];
-				if (p.X == uint.Parse(NodeX.Text) && p.Y == uint.Parse(NodeY.Text))
+				errorMessage.AppendLine("X is not a valid integer value.");
+				errors = true;
+			}
+			if (!uint.TryParse(NodeY.Text, out newY))
+			{
+				errorMessage.AppendLine("Y is not a valid integer value.");
+				errors = true;
+			}
+
+			if (!errors)
+			{
+				var existingNode = nodeCollection.Values.FirstOrDefault(n => n.X == newX && n.Y == newY);
+				if (existingNode != null)
 				{
-					MessageBox.Show("Error: A path node with the given (X,Y) coordinates already exists! [#" + p.Id.ToString() + "]", "A Node Already Exists", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-					return;
+					errorMessage.AppendFormat("Error: A path node with the given (X,Y) coordinates already exists! [#{0}]", existingNode.Id).AppendLine();
+					errors = true;
 				}
 			}
 
-			PathNodeHelper.PND_HAS_CHANGED = true;
-			float offX, offY;
-			if (!float.TryParse(NodeOfsX.Text, out offX))
-				MessageBox.Show("Offset X didn't have a valid floating point value. It was reset to 0", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			if (!float.TryParse(NodeOfsY.Text, out offY))
-				MessageBox.Show("Offset Y didn't have a valid floating point value. It was reset to 0", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-			var p1 = new PathNode(PathNodeHelper.CURRENT_TOP_ID, uint.Parse(NodeX.Text), uint.Parse(NodeY.Text), offX, offY);
-			PathNodeHelper.PathNodes.Add(p1.Id, p1);
-			PathNodeHelper.PathNodeGoals.Add(p1.Id, ""); // empty set of links
-			lstNodes.Items.Add(string.Format("ID #{0}: ({1}, {2})", p1.Id, p1.X, p1.Y));
+			float newOffsetX, newOffsetY;
+			if (!float.TryParse(NodeOfsX.Text, out newOffsetX))
+			{
+				errorMessage.AppendLine("Offset X is not a valid floating point value.");
+				errors = true;
+			}
+			if (!float.TryParse(NodeOfsY.Text, out newOffsetY))
+			{
+				errorMessage.AppendLine("Offset Y is not a valid floating point value.");
+				errors = true;
+			}
+			if (errors)
+			{
+				MessageBox.Show(errorMessage.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+				return;
+			}
+			var newNode = new PathNode(nodeCollection.TopId + 1, newX, newY, newOffsetX, newOffsetY);
+			nodeCollection.Add(newNode);
+			lstNodes.Items.Add(newNode);
 			lstNodes.SelectedIndex = lstNodes.Items.Count - 1;
-			PathNodeHelper.CURRENT_TOP_ID++;
 		}
 
-		private void btnGeneratePND_Click(object sender, EventArgs e)
+		private void OnRegenerateLinksClick(object sender, EventArgs e)
 		{
-			if (
-				MessageBox.Show(
-					"NOTE: Using the 'Generate' button will create all possible path links between the nodes. This will allow the game engine to move the characters along the given paths. It is a required step to do after a path node is added, removed, or modified in any way. Generating path node links may take some time to complete. Do you want to generate path node links now?",
-					"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+			if (MessageBox.Show("NOTE: Using the 'Generate' button will create all possible path links between the nodes. " +
+								"This will allow the game engine to move the characters along the given paths. " +
+								"It is only required step to do after a path node was modified or Tolerance was changed. " +
+								"Generating path node links may take some time to complete. " +
+								"Do you want to generate path node links now?",
+								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
-
-			PathNodeHelper.PathNodeGoals.Clear(); // clear the old list
-
-			var NodeStack = new Stack(PathNodeHelper.PathNodes.Keys);
-			IEnumerator p = NodeStack.GetEnumerator();
-			var NodeStackDest = new Stack(PathNodeHelper.PathNodes.Keys);
-			IEnumerator destination = NodeStackDest.GetEnumerator();
-
-			var pd_Source = new PathNode();
-			var pd_Dest = new PathNode();
-			string goal_list = "";
-
-			while (p.MoveNext()) /* first walkover: source nodes */
-			{
-				pd_Source = (PathNode) PathNodeHelper.PathNodes[uint.Parse(p.Current.ToString())];
-				goal_list = "";
-
-				while (destination.MoveNext()) /* second walkover: destinations */
-				{
-					pd_Dest = (PathNode) PathNodeHelper.PathNodes[uint.Parse(destination.Current.ToString())];
-					if (pd_Source.Id != pd_Dest.Id) /* can't back-link to itself */
-					{
-						if (pd_Source.IsNear(pd_Dest, vicinity))
-							goal_list += pd_Dest.Id.ToString() + "::";
-					}
-				}
-				destination.Reset();
-				PathNodeHelper.PathNodeGoals.Add(pd_Source.Id, goal_list);
-			}
-
-			PathNodeHelper.PND_HAS_CHANGED = false;
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
+		private readonly Tuple<ToolStripMenuItem, double>[] vicinitySwitch;
 
-		private void experimentalToolStripMenuItem_Click(object sender, EventArgs e)
+		private void OnChangeToleranceClick(object sender, EventArgs e)
 		{
-			vicinity = 7d;
-			experimentalToolStripMenuItem.Checked = true;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
+			foreach (var tuple in vicinitySwitch)
+				if (tuple.Item1 == sender)
+				{
+					if (tuple.Item1.Checked) continue;
+
+					nodeCollection.NeighbourhoodVicinity = tuple.Item2;
+					tuple.Item1.Checked = true;
+				}
+				else
+					tuple.Item1.Checked = false;
 		}
 
-		private void menuItem2_Click(object sender, EventArgs e)
+		private void OnToleranceHelpClick(object sender, EventArgs e)
 		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 19d;
-			menuItem2.Checked = true;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
+			MessageBox.Show("Tolerance defines the maximum distance between two path nodes for a link to be generated. " +
+							"The bigger this value is, the more links will be generated between neighboring nodes in a wider radius. " +
+							"Technically speaking, setting the lower value of 'Tolerance' will result " +
+							"in very few links being generated because of the strict requirement " +
+							"for a distance between path nodes (19-21 tiles). " +
+							"The default value (22 tiles) assumes the standard distance between path nodes in ToEE (20 tiles) " +
+							"and takes extra 2 tile radius into consideration to generate a few alternative links, if possible. " +
+							"Bigger values (23-25) will result in many overlapping links and may technically cause 'dead links' to appear " +
+							"(links that exist but that can't be parsed by the game because they are very far away from each other, " +
+							"e.g. 23-25 tiles away).\n" +
+							"\n" +
+							"Normally there is no need to modify the default tolerance value (22). " +
+							"However, if you feel that the pathfinding on your map is somewhat weird, " +
+							"but you are confident that you are doing everything right, " +
+							"you can try setting more rigid or lax values of the tolerance and see if that helps.",
+							"About Tolerance Option...", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
-		private void menuItem3_Click(object sender, EventArgs e)
+		private void OnAutogeneratePathClick(object sender, EventArgs e)
 		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 20d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = true;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
-		}
 
-		private void menuItem4_Click(object sender, EventArgs e)
-		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 21d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = true;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
-		}
+			//todo: clean up after converting return values to uint?
+			var autoGenDlg = new PathNodeAutoGen();
+			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.r_Step == -1) return;
 
-		private void menuItem5_Click(object sender, EventArgs e)
-		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 22d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = true;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
-		}
+			// New PND file
+			nodeCollection = new PathNodeCollection(nodeCollection);
+			EnableInterface(true);
 
-		private void menuItem6_Click(object sender, EventArgs e)
-		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 23d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = true;
-			menuItem7.Checked = false;
-			menuItem8.Checked = false;
-		}
-
-		private void menuItem7_Click(object sender, EventArgs e)
-		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 24d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = true;
-			menuItem8.Checked = false;
-		}
-
-		private void menuItem8_Click(object sender, EventArgs e)
-		{
-			experimentalToolStripMenuItem.Checked = false;
-			vicinity = 25d;
-			menuItem2.Checked = false;
-			menuItem3.Checked = false;
-			menuItem4.Checked = false;
-			menuItem5.Checked = false;
-			menuItem6.Checked = false;
-			menuItem7.Checked = false;
-			menuItem8.Checked = true;
-		}
-
-		private void menuItem10_Click(object sender, EventArgs e)
-		{
-			MessageBox.Show(
-				"Tolerance defines the maximum distance between two path nodes for a link to be generated. The bigger this value is, the more links will be generated between neighboring nodes in a wider radius. Technically speaking, setting the lower value of 'Tolerance' will result in very few links being generated because of the strict requirement for a distance between path nodes (19-21 tiles). The default value (22 tiles) assumes the standard distance between path nodes in ToEE (20 tiles) and takes extra 2 tile radius into consideration to generate a few alternative links, if possible. Bigger values (23-25) will result in many overlapping links and may technically cause 'dead links' to appear (links that exist but that can't be parsed by the game because they are very far away from each other, e.g. 23-25 tiles away).\n\nNormally there is no need to modify the default tolerance value (22). However, if you feel that the pathfinding on your map is somewhat weird but you are confident that you are doing everything alright, you can try setting more rigid or lax values of the tolerance and see if that helps.",
-				"About Tolerance Option...", MessageBoxButtons.OK, MessageBoxIcon.Information);
-		}
-
-		private void autoPathnodeGeneratorToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			var pWnd = new PathNodeAutoGen();
-			if (pWnd.ShowDialog() == DialogResult.OK)
-			{
-				if (pWnd.r_Step == -1)
-					return;
-
-				// New PND file
-				PathNodeHelper.CURRENT_TOP_ID = 0;
-				lstNodes.Items.Clear();
-				lstLinks.Items.Clear();
-				PathNodeHelper.PathNodes.Clear();
-				PathNodeHelper.PathNodeGoals.Clear();
-				PathNodeHelper.PND_HAS_CHANGED = false;
-				PathNodeHelper.PND_MODE_ACTIVE = true;
-				SetInterfaceState(true);
-
-				int blocked_so_far = 0;
-				int pnd_on_subgrid = 0;
-				bool exists = false;
-
-				// Generate automated path nodes
-				for (int x = pWnd.r_FX; x <= pWnd.r_TX; x += pWnd.r_Step)
-					for (int y = pWnd.r_FY; y <= pWnd.r_TY; y += pWnd.r_Step)
+			// Generate automated path nodes
+			for (var x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
+				for (var y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
+					if (IsAvailableTile(x, y))
 					{
-						bool blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, x, y);
-
-						if (exists && !blocked)
+						DisplayNode(x, y, 0f, 0f);
+						OnAddNodeClick(sender, e);
+					}
+					else
+					{
+						// the tile is blocked, so try laying pathnodes around the smaller grid
+						var tile = new[]
+										{
+											Tuple.Create(x + 3, y),
+											Tuple.Create(x, y + 3),
+											Tuple.Create(x, y - 3),
+											Tuple.Create(x - 3, y),
+											Tuple.Create(x + 3, y + 3),
+											Tuple.Create(x - 3, y - 3),
+											Tuple.Create(x + 3, y - 3),
+											Tuple.Create(x - 3, y + 3),
+										}.FirstOrDefault(n => IsAvailableTile(n.Item1, n.Item2));
+						if (tile != null)
 						{
-							NodeX.Text = x.ToString();
-							NodeY.Text = y.ToString();
-							NodeOfsX.Text = "0";
-							NodeOfsY.Text = "0";
-							btnAddNode_Click(sender, e);
-						}
-						else
-						{
-							// the tile is blocked, so try laying pathnodes around the smaller grid
-							int new_x = 0, new_y = 0;
-							bool fr = false;
-
-							new_x = x + 3;
-							new_y = y;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								fr = true;
-								pnd_on_subgrid++;
-							}
-
-							new_x = x;
-							new_y = y + 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x;
-							new_y = y - 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x - 3;
-							new_y = y;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x + 3;
-							new_y = y + 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x - 3;
-							new_y = y - 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x + 3;
-							new_y = y - 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
-
-							new_x = x - 3;
-							new_y = y + 3;
-							blocked = GetBlockedXY(ref blocked_so_far, ref pnd_on_subgrid, ref exists, new_x, new_y);
-							if (exists && !blocked && !fr)
-							{
-								NodeX.Text = new_x.ToString();
-								NodeY.Text = new_y.ToString();
-								NodeOfsX.Text = "0";
-								NodeOfsY.Text = "0";
-								btnAddNode_Click(sender, e);
-								pnd_on_subgrid++;
-								fr = true;
-							}
+							DisplayNode(tile.Item1, tile.Item2, 0f, 0f);
+							OnAddNodeClick(sender, e);
 						}
 					}
-				MessageBox.Show("Automated generation complete.\n\nBlocked tiles ignored: " + blocked_so_far.ToString() + "\nNodes laid on subgrid: " + pnd_on_subgrid.ToString());
-			}
+			MessageBox.Show("Automated generation complete."); //todo: there were some numbers here
 		}
 
-		private static bool GetBlockedXY(ref int blocked_so_far, ref int pnd_on_subgrid, ref bool exists, int x, int y)
+		private static bool IsAvailableTile(int x, int y)
 		{
 			string sector = Helper.SEC_GetSectorCorrespondence(x, y).ToString();
 			string sectfile = Path.GetDirectoryName(Application.ExecutablePath) + "\\Sectors\\" + sector + ".sec";
-			int max_x = 0;
-			int max_y = 0;
-			int min_x = 0;
-			int min_y = 0;
-			bool blocked = false;
+			if (!File.Exists(sectfile)) return false; // check if this sector tile is taken first
 
-			// check if this sector tile is taken first
-			if (File.Exists(sectfile))
+			using (var r_sec = new BinaryReader(new FileStream(sectfile, FileMode.Open)))
 			{
-				exists = true;
-				var r_sec = new BinaryReader(new FileStream(sectfile, FileMode.Open));
+				int max_x = 0, max_y = 0, min_x = 0, min_y = 0;
 				Helper.Sec_GetMinMax(sector, ref min_y, ref max_y, ref min_x, ref max_x);
-
 				int int_x = x - min_x;
 				int int_y = y - min_y;
 				int skipdist = (int_y*64 + int_x)*16;
-
 				uint num_lights = r_sec.ReadUInt32();
 				for (int i = 0; i < num_lights; i++)
 					LightEditorEx.LoadLightFromSEC(r_sec);
-
 				r_sec.BaseStream.Seek(skipdist, SeekOrigin.Current);
-
-				if (r_sec.ReadUInt64() > 32)
-				{
-					blocked = true;
-					blocked_so_far++;
-				}
-				else
-				{
-					blocked = false;
-				}
-
-				r_sec.Close();
+				return r_sec.ReadUInt64() <= 32;
 			}
-			else
-			{
-				exists = false;
-			}
-			return blocked;
 		}
 
 		private void tmrPND_Tick(object sender, EventArgs e)
@@ -643,7 +332,7 @@ namespace WorldBuilder.Forms
 								File.Delete(Helper.InteropPath);
 								NodeX.Text = wbl_data_arr[1];
 								NodeY.Text = wbl_data_arr[2];
-								btnAddNode_Click(null, null);
+								OnAddNodeClick(null, null);
 								return;
 							}
 							else

@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.IO;
 
 namespace WorldBuilder.Helpers
@@ -9,15 +8,18 @@ namespace WorldBuilder.Helpers
 	/// </summary>
 	public static class PathNodeHelper
 	{
-		public static bool PND_MODE_ACTIVE;
-		public static bool PND_HAS_CHANGED; // Require regeneration of nodes
-		public static uint CURRENT_TOP_ID; // Current top ID of the node
-		public static readonly Dictionary<uint, PathNode> PathNodes = new Dictionary<uint,PathNode>(); // All loaded path nodes
-		public static readonly Dictionary<uint, string> PathNodeGoals = new Dictionary<uint, string>(); // Corresponding neighboring node IDs
-
-		public static PathNode ReadPathNode(this BinaryReader br)
+		public static PathNode ReadPathNode(this BinaryReader reader)
 		{
-			return new PathNode(br.ReadUInt32(), br.ReadUInt32(), br.ReadUInt32(), br.ReadSingle(), br.ReadSingle());
+			return new PathNode(reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadUInt32(), reader.ReadSingle(), reader.ReadSingle());
+		}
+	
+		public static void WritePathNode(this BinaryWriter writer, PathNode node)
+		{
+			writer.Write(node.Id);
+			writer.Write(node.X);
+			writer.Write(node.Y);
+			writer.Write(node.OffsetX);
+			writer.Write(node.OffsetY);
 		}
 	}
 }
