@@ -15,14 +15,14 @@ namespace WorldBuilder.Forms
 			controls = new Control[] { btnGeneratePND, btnSavePND, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY };
 			vicinitySwitch = new[]
 								{
-									Tuple.Create(experimentalToolStripMenuItem, 7d),
-									Tuple.Create(menuItem2, 19d),
-									Tuple.Create(menuItem3, 20d),
-									Tuple.Create(menuItem4, 21d),
-									Tuple.Create(menuItem5, 22d),
-									Tuple.Create(menuItem6, 23d),
-									Tuple.Create(menuItem7, 24d),
-									Tuple.Create(menuItem8, 25d),
+									Tuple.Create(toleranceMenuItem1,  7d),
+									Tuple.Create(toleranceMenuItem2, 19d),
+									Tuple.Create(toleranceMenuItem3, 20d),
+									Tuple.Create(toleranceMenuItem4, 21d),
+									Tuple.Create(toleranceMenuItem5, 22d),
+									Tuple.Create(toleranceMenuItem6, 23d),
+									Tuple.Create(toleranceMenuItem7, 24d),
+									Tuple.Create(toleranceMenuItem8, 25d),
 								};
 			nodeCollection = new PathNodeCollection(nodeCollection);
 		}
@@ -253,6 +253,7 @@ namespace WorldBuilder.Forms
 			EnableInterface(true);
 
 			// Generate automated path nodes
+			//todo: move to PathNodeCollection after dealing with IsAvailableTile
 			for (var x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
 				for (var y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
 					if (IsAvailableTile(x, y))
@@ -285,77 +286,58 @@ namespace WorldBuilder.Forms
 
 		private static bool IsAvailableTile(int x, int y)
 		{
+			//todo: nasty mix of responsibility
 			string sector = Helper.SEC_GetSectorCorrespondence(x, y).ToString();
-			string sectfile = Path.GetDirectoryName(Application.ExecutablePath) + "\\Sectors\\" + sector + ".sec";
+			string sectfile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Sectors", sector + ".sec");
 			if (!File.Exists(sectfile)) return false; // check if this sector tile is taken first
 
-			using (var r_sec = new BinaryReader(new FileStream(sectfile, FileMode.Open)))
+			//todo: cache loaded files to skip them for consecutive calls
+			using (var stream = new FileStream(sectfile, FileMode.Open))
+			using (var reader = new BinaryReader(stream))
 			{
-				int max_x = 0, max_y = 0, min_x = 0, min_y = 0;
-				Helper.Sec_GetMinMax(sector, ref min_y, ref max_y, ref min_x, ref max_x);
-				int int_x = x - min_x;
-				int int_y = y - min_y;
-				int skipdist = (int_y*64 + int_x)*16;
-				uint num_lights = r_sec.ReadUInt32();
-				for (int i = 0; i < num_lights; i++)
-					LightEditorEx.LoadLightFromSEC(r_sec);
-				r_sec.BaseStream.Seek(skipdist, SeekOrigin.Current);
-				return r_sec.ReadUInt64() <= 32;
+				int maxX = 0, maxY = 0, minX = 0, minY = 0;
+				Helper.Sec_GetMinMax(sector, ref minY, ref maxY, ref minX, ref maxX);
+				uint lightsCount = reader.ReadUInt32();
+				for (int i = 0; i < lightsCount; i++)
+					LightEditorEx.LoadLightFromSEC(reader);
+				int distX = x - minX;
+				int distY = y - minY;
+				int skipLength = (distY * 64 + distX) * 16;
+				stream.Seek(skipLength, SeekOrigin.Current);
+				return reader.ReadUInt64() <= 32;
 			}
 		}
 
-		private void tmrPND_Tick(object sender, EventArgs e)
+		private void OnTimerTick(object sender, EventArgs e)
 		{
 			// v2.0.0: Interoperability with ToEE console support
-			if (File.Exists(Helper.InteropPath))
-			{
-				string wbl_data = "";
-				bool DATA_PASS_ON = false;
-				try
-				{
-					var sr = new StreamReader(Helper.InteropPath);
-					wbl_data = sr.ReadLine();
-					sr.Close();
-				}
-				catch (Exception)
-				{
-				}
-				if (wbl_data != "")
-				{
-					string[] wbl_data_arr = wbl_data.Split(' ');
-					wbl_data = "";
-					switch (wbl_data_arr[0])
-					{
-						case "PNDLOC": // location -> created path node
-							if (btnAddNode.Enabled)
-							{
-								File.Delete(Helper.InteropPath);
-								NodeX.Text = wbl_data_arr[1];
-								NodeY.Text = wbl_data_arr[2];
-								OnAddNodeClick(null, null);
-								return;
-							}
-							else
-							{
-								File.Delete(Helper.InteropPath);
-								MessageBox.Show("Please create a path node file first! (e.g. click 'New' or 'Open')", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-								return;
-							}
-							//break;
-						default:
-							DATA_PASS_ON = true;
-							break;
-					}
+			if (!File.Exists(Helper.InteropPath)) return;
 
-					if (!DATA_PASS_ON)
-						File.Delete(Helper.InteropPath);
-				}
+			string worldBuilderLogData = null;
+			try { worldBuilderLogData = File.ReadLines(Helper.InteropPath).FirstOrDefault(); } catch {}
+			if (string.IsNullOrEmpty(worldBuilderLogData)) return;
+
+			string[] logPart = worldBuilderLogData.Split(' ');
+			switch (logPart[0])
+			{
+				case "PNDLOC": // location -> created path node
+					if (btnAddNode.Enabled)
+					{
+						NodeX.Text = logPart[1];
+						NodeY.Text = logPart[2];
+						OnAddNodeClick(null, null);
+					}
+					else
+						MessageBox.Show("Please create a path node file first! (e.g. click 'New' or 'Open')",
+										"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+					try { File.Delete(Helper.InteropPath); } catch { }
+					return;
 			}
 		}
 
-		private void PathNodeGen_Load(object sender, EventArgs e)
+		private void OnLoad(object sender, EventArgs e)
 		{
-			tmrPND.Enabled = true;
+			timer.Enabled = true;
 		}
 	}
 }

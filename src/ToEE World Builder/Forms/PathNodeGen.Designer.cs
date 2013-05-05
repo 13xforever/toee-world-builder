@@ -67,19 +67,19 @@ namespace WorldBuilder.Forms
 			this.menuItem10a = new System.Windows.Forms.MenuItem();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.NET2Menu = new System.Windows.Forms.ToolStripMenuItem();
-			this.experimentalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem2 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem3 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem4 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem5 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem6 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem7 = new System.Windows.Forms.ToolStripMenuItem();
-			this.menuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+			this.toleranceMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.menuItem10 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.autoPathnodeGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.tmrPND = new System.Windows.Forms.Timer(this.components);
+			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.menuStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -383,78 +383,78 @@ namespace WorldBuilder.Forms
 			// NET2Menu
 			// 
 			this.NET2Menu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.experimentalToolStripMenuItem,
-            this.menuItem2,
-            this.menuItem3,
-            this.menuItem4,
-            this.menuItem5,
-            this.menuItem6,
-            this.menuItem7,
-            this.menuItem8,
+            this.toleranceMenuItem1,
+            this.toleranceMenuItem2,
+            this.toleranceMenuItem3,
+            this.toleranceMenuItem4,
+            this.toleranceMenuItem5,
+            this.toleranceMenuItem6,
+            this.toleranceMenuItem7,
+            this.toleranceMenuItem8,
             this.toolStripMenuItem1,
             this.menuItem10});
 			this.NET2Menu.Name = "NET2Menu";
 			this.NET2Menu.Size = new System.Drawing.Size(71, 20);
 			this.NET2Menu.Text = "Tolerance";
 			// 
-			// experimentalToolStripMenuItem
+			// toleranceMenuItem1
 			// 
-			this.experimentalToolStripMenuItem.Name = "experimentalToolStripMenuItem";
-			this.experimentalToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
-			this.experimentalToolStripMenuItem.Text = "7 (Experimental)";
-			this.experimentalToolStripMenuItem.Visible = false;
-			this.experimentalToolStripMenuItem.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem1.Name = "experimentalToolStripMenuItem";
+			this.toleranceMenuItem1.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem1.Text = "7 (Experimental)";
+			this.toleranceMenuItem1.Visible = false;
+			this.toleranceMenuItem1.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem2
+			// toleranceMenuItem2
 			// 
-			this.menuItem2.Name = "menuItem2";
-			this.menuItem2.Size = new System.Drawing.Size(178, 22);
-			this.menuItem2.Text = "19 (Rigid)";
-			this.menuItem2.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem2.Name = "menuItem2";
+			this.toleranceMenuItem2.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem2.Text = "19 (Rigid)";
+			this.toleranceMenuItem2.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem3
+			// toleranceMenuItem3
 			// 
-			this.menuItem3.Name = "menuItem3";
-			this.menuItem3.Size = new System.Drawing.Size(178, 22);
-			this.menuItem3.Text = "20";
-			this.menuItem3.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem3.Name = "menuItem3";
+			this.toleranceMenuItem3.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem3.Text = "20";
+			this.toleranceMenuItem3.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem4
+			// toleranceMenuItem4
 			// 
-			this.menuItem4.Name = "menuItem4";
-			this.menuItem4.Size = new System.Drawing.Size(178, 22);
-			this.menuItem4.Text = "21";
-			this.menuItem4.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem4.Name = "menuItem4";
+			this.toleranceMenuItem4.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem4.Text = "21";
+			this.toleranceMenuItem4.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem5
+			// toleranceMenuItem5
 			// 
-			this.menuItem5.Checked = true;
-			this.menuItem5.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.menuItem5.Name = "menuItem5";
-			this.menuItem5.Size = new System.Drawing.Size(178, 22);
-			this.menuItem5.Text = "22 (Recommended)";
-			this.menuItem5.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem5.Checked = true;
+			this.toleranceMenuItem5.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.toleranceMenuItem5.Name = "menuItem5";
+			this.toleranceMenuItem5.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem5.Text = "22 (Recommended)";
+			this.toleranceMenuItem5.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem6
+			// toleranceMenuItem6
 			// 
-			this.menuItem6.Name = "menuItem6";
-			this.menuItem6.Size = new System.Drawing.Size(178, 22);
-			this.menuItem6.Text = "23";
-			this.menuItem6.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem6.Name = "menuItem6";
+			this.toleranceMenuItem6.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem6.Text = "23";
+			this.toleranceMenuItem6.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem7
+			// toleranceMenuItem7
 			// 
-			this.menuItem7.Name = "menuItem7";
-			this.menuItem7.Size = new System.Drawing.Size(178, 22);
-			this.menuItem7.Text = "24";
-			this.menuItem7.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem7.Name = "menuItem7";
+			this.toleranceMenuItem7.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem7.Text = "24";
+			this.toleranceMenuItem7.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
-			// menuItem8
+			// toleranceMenuItem8
 			// 
-			this.menuItem8.Name = "menuItem8";
-			this.menuItem8.Size = new System.Drawing.Size(178, 22);
-			this.menuItem8.Text = "25 (Lax)";
-			this.menuItem8.Click += new System.EventHandler(this.OnChangeToleranceClick);
+			this.toleranceMenuItem8.Name = "menuItem8";
+			this.toleranceMenuItem8.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem8.Text = "25 (Lax)";
+			this.toleranceMenuItem8.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toolStripMenuItem1
 			// 
@@ -484,10 +484,10 @@ namespace WorldBuilder.Forms
 			this.autoPathnodeGeneratorToolStripMenuItem.Text = "Auto Path Node Generation...";
 			this.autoPathnodeGeneratorToolStripMenuItem.Click += new System.EventHandler(this.OnAutogeneratePathClick);
 			// 
-			// tmrPND
+			// timer
 			// 
-			this.tmrPND.Interval = 1;
-			this.tmrPND.Tick += new System.EventHandler(this.tmrPND_Tick);
+			this.timer.Interval = 1;
+			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
 			// PathNodeGen
 			// 
@@ -523,7 +523,7 @@ namespace WorldBuilder.Forms
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Path Node Editor/Generator";
-			this.Load += new System.EventHandler(this.PathNodeGen_Load);
+			this.Load += new System.EventHandler(this.OnLoad);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -569,18 +569,18 @@ namespace WorldBuilder.Forms
 		private System.Windows.Forms.MenuItem menuItem10a;
 		private MenuStrip menuStrip1;
 		private ToolStripMenuItem NET2Menu;
-		private ToolStripMenuItem menuItem2;
-		private ToolStripMenuItem menuItem3;
-		private ToolStripMenuItem menuItem4;
-		private ToolStripMenuItem menuItem5;
-		private ToolStripMenuItem menuItem6;
-		private ToolStripMenuItem menuItem7;
-		private ToolStripMenuItem menuItem8;
+		private ToolStripMenuItem toleranceMenuItem2;
+		private ToolStripMenuItem toleranceMenuItem3;
+		private ToolStripMenuItem toleranceMenuItem4;
+		private ToolStripMenuItem toleranceMenuItem5;
+		private ToolStripMenuItem toleranceMenuItem6;
+		private ToolStripMenuItem toleranceMenuItem7;
+		private ToolStripMenuItem toleranceMenuItem8;
 		private ToolStripSeparator toolStripMenuItem1;
 		private ToolStripMenuItem menuItem10;
 		private ToolStripMenuItem toolsToolStripMenuItem;
 		private ToolStripMenuItem autoPathnodeGeneratorToolStripMenuItem;
-		private Timer tmrPND;
-		private ToolStripMenuItem experimentalToolStripMenuItem;
+		private Timer timer;
+		private ToolStripMenuItem toleranceMenuItem1;
 	}
 }
