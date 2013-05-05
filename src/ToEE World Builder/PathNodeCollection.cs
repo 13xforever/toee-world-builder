@@ -30,12 +30,12 @@ namespace WorldBuilder
 				IsDirty = true;
 			}
 		}
+		public PathNode this[uint x, uint y] { get { return nodes.Values.FirstOrDefault(n => n.X == x && n.Y == y); } }
 
 		public bool IsDirty { get; private set; } // Require regeneration of nodes
 		public uint TopId { get; private set; }
 		public int Count { get { lock (theDoor) return nodes.Count; } }
-		public IEnumerable<uint> Keys { get { lock (theDoor) return nodes.Keys; } }
-		public IEnumerable<PathNode> Values { get { lock (theDoor) return nodes.Values; } }
+		public IEnumerable<PathNode> SortedValues { get { lock (theDoor) return nodes.Values.OrderBy(n => n.Id); } }
 
 		public double NeighbourhoodVicinity
 		{
@@ -49,7 +49,7 @@ namespace WorldBuilder
 			}
 		}
 
-		public IEnumerable<uint> GetGoalsFor(uint nodeId) { lock (theDoor) return goals[nodeId]; }
+		public IEnumerable<uint> GetSortedGoalsFor(uint nodeId) { lock (theDoor) return goals[nodeId].OrderBy(key => key); }
 
 		public bool Add(PathNode newNode)
 		{
@@ -122,17 +122,16 @@ namespace WorldBuilder
 				using (var writer = new BinaryWriter(new FileStream(filename, FileMode.Create, FileAccess.Write, FileShare.None)))
 				{
 					writer.Write((uint) Count);
-					foreach (var id in Keys)
+					foreach (var id in nodes.Keys.OrderBy(key => key))
 					{
 						writer.WritePathNode(nodes[id]);
 						writer.Write(goals[id].Count);
-						foreach (var goal in goals[id])
+						foreach (var goal in goals[id].OrderBy(key => key))
 							writer.Write(goal);
 					}
 				}
 		}
 
-		[Obsolete("Consistency should be automatic now")]
 		public void RegenerateLinks()
 		{
 			goals.Clear();

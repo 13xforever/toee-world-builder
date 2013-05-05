@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 
 namespace WorldBuilder
 {
+	[DebuggerDisplay("({X},{Y})", Name = "{Id}")]
 	public class PathNode
 	{
 		public readonly uint Id;

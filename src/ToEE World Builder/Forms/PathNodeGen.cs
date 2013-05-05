@@ -34,10 +34,12 @@ namespace WorldBuilder.Forms
 		{
 			if (OpenPND.ShowDialog() != DialogResult.OK) return;
 
-			var newCollection = PathNodeCollection.Read(OpenPND.FileName);
-			newCollection.NeighbourhoodVicinity = nodeCollection.NeighbourhoodVicinity;
-			foreach (var node in nodeCollection.Values)
-				lstNodes.Items.Add(node); //todo: check that it renders properly
+			//todo: do something about vicinity, as it bothers me right now (i.e. reset Tolerance menu as needed)
+			var vicinity = nodeCollection.NeighbourhoodVicinity;
+			nodeCollection = PathNodeCollection.Read(OpenPND.FileName);
+			nodeCollection.NeighbourhoodVicinity = vicinity;
+			foreach (var node in nodeCollection.SortedValues)
+				lstNodes.Items.Add(node);
 			EnableInterface(true);
 		}
 
@@ -75,6 +77,8 @@ namespace WorldBuilder.Forms
 								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
+			lstNodes.Items.Clear();
+			lstLinks.Items.Clear();
 			nodeCollection = new PathNodeCollection(nodeCollection);
 			EnableInterface(true);
 		}
@@ -109,7 +113,7 @@ namespace WorldBuilder.Forms
 			var node = (PathNode)lstNodes.Items[lstNodes.SelectedIndex];
 			DisplayNode(node);
 			lstLinks.Items.Clear();
-			foreach (var goal in nodeCollection.GetGoalsFor(node.Id))
+			foreach (var goal in nodeCollection.GetSortedGoalsFor(node.Id))
 				lstLinks.Items.Add(nodeCollection[goal]);
 		}
 
@@ -163,7 +167,7 @@ namespace WorldBuilder.Forms
 
 			if (!errors)
 			{
-				var existingNode = nodeCollection.Values.FirstOrDefault(n => n.X == newX && n.Y == newY);
+				var existingNode = nodeCollection[newX, newY];
 				if (existingNode != null)
 				{
 					errorMessage.AppendFormat("Error: A path node with the given (X,Y) coordinates already exists! [#{0}]", existingNode.Id).AppendLine();
@@ -202,6 +206,8 @@ namespace WorldBuilder.Forms
 								"Do you want to generate path node links now?",
 								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
+			nodeCollection.RegenerateLinks();
+			OnSelectedNodeChanged(null, null);
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 

@@ -1059,7 +1059,9 @@ namespace WorldBuilder.Helpers
 		[Obsolete]
 		public static void LoadLight(BinaryReader buf, ref LightInfo light)
 		{
+			// ReSharper disable UseObjectOrCollectionInitializer
 			light = new LightInfo();
+			// ReSharper restore UseObjectOrCollectionInitializer
 
 			light.unknown1 = buf.ReadUInt32();
 			light.unknown2 = buf.ReadUInt32();
