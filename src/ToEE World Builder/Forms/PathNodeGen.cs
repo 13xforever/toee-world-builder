@@ -11,7 +11,9 @@ namespace WorldBuilder.Forms
 	{
 		private readonly Control[] controls;
 		private readonly Tuple<ToolStripMenuItem, double>[] vicinitySwitch;
-		private PathNodeCollection nodeCollection;
+		private PathNodeCollection nodeCollection = new PathNodeCollection();
+		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
+		private bool isDirty;
 
 		public PathNodeGen()
 		{
@@ -28,7 +30,6 @@ namespace WorldBuilder.Forms
 									Tuple.Create(toleranceMenuItem7, 24d),
 									Tuple.Create(toleranceMenuItem8, 25d),
 								};
-			nodeCollection = new PathNodeCollection(nodeCollection);
 		}
 
 		private void OnOpenPndFileClick(object sender, EventArgs e)
@@ -37,10 +38,7 @@ namespace WorldBuilder.Forms
 
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			//todo: do something about vicinity, as it bothers me right now (i.e. reset Tolerance menu as needed)
-			double vicinity = nodeCollection.NeighbourhoodVicinity;
 			nodeCollection = PathNodeCollection.Read(OpenPND.FileName);
-			nodeCollection.NeighbourhoodVicinity = vicinity;
 			foreach (PathNode node in nodeCollection.SortedValues)
 				lstNodes.Items.Add(node);
 			EnableInterface(true);
@@ -54,7 +52,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 
-			if (nodeCollection.IsDirty)
+			if (isDirty)
 			{
 				if (MessageBox.Show("Warning: The path nodes have changed since the last time they were saved. " +
 									"It means that certain links may have been invalidated or become unusable. " +
@@ -82,7 +80,7 @@ namespace WorldBuilder.Forms
 
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			nodeCollection = new PathNodeCollection(nodeCollection);
+			nodeCollection = new PathNodeCollection();
 			EnableInterface(true);
 		}
 
@@ -184,7 +182,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 			var newNode = new PathNode(nodeCollection.TopId + 1, newX, newY, newOffsetX, newOffsetY);
-			nodeCollection.Add(newNode);
+			nodeCollection.Add(newNode, vicinity);
 			lstNodes.Items.Add(newNode);
 			lstNodes.SelectedIndex = lstNodes.Items.Count - 1;
 		}
@@ -198,7 +196,7 @@ namespace WorldBuilder.Forms
 								"Do you want to generate path node links now?",
 								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
-			nodeCollection.RegenerateLinks();
+			nodeCollection.RegenerateLinks(vicinity);
 			OnSelectedNodeChanged(null, null);
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -210,7 +208,8 @@ namespace WorldBuilder.Forms
 				{
 					if (tuple.Item1.Checked) continue;
 
-					nodeCollection.NeighbourhoodVicinity = tuple.Item2;
+					vicinity = tuple.Item2;
+					isDirty = true;
 					tuple.Item1.Checked = true;
 				}
 				else
@@ -246,7 +245,7 @@ namespace WorldBuilder.Forms
 			// New PND file
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			nodeCollection = new PathNodeCollection(nodeCollection);
+			nodeCollection = new PathNodeCollection();
 			EnableInterface(true);
 
 			// Generate automated path nodes
