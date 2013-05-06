@@ -39,6 +39,22 @@ namespace WorldBuilder
 			goals[nodeId2].Add(nodeId1);
 		}
 
+		private void AddAllGoalsFor(PathNode node, double vicinity)
+		{
+			foreach (var neighbourId in nodes.Values.Where(neighbour => neighbour.IsNear(node, vicinity)).Select(neighbour => neighbour.Id))
+				AddGoal(node.Id, neighbourId);
+		}
+
+		public void RegenerateLinks(double vicinity)
+		{
+			lock (theDoor)
+			{
+				goals.Clear();
+				foreach (var node in nodes.Values)
+					AddAllGoalsFor(node, vicinity);
+			}
+		}
+
 		public bool Add(PathNode newNode, double vicinity)
 		{
 			lock (theDoor)
@@ -46,8 +62,7 @@ namespace WorldBuilder
 				if (nodes.ContainsKey(newNode.Id)) return false;
 
 				this[newNode.Id] = newNode;
-				foreach (var neighbourId in nodes.Values.Where(neighbour => neighbour.IsNear(newNode, vicinity)).Select(neighbour => neighbour.Id))
-					AddGoal(newNode.Id, neighbourId);
+				AddAllGoalsFor(newNode, vicinity);
 			}
 			return true;
 		}
@@ -103,12 +118,5 @@ namespace WorldBuilder
 				}
 		}
 
-		public void RegenerateLinks(double vicinity)
-		{
-			goals.Clear();
-			foreach (var node in nodes.Values)
-				foreach (var neighbourId in nodes.Values.Where(neighbour => neighbour.IsNear(node, vicinity)).Select(neighbour => neighbour.Id))
-					AddGoal(node.Id, neighbourId);
-		}
 	}
 }
