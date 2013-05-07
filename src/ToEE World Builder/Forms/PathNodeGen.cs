@@ -14,6 +14,7 @@ namespace WorldBuilder.Forms
 		private PathNodeCollection nodeCollection = new PathNodeCollection();
 		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
 		private bool isDirty;
+		private static readonly string SectorsPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Sectors");
 
 		public PathNodeGen()
 		{
@@ -255,11 +256,11 @@ namespace WorldBuilder.Forms
 				{
 					var tile = new[]
 						{
-							Tuple.Create(x, y),
-							Tuple.Create(x + 3, y),
-							Tuple.Create(x, y + 3),
-							Tuple.Create(x, y - 3),
-							Tuple.Create(x - 3, y),
+							Tuple.Create(x    , y    ),
+							Tuple.Create(x + 3, y    ),
+							Tuple.Create(x    , y + 3),
+							Tuple.Create(x    , y - 3),
+							Tuple.Create(x - 3, y    ),
 							Tuple.Create(x + 3, y + 3),
 							Tuple.Create(x - 3, y - 3),
 							Tuple.Create(x + 3, y - 3),
@@ -278,15 +279,15 @@ namespace WorldBuilder.Forms
 		{
 			//todo: nasty mix of responsibility
 			string sector = Helper.SEC_GetSectorCorrespondence(x, y).ToString();
-			string sectfile = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Sectors", sector + ".sec");
+			string sectfile = Path.Combine(SectorsPath, sector + ".sec");
 			if (!File.Exists(sectfile)) return false; // check if this sector tile is taken first
 
 			//todo: cache loaded files to skip them for consecutive calls
 			using (var stream = new FileStream(sectfile, FileMode.Open))
 			using (var reader = new BinaryReader(stream))
 			{
-				int maxX = 0, maxY = 0, minX = 0, minY = 0;
-				Helper.Sec_GetMinMax(sector, ref minY, ref maxY, ref minX, ref maxX);
+				int maxX, maxY, minX, minY;
+				Helper.Sec_GetMinMax(sector, out minY, out maxY, out minX, out maxX);
 				uint lightsCount = reader.ReadUInt32();
 				for (int i = 0; i < lightsCount; i++)
 					LightEditorEx.LoadLightFromSEC(reader);

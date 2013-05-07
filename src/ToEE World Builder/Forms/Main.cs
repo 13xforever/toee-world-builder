@@ -7846,20 +7846,16 @@ namespace WorldBuilder
 
 				SecFile = "Sectors\\" + o.FileToOpen + ".sec";
 
-				int minX = -1;
-				int maxX = -1;
-				int minY = -1;
-				int maxY = -1;
-
-				Helper.Sec_GetMinMax(o.FileToOpen, ref minY, ref maxY, ref minX, ref maxX);
-				tu_0_0.Text = String.Format("({0},{1})", minX, minY);
-				tu_X_0.Text = String.Format("({0},{1})", maxX, minY);
-				tu_0_Y.Text = String.Format("({0},{1})", minX, maxY);
-				tu_X_Y.Text = String.Format("({0},{1})", maxX, maxY);
-				tv_0_0.Text = String.Format("({0},{1})", minX, minY);
-				tv_X_0.Text = String.Format("({0},{1})", maxX, minY);
-				tv_0_Y.Text = String.Format("({0},{1})", minX, maxY);
-				tv_X_Y.Text = String.Format("({0},{1})", maxX, maxY);
+				int minX, maxX, minY, maxY;
+				Helper.Sec_GetMinMax(o.FileToOpen, out minY, out maxY, out minX, out maxX);
+				tu_0_0.Text = string.Format("({0},{1})", minX, minY);
+				tu_X_0.Text = string.Format("({0},{1})", maxX, minY);
+				tu_0_Y.Text = string.Format("({0},{1})", minX, maxY);
+				tu_X_Y.Text = string.Format("({0},{1})", maxX, maxY);
+				tv_0_0.Text = string.Format("({0},{1})", minX, minY);
+				tv_X_0.Text = string.Format("({0},{1})", maxX, minY);
+				tv_0_Y.Text = string.Format("({0},{1})", minX, maxY);
+				tv_X_Y.Text = string.Format("({0},{1})", maxX, maxY);
 
 				tCurSector.Text = o.FileToOpen + ".sec";
 

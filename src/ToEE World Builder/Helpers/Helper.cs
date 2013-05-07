@@ -782,35 +782,31 @@ namespace WorldBuilder.Helpers
 
 		public static void SEC_GetXY(string sectorName, ref int X, ref int Y)
 		{
-			string sectorNameX = int.Parse(sectorName).ToString("X").PadLeft(8, '0');
+			string sectorNameX = int.Parse(sectorName).ToString("x8");
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
 			X = Convert.ToInt32(sectorX, 16)/4;
 			Y = Convert.ToInt32(sectorY, 16);
-
-			return;
 		}
 
 		/// <summary>
 		///     NOTE: in fact, minX and minY are reversed here... as well as maxX and maxY... sorry
 		/// </summary>
-		public static void Sec_GetMinMax(string sectorName, ref int minX, ref int maxX, ref int minY, ref int maxY)
+		public static void Sec_GetMinMax(string sectorName, out int minX, out int maxX, out int minY, out int maxY)
 		{
 			//todo: fix minX/minY & maxX/maxY?
-			string sectorNameX = int.Parse(sectorName).ToString("X").PadLeft(8, '0');
+			string sectorNameX = uint.Parse(sectorName).ToString("x8");
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
-			int X = Convert.ToInt32(sectorX, 16)/4;
-			int Y = Convert.ToInt32(sectorY, 16);
+			int x = Convert.ToInt32(sectorX, 16)/4; // >>2
+			int y = Convert.ToInt32(sectorY, 16);
 
-			minX = 64*X;
-			maxX = (64*(X + 1)) - 1;
-			minY = 64*Y;
-			maxY = (64*(Y + 1)) - 1;
-
-			return;
+			minX = 64*x; //<<6
+			maxX = (64*(x + 1)) - 1;
+			minY = 64*y;
+			maxY = (64*(y + 1)) - 1;
 		}
 
 		public static void SEC_CreateNewData()

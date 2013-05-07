@@ -8,6 +8,7 @@ namespace WorldBuilder
 	public partial class OpenSEC : Form
 	{
 		public string FileToOpen = "";
+		private static readonly string sectorsPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "\\Sectors");
 
 		public OpenSEC()
 		{
@@ -16,7 +17,7 @@ namespace WorldBuilder
 
 		private void OpenSEC_Load(object sender, EventArgs e)
 		{
-			if (!Directory.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\Sectors"))
+			if (!Directory.Exists(sectorsPath))
 			{
 				MessageBox.Show("Critical Error 003: installation of ToEE World Editor may be corrupt. Please reinstall.",
 								"Critical Error",
@@ -25,21 +26,16 @@ namespace WorldBuilder
 				Close();
 			}
 
-			string[] secs = Directory.GetFiles(Path.GetDirectoryName(Application.ExecutablePath) + "\\Sectors", "*.sec");
+			string[] secs = Directory.GetFiles(sectorsPath, "*.sec");
 
 			int X = -1;
 			int Y = -1;
-			int mX = -1;
-			int mY = -1;
-			int MX = -1;
-			int MY = -1;
-
+			int mX, mY, MX, MY;
 			foreach (string sec in secs)
 			{
 				Helper.SEC_GetXY(Path.GetFileNameWithoutExtension(sec), ref X, ref Y);
-				Helper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(sec), ref mY, ref MY, ref mX, ref MX);
-
-				SEC_LIST.Items.Add(Path.GetFileNameWithoutExtension(sec).PadRight(20, ' ') + "\t" + "(SX = " + X + "; SY = " + Y + ")" + "\t\t" + "Coordinates from (" + mX + "; " + mY + ") to (" + MX + "; " + MY + ")");
+				Helper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(sec), out mY, out MY, out mX, out MX);
+				SEC_LIST.Items.Add(string.Format("{0,-20}\t(SX = {1}; SY = {2})\t\tCoordinates from ({3}; {4}) to ({5}; {6})", Path.GetFileNameWithoutExtension(sec), X, Y, mX, mY, MX, MY));
 			}
 		}
 
