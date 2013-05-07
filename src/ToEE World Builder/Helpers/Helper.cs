@@ -752,10 +752,12 @@ namespace WorldBuilder.Helpers
 
 		public static uint SEC_GetSectorCorrespondence(int worldY, int worldX) //todo: why in this order?
 		{
-			int secX = (worldX/64)*4;//(int)((worldX >> 4) & 0xfffffffc);// (worldX/64)*4;
-			int secY = worldY/64;
-			string hexStr = string.Format("{0:x2}0000{1:x2}", secX, secY);
-			return Convert.ToUInt32(hexStr, 16);
+			if (worldX > 0x0FFF) throw new ArgumentOutOfRangeException("worldX", "World X should be in range [0..0x0FFF]");
+			if (worldY > 0x3FFF) throw new ArgumentOutOfRangeException("worldY", "World Y should be in range [0..0x3FFF]");
+
+			int secX = (int)((worldX << 20) & 0xfc000000); // (worldX/64)*4 and then << 24;
+			int secY = worldY >> 6; // worldY/64;
+			return (uint)(secX | secY);
 		}
 
 		public static void SEC_CreateEmptySectorFile(BinaryWriter w_sec)
