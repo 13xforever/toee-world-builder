@@ -252,25 +252,19 @@ namespace WorldBuilder.Forms
 			//todo: move to PathNodeCollection after dealing with IsAvailableTile as OnAddNodeClick is hot
 			for (int x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
 				for (int y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
-					if (IsAvailableTile(x, y))
-					{
-						DisplayNode(x, y, 0f, 0f);
-						OnAddNodeClick(sender, e);
-					}
-					else
-					{
-						// the tile is blocked, so try laying pathnodes around the smaller grid
-						var tile = new[]
-										{
-											Tuple.Create(x + 3, y),
-											Tuple.Create(x, y + 3),
-											Tuple.Create(x, y - 3),
-											Tuple.Create(x - 3, y),
-											Tuple.Create(x + 3, y + 3),
-											Tuple.Create(x - 3, y - 3),
-											Tuple.Create(x + 3, y - 3),
-											Tuple.Create(x - 3, y + 3),
-										}.FirstOrDefault(n => IsAvailableTile(n.Item1, n.Item2));
+				{
+					var tile = new[]
+						{
+							Tuple.Create(x, y),
+							Tuple.Create(x + 3, y),
+							Tuple.Create(x, y + 3),
+							Tuple.Create(x, y - 3),
+							Tuple.Create(x - 3, y),
+							Tuple.Create(x + 3, y + 3),
+							Tuple.Create(x - 3, y - 3),
+							Tuple.Create(x + 3, y - 3),
+							Tuple.Create(x - 3, y + 3),
+						}.FirstOrDefault(n => IsAvailableTile(n.Item1, n.Item2));
 						if (tile != null)
 						{
 							DisplayNode(tile.Item1, tile.Item2, 0f, 0f);

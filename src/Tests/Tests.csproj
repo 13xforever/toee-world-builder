@@ -43,6 +43,7 @@
     <Compile Include="PathNodeHelperTests.cs" />
     <Compile Include="ProtoHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SectorHelperTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -742,30 +742,20 @@ namespace WorldBuilder.Helpers
 		public static ArrayList SectorObjects = new ArrayList();
 		public static ArrayList SectorLightsChunk = new ArrayList();
 
-		public static uint SEC_GetSecNameFromXY(int Sec_X, int Sec_Y)
+		public static uint SEC_GetSecNameFromXY(int secX, int secY)
 		{
-			int X = Sec_X*4;
-			int Y = Sec_Y;
-
-			string S = X.ToString("X").PadLeft(2, '0') + "0000" + Y.ToString("X").PadLeft(2, '0');
-
-			uint U = Convert.ToUInt32(S, 16);
-
-			return U;
+			int x = secX*4;
+			int y = secY;
+			string hexStr = string.Format("{0:x2}0000{1:x2}", x, y);
+			return Convert.ToUInt32(hexStr, 16);
 		}
 
-		public static uint SEC_GetSectorCorrespondence(int World_Y, int World_X)
+		public static uint SEC_GetSectorCorrespondence(int worldY, int worldX) //todo: why in this order?
 		{
-			uint u = 0;
-
-			int Sec_X = World_X/64;
-			int Sec_Y = World_Y/64;
-
-			Sec_X *= 4;
-			string S = Sec_X.ToString("X").PadLeft(2, '0') + "0000" + Sec_Y.ToString("X").PadLeft(2, '0');
-			u = Convert.ToUInt32(S, 16);
-
-			return u;
+			int secX = (worldX/64)*4;//(int)((worldX >> 4) & 0xfffffffc);// (worldX/64)*4;
+			int secY = worldY/64;
+			string hexStr = string.Format("{0:x2}0000{1:x2}", secX, secY);
+			return Convert.ToUInt32(hexStr, 16);
 		}
 
 		public static void SEC_CreateEmptySectorFile(BinaryWriter w_sec)
