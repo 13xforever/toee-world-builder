@@ -744,7 +744,10 @@ namespace WorldBuilder.Helpers
 
 		public static uint SEC_GetSecNameFromXY(int secX, int secY)
 		{
-			int x = secX*4;
+			if (secX > 0x3f) throw new ArgumentOutOfRangeException("secX", "SecX should be in range [0..0x3f]");
+			if (secY > 0xff) throw new ArgumentOutOfRangeException("secY", "SecY should be in range [0..0xFF]");
+
+			int x = secX * 4; // << 2
 			int y = secY;
 			string hexStr = string.Format("{0:x2}0000{1:x2}", x, y);
 			return Convert.ToUInt32(hexStr, 16);
