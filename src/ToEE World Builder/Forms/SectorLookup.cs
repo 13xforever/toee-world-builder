@@ -33,8 +33,7 @@ namespace WorldBuilder
 				int _fromY = int.Parse(fromY.Text);
 				int _toX = int.Parse(toX.Text);
 				int _toY = int.Parse(toY.Text);
-				int SX = 0;
-				int SY = 0;
+				int SX, SY;
 				string secname = "";
 
 				for (int X = _fromX; X <= _toX; X++)
@@ -42,7 +41,7 @@ namespace WorldBuilder
 					for (int Y = _fromY; Y <= _toY; Y++)
 					{
 						secname = Helper.SEC_GetSectorCorrespondence(X, Y).ToString();
-						Helper.SEC_GetXY(secname, ref SX, ref SY);
+						Helper.SEC_GetXY(secname, out SX, out SY);
 						if (!(lstSecs.Items.Contains(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")")))
 							lstSecs.Items.Add(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")");
 					}
