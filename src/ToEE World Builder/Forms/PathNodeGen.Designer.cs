@@ -30,14 +30,8 @@ namespace WorldBuilder.Forms
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.btnOpenPND = new System.Windows.Forms.Button();
 			this.OpenPND = new System.Windows.Forms.OpenFileDialog();
 			this.SavePND = new System.Windows.Forms.SaveFileDialog();
-			this.btnSavePND = new System.Windows.Forms.Button();
-			this.btnNewPND = new System.Windows.Forms.Button();
-			this.btnQuitPND = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.btnGeneratePND = new System.Windows.Forms.Button();
 			this.lstNodes = new System.Windows.Forms.ListBox();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
@@ -49,10 +43,14 @@ namespace WorldBuilder.Forms
 			this.NodeOfsY = new System.Windows.Forms.TextBox();
 			this.btnAddNode = new System.Windows.Forms.Button();
 			this.btnDelNode = new System.Windows.Forms.Button();
-			this.label8 = new System.Windows.Forms.Label();
 			this.lstLinks = new System.Windows.Forms.ListBox();
 			this.btnGotoPND = new System.Windows.Forms.Button();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.NET2Menu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toleranceMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toleranceMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
@@ -66,18 +64,14 @@ namespace WorldBuilder.Forms
 			this.menuItem10 = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.autoPathnodeGeneratorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.regenerateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.timer = new System.Windows.Forms.Timer(this.components);
+			this.pathNodesGroup = new System.Windows.Forms.GroupBox();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.menuStrip1.SuspendLayout();
+			this.pathNodesGroup.SuspendLayout();
+			this.groupBox1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// btnOpenPND
-			// 
-			this.btnOpenPND.Location = new System.Drawing.Point(200, 472);
-			this.btnOpenPND.Name = "btnOpenPND";
-			this.btnOpenPND.Size = new System.Drawing.Size(75, 23);
-			this.btnOpenPND.TabIndex = 0;
-			this.btnOpenPND.Text = "Open...";
-			this.btnOpenPND.Click += new System.EventHandler(this.OnOpenPndFileClick);
 			// 
 			// OpenPND
 			// 
@@ -87,83 +81,39 @@ namespace WorldBuilder.Forms
 			// 
 			this.SavePND.Filter = "Path Nodes (pathnode.pnd)|pathnode.pnd";
 			// 
-			// btnSavePND
-			// 
-			this.btnSavePND.Enabled = false;
-			this.btnSavePND.Location = new System.Drawing.Point(280, 472);
-			this.btnSavePND.Name = "btnSavePND";
-			this.btnSavePND.Size = new System.Drawing.Size(75, 23);
-			this.btnSavePND.TabIndex = 1;
-			this.btnSavePND.Text = "Save...";
-			this.btnSavePND.Click += new System.EventHandler(this.OnSavePndFileClick);
-			// 
-			// btnNewPND
-			// 
-			this.btnNewPND.Location = new System.Drawing.Point(120, 472);
-			this.btnNewPND.Name = "btnNewPND";
-			this.btnNewPND.Size = new System.Drawing.Size(75, 23);
-			this.btnNewPND.TabIndex = 2;
-			this.btnNewPND.Text = "New";
-			this.btnNewPND.Click += new System.EventHandler(this.OnNewPndFileClick);
-			// 
-			// btnQuitPND
-			// 
-			this.btnQuitPND.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.btnQuitPND.Location = new System.Drawing.Point(440, 472);
-			this.btnQuitPND.Name = "btnQuitPND";
-			this.btnQuitPND.Size = new System.Drawing.Size(75, 23);
-			this.btnQuitPND.TabIndex = 3;
-			this.btnQuitPND.Text = "Exit";
-			// 
-			// label1
-			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label1.Location = new System.Drawing.Point(8, 24);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(100, 16);
-			this.label1.TabIndex = 4;
-			this.label1.Text = "Path Nodes:";
-			// 
-			// btnGeneratePND
-			// 
-			this.btnGeneratePND.Enabled = false;
-			this.btnGeneratePND.Location = new System.Drawing.Point(360, 472);
-			this.btnGeneratePND.Name = "btnGeneratePND";
-			this.btnGeneratePND.Size = new System.Drawing.Size(75, 23);
-			this.btnGeneratePND.TabIndex = 5;
-			this.btnGeneratePND.Text = "Generate";
-			this.btnGeneratePND.Click += new System.EventHandler(this.OnRegenerateLinksClick);
-			// 
 			// lstNodes
 			// 
 			this.lstNodes.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lstNodes.ItemHeight = 16;
-			this.lstNodes.Location = new System.Drawing.Point(8, 40);
+			this.lstNodes.Location = new System.Drawing.Point(6, 19);
 			this.lstNodes.Name = "lstNodes";
-			this.lstNodes.Size = new System.Drawing.Size(304, 372);
+			this.lstNodes.Size = new System.Drawing.Size(330, 372);
 			this.lstNodes.TabIndex = 6;
 			this.lstNodes.SelectedIndexChanged += new System.EventHandler(this.OnSelectedNodeChanged);
+			this.lstNodes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnNodeKeyPress);
 			// 
 			// label4
 			// 
-			this.label4.Location = new System.Drawing.Point(8, 416);
+			this.label4.AutoSize = true;
+			this.label4.Location = new System.Drawing.Point(6, 400);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(16, 23);
+			this.label4.Size = new System.Drawing.Size(17, 13);
 			this.label4.TabIndex = 9;
 			this.label4.Text = "X:";
 			// 
 			// label5
 			// 
-			this.label5.Location = new System.Drawing.Point(72, 416);
+			this.label5.AutoSize = true;
+			this.label5.Location = new System.Drawing.Point(74, 400);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(16, 23);
+			this.label5.Size = new System.Drawing.Size(17, 13);
 			this.label5.TabIndex = 10;
 			this.label5.Text = "Y:";
 			// 
 			// NodeX
 			// 
 			this.NodeX.Enabled = false;
-			this.NodeX.Location = new System.Drawing.Point(24, 416);
+			this.NodeX.Location = new System.Drawing.Point(28, 397);
 			this.NodeX.Name = "NodeX";
 			this.NodeX.Size = new System.Drawing.Size(40, 20);
 			this.NodeX.TabIndex = 11;
@@ -172,7 +122,7 @@ namespace WorldBuilder.Forms
 			// NodeY
 			// 
 			this.NodeY.Enabled = false;
-			this.NodeY.Location = new System.Drawing.Point(88, 416);
+			this.NodeY.Location = new System.Drawing.Point(96, 397);
 			this.NodeY.Name = "NodeY";
 			this.NodeY.Size = new System.Drawing.Size(40, 20);
 			this.NodeY.TabIndex = 12;
@@ -180,16 +130,17 @@ namespace WorldBuilder.Forms
 			// 
 			// label6
 			// 
-			this.label6.Location = new System.Drawing.Point(128, 416);
+			this.label6.AutoSize = true;
+			this.label6.Location = new System.Drawing.Point(142, 400);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(48, 23);
+			this.label6.Size = new System.Drawing.Size(48, 13);
 			this.label6.TabIndex = 13;
 			this.label6.Text = "X Offset:";
 			// 
 			// NodeOfsX
 			// 
 			this.NodeOfsX.Enabled = false;
-			this.NodeOfsX.Location = new System.Drawing.Point(176, 416);
+			this.NodeOfsX.Location = new System.Drawing.Point(196, 397);
 			this.NodeOfsX.Name = "NodeOfsX";
 			this.NodeOfsX.Size = new System.Drawing.Size(40, 20);
 			this.NodeOfsX.TabIndex = 14;
@@ -197,16 +148,17 @@ namespace WorldBuilder.Forms
 			// 
 			// label7
 			// 
-			this.label7.Location = new System.Drawing.Point(216, 416);
+			this.label7.AutoSize = true;
+			this.label7.Location = new System.Drawing.Point(242, 400);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(56, 23);
+			this.label7.Size = new System.Drawing.Size(48, 13);
 			this.label7.TabIndex = 15;
 			this.label7.Text = "Y Offset:";
 			// 
 			// NodeOfsY
 			// 
 			this.NodeOfsY.Enabled = false;
-			this.NodeOfsY.Location = new System.Drawing.Point(264, 416);
+			this.NodeOfsY.Location = new System.Drawing.Point(296, 397);
 			this.NodeOfsY.Name = "NodeOfsY";
 			this.NodeOfsY.Size = new System.Drawing.Size(40, 20);
 			this.NodeOfsY.TabIndex = 16;
@@ -215,7 +167,7 @@ namespace WorldBuilder.Forms
 			// btnAddNode
 			// 
 			this.btnAddNode.Enabled = false;
-			this.btnAddNode.Location = new System.Drawing.Point(80, 440);
+			this.btnAddNode.Location = new System.Drawing.Point(93, 423);
 			this.btnAddNode.Name = "btnAddNode";
 			this.btnAddNode.Size = new System.Drawing.Size(75, 23);
 			this.btnAddNode.TabIndex = 17;
@@ -225,36 +177,27 @@ namespace WorldBuilder.Forms
 			// btnDelNode
 			// 
 			this.btnDelNode.Enabled = false;
-			this.btnDelNode.Location = new System.Drawing.Point(160, 440);
+			this.btnDelNode.Location = new System.Drawing.Point(174, 423);
 			this.btnDelNode.Name = "btnDelNode";
 			this.btnDelNode.Size = new System.Drawing.Size(75, 23);
 			this.btnDelNode.TabIndex = 18;
 			this.btnDelNode.Text = "Delete Node";
 			this.btnDelNode.Click += new System.EventHandler(this.OnDeleteNodeClick);
 			// 
-			// label8
-			// 
-			this.label8.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.label8.Location = new System.Drawing.Point(328, 24);
-			this.label8.Name = "label8";
-			this.label8.Size = new System.Drawing.Size(288, 16);
-			this.label8.TabIndex = 19;
-			this.label8.Text = "Current Generated Links for Selected Path Node:";
-			// 
 			// lstLinks
 			// 
 			this.lstLinks.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.lstLinks.ItemHeight = 16;
-			this.lstLinks.Location = new System.Drawing.Point(328, 40);
+			this.lstLinks.Location = new System.Drawing.Point(6, 19);
 			this.lstLinks.Name = "lstLinks";
-			this.lstLinks.Size = new System.Drawing.Size(304, 372);
+			this.lstLinks.Size = new System.Drawing.Size(330, 372);
 			this.lstLinks.TabIndex = 20;
+			this.lstLinks.DoubleClick += new System.EventHandler(this.OnJumpToNodeClick);
 			// 
 			// btnGotoPND
 			// 
 			this.btnGotoPND.Enabled = false;
-			this.btnGotoPND.Location = new System.Drawing.Point(424, 416);
+			this.btnGotoPND.Location = new System.Drawing.Point(116, 423);
 			this.btnGotoPND.Name = "btnGotoPND";
 			this.btnGotoPND.Size = new System.Drawing.Size(96, 23);
 			this.btnGotoPND.TabIndex = 21;
@@ -265,13 +208,53 @@ namespace WorldBuilder.Forms
 			// 
 			this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2);
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.NET2Menu,
             this.toolsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(634, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(714, 24);
 			this.menuStrip1.TabIndex = 22;
 			this.menuStrip1.Text = "menuStrip1";
+			// 
+			// fileToolStripMenuItem
+			// 
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newToolStripMenuItem,
+            this.openToolStripMenuItem,
+            this.saveToolStripMenuItem,
+            this.exitToolStripMenuItem});
+			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fileToolStripMenuItem.Text = "&File";
+			// 
+			// newToolStripMenuItem
+			// 
+			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.newToolStripMenuItem.Text = "&New";
+			this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewPndFileClick);
+			// 
+			// openToolStripMenuItem
+			// 
+			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.openToolStripMenuItem.Text = "&Open...";
+			this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenPndFileClick);
+			// 
+			// saveToolStripMenuItem
+			// 
+			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.saveToolStripMenuItem.Text = "&Save...";
+			this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSavePndFileClick);
+			// 
+			// exitToolStripMenuItem
+			// 
+			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.exitToolStripMenuItem.Text = "E&xit";
+			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnCloseClick);
 			// 
 			// NET2Menu
 			// 
@@ -288,12 +271,13 @@ namespace WorldBuilder.Forms
             this.menuItem10});
 			this.NET2Menu.Name = "NET2Menu";
 			this.NET2Menu.Size = new System.Drawing.Size(71, 20);
-			this.NET2Menu.Text = "Tolerance";
+			this.NET2Menu.Text = "Tol&erance";
 			// 
 			// toleranceMenuItem1
 			// 
 			this.toleranceMenuItem1.Name = "toleranceMenuItem1";
-			this.toleranceMenuItem1.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D1)));
+			this.toleranceMenuItem1.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem1.Text = "7 (Experimental)";
 			this.toleranceMenuItem1.Visible = false;
 			this.toleranceMenuItem1.Click += new System.EventHandler(this.OnChangeToleranceClick);
@@ -301,21 +285,24 @@ namespace WorldBuilder.Forms
 			// toleranceMenuItem2
 			// 
 			this.toleranceMenuItem2.Name = "toleranceMenuItem2";
-			this.toleranceMenuItem2.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D2)));
+			this.toleranceMenuItem2.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem2.Text = "19 (Rigid)";
 			this.toleranceMenuItem2.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem3
 			// 
 			this.toleranceMenuItem3.Name = "toleranceMenuItem3";
-			this.toleranceMenuItem3.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem3.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D3)));
+			this.toleranceMenuItem3.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem3.Text = "20";
 			this.toleranceMenuItem3.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem4
 			// 
 			this.toleranceMenuItem4.Name = "toleranceMenuItem4";
-			this.toleranceMenuItem4.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem4.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D4)));
+			this.toleranceMenuItem4.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem4.Text = "21";
 			this.toleranceMenuItem4.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
@@ -324,28 +311,32 @@ namespace WorldBuilder.Forms
 			this.toleranceMenuItem5.Checked = true;
 			this.toleranceMenuItem5.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toleranceMenuItem5.Name = "toleranceMenuItem5";
-			this.toleranceMenuItem5.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem5.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D5)));
+			this.toleranceMenuItem5.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem5.Text = "22 (Recommended)";
 			this.toleranceMenuItem5.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem6
 			// 
 			this.toleranceMenuItem6.Name = "toleranceMenuItem6";
-			this.toleranceMenuItem6.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem6.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D6)));
+			this.toleranceMenuItem6.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem6.Text = "23";
 			this.toleranceMenuItem6.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem7
 			// 
 			this.toleranceMenuItem7.Name = "toleranceMenuItem7";
-			this.toleranceMenuItem7.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem7.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D7)));
+			this.toleranceMenuItem7.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem7.Text = "24";
 			this.toleranceMenuItem7.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem8
 			// 
 			this.toleranceMenuItem8.Name = "toleranceMenuItem8";
-			this.toleranceMenuItem8.Size = new System.Drawing.Size(178, 22);
+			this.toleranceMenuItem8.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D8)));
+			this.toleranceMenuItem8.Size = new System.Drawing.Size(218, 22);
 			this.toleranceMenuItem8.Text = "25 (Lax)";
 			this.toleranceMenuItem8.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
@@ -357,55 +348,77 @@ namespace WorldBuilder.Forms
 			// menuItem10
 			// 
 			this.menuItem10.Name = "menuItem10";
-			this.menuItem10.Size = new System.Drawing.Size(178, 22);
-			this.menuItem10.Text = "What is Tolerance?";
+			this.menuItem10.Size = new System.Drawing.Size(218, 22);
+			this.menuItem10.Text = "What is Tolerance&?";
 			this.menuItem10.Click += new System.EventHandler(this.OnToleranceHelpClick);
 			// 
 			// toolsToolStripMenuItem
 			// 
 			this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.autoPathnodeGeneratorToolStripMenuItem});
+            this.autoPathnodeGeneratorToolStripMenuItem,
+            this.regenerateToolStripMenuItem});
 			this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
 			this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
-			this.toolsToolStripMenuItem.Text = "Tools";
+			this.toolsToolStripMenuItem.Text = "&Tools";
 			// 
 			// autoPathnodeGeneratorToolStripMenuItem
 			// 
 			this.autoPathnodeGeneratorToolStripMenuItem.Name = "autoPathnodeGeneratorToolStripMenuItem";
 			this.autoPathnodeGeneratorToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
 			this.autoPathnodeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
-			this.autoPathnodeGeneratorToolStripMenuItem.Text = "Auto Path Node Generation...";
+			this.autoPathnodeGeneratorToolStripMenuItem.Text = "&Auto Path Node Generation...";
 			this.autoPathnodeGeneratorToolStripMenuItem.Click += new System.EventHandler(this.OnAutogeneratePathClick);
+			// 
+			// regenerateToolStripMenuItem
+			// 
+			this.regenerateToolStripMenuItem.Name = "regenerateToolStripMenuItem";
+			this.regenerateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+			this.regenerateToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
+			this.regenerateToolStripMenuItem.Text = "&Regenerate";
+			this.regenerateToolStripMenuItem.Click += new System.EventHandler(this.OnRegenerateLinksClick);
 			// 
 			// timer
 			// 
 			this.timer.Interval = 1;
 			this.timer.Tick += new System.EventHandler(this.OnTimerTick);
 			// 
+			// pathNodesGroup
+			// 
+			this.pathNodesGroup.Controls.Add(this.lstNodes);
+			this.pathNodesGroup.Controls.Add(this.label4);
+			this.pathNodesGroup.Controls.Add(this.label5);
+			this.pathNodesGroup.Controls.Add(this.NodeX);
+			this.pathNodesGroup.Controls.Add(this.NodeY);
+			this.pathNodesGroup.Controls.Add(this.btnDelNode);
+			this.pathNodesGroup.Controls.Add(this.label6);
+			this.pathNodesGroup.Controls.Add(this.NodeOfsY);
+			this.pathNodesGroup.Controls.Add(this.btnAddNode);
+			this.pathNodesGroup.Controls.Add(this.NodeOfsX);
+			this.pathNodesGroup.Controls.Add(this.label7);
+			this.pathNodesGroup.Location = new System.Drawing.Point(12, 27);
+			this.pathNodesGroup.Name = "pathNodesGroup";
+			this.pathNodesGroup.Size = new System.Drawing.Size(342, 456);
+			this.pathNodesGroup.TabIndex = 23;
+			this.pathNodesGroup.TabStop = false;
+			this.pathNodesGroup.Text = "Path Nodes";
+			// 
+			// groupBox1
+			// 
+			this.groupBox1.Controls.Add(this.lstLinks);
+			this.groupBox1.Controls.Add(this.btnGotoPND);
+			this.groupBox1.Location = new System.Drawing.Point(360, 27);
+			this.groupBox1.Name = "groupBox1";
+			this.groupBox1.Size = new System.Drawing.Size(342, 456);
+			this.groupBox1.TabIndex = 24;
+			this.groupBox1.TabStop = false;
+			this.groupBox1.Text = "Linked Nodes";
+			// 
 			// PathNodeGen
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(634, 506);
-			this.Controls.Add(this.btnGotoPND);
-			this.Controls.Add(this.lstLinks);
-			this.Controls.Add(this.label8);
-			this.Controls.Add(this.btnDelNode);
-			this.Controls.Add(this.btnAddNode);
-			this.Controls.Add(this.NodeOfsY);
-			this.Controls.Add(this.label7);
-			this.Controls.Add(this.NodeOfsX);
-			this.Controls.Add(this.label6);
-			this.Controls.Add(this.NodeY);
-			this.Controls.Add(this.NodeX);
-			this.Controls.Add(this.label5);
-			this.Controls.Add(this.label4);
-			this.Controls.Add(this.lstNodes);
-			this.Controls.Add(this.btnGeneratePND);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.btnQuitPND);
-			this.Controls.Add(this.btnNewPND);
-			this.Controls.Add(this.btnSavePND);
-			this.Controls.Add(this.btnOpenPND);
+			this.ClientSize = new System.Drawing.Size(714, 495);
+			this.Controls.Add(this.groupBox1);
+			this.Controls.Add(this.pathNodesGroup);
 			this.Controls.Add(this.menuStrip1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
@@ -415,20 +428,17 @@ namespace WorldBuilder.Forms
 			this.Load += new System.EventHandler(this.OnLoad);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.pathNodesGroup.ResumeLayout(false);
+			this.pathNodesGroup.PerformLayout();
+			this.groupBox1.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
 		}
 		#endregion
 
-		private System.Windows.Forms.Button btnOpenPND;
 		private System.Windows.Forms.OpenFileDialog OpenPND;
 		private System.Windows.Forms.SaveFileDialog SavePND;
-		private System.Windows.Forms.Button btnSavePND;
-		private System.Windows.Forms.Button btnNewPND;
-		private System.Windows.Forms.Button btnQuitPND;
-		private System.Windows.Forms.Label label1;
-		private System.Windows.Forms.Button btnGeneratePND;
 		private System.Windows.Forms.ListBox lstNodes;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
@@ -440,7 +450,6 @@ namespace WorldBuilder.Forms
 		private System.Windows.Forms.TextBox NodeOfsY;
 		private System.Windows.Forms.Button btnAddNode;
 		private System.Windows.Forms.Button btnDelNode;
-		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.ListBox lstLinks;
 		private System.Windows.Forms.Button btnGotoPND;
 		private MenuStrip menuStrip1;
@@ -458,5 +467,13 @@ namespace WorldBuilder.Forms
 		private ToolStripMenuItem autoPathnodeGeneratorToolStripMenuItem;
 		private Timer timer;
 		private ToolStripMenuItem toleranceMenuItem1;
+		private GroupBox pathNodesGroup;
+		private GroupBox groupBox1;
+		private ToolStripMenuItem fileToolStripMenuItem;
+		private ToolStripMenuItem newToolStripMenuItem;
+		private ToolStripMenuItem openToolStripMenuItem;
+		private ToolStripMenuItem saveToolStripMenuItem;
+		private ToolStripMenuItem exitToolStripMenuItem;
+		private ToolStripMenuItem regenerateToolStripMenuItem;
 	}
 }

@@ -18,7 +18,7 @@ namespace WorldBuilder.Forms
 		public PathNodeGen()
 		{
 			InitializeComponent();
-			controls = new Control[] {btnGeneratePND, btnSavePND, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY};
+			controls = new Control[] {menuStrip1, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY};
 			vicinitySwitch = new[]
 								{
 									Tuple.Create(toleranceMenuItem1,  7d),
@@ -36,6 +36,7 @@ namespace WorldBuilder.Forms
 		{
 			if (OpenPND.ShowDialog() != DialogResult.OK) return;
 
+			EnableInterface(false);
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
 			nodeCollection = PathNodeCollection.Read(OpenPND.FileName);
@@ -78,6 +79,7 @@ namespace WorldBuilder.Forms
 								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
+			EnableInterface(false);
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
 			nodeCollection = new PathNodeCollection();
@@ -196,8 +198,11 @@ namespace WorldBuilder.Forms
 								"Do you want to generate path node links now?",
 								"Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
+
+			EnableInterface(false);
 			nodeCollection.RegenerateLinks(vicinity);
 			OnSelectedNodeChanged(null, null);
+			EnableInterface(true);
 			MessageBox.Show("Node links generated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
@@ -241,7 +246,7 @@ namespace WorldBuilder.Forms
 			var autoGenDlg = new PathNodeAutoGen();
 			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.Step == -1) return;
 
-			// New PND file
+			EnableInterface(false);
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
 			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.FromX, autoGenDlg.ToX, autoGenDlg.FromY, autoGenDlg.ToY, autoGenDlg.Step, vicinity);
@@ -281,6 +286,26 @@ namespace WorldBuilder.Forms
 		private void OnLoad(object sender, EventArgs e)
 		{
 			timer.Enabled = true;
+			EnableInterface(true);
+		}
+
+		private void OnCloseClick(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		private void OnNodeKeyPress(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Delete:
+					OnDeleteNodeClick(sender, e);
+					break;
+				case Keys.Add:
+				case Keys.Insert:
+					OnAddNodeClick(sender, e);
+					break;
+			}
 		}
 	}
 }

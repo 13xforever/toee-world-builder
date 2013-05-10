@@ -89,11 +89,11 @@ namespace WorldBuilder
 				{
 					var tile = new[]
 									{
-										Tuple.Create(x, y),
-										Tuple.Create(x + 3, y),
-										Tuple.Create(x, y + 3),
-										Tuple.Create(x, y - 3),
-										Tuple.Create(x - 3, y),
+										Tuple.Create(x    , y    ),
+										Tuple.Create(x + 3, y    ),
+										Tuple.Create(x    , y + 3),
+										Tuple.Create(x    , y - 3),
+										Tuple.Create(x - 3, y    ),
 										Tuple.Create(x + 3, y + 3),
 										Tuple.Create(x - 3, y - 3),
 										Tuple.Create(x + 3, y - 3),
