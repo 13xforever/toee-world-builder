@@ -11,10 +11,11 @@ namespace WorldBuilder.Forms
 	public partial class PathNodeGen : Form
 	{
 		private readonly Control[] controls;
+		private readonly Stopwatch progressTimer = new Stopwatch();
 		private readonly Tuple<ToolStripMenuItem, double>[] vicinitySwitch;
+		private bool isDirty;
 		private PathNodeCollection nodeCollection = new PathNodeCollection();
 		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
-		private bool isDirty;
 
 		public PathNodeGen()
 		{
@@ -126,6 +127,20 @@ namespace WorldBuilder.Forms
 
 			lstNodes.SelectedIndex = lstNodes.Items.IndexOf(lstLinks.Items[lstLinks.SelectedIndex]);
 			lstNodes.Focus();
+		}
+
+		private void OnNodeKeyPress(object sender, KeyEventArgs e)
+		{
+			switch (e.KeyCode)
+			{
+				case Keys.Delete:
+					OnDeleteNodeClick(sender, e);
+					break;
+				case Keys.Add:
+				case Keys.Insert:
+					OnAddNodeClick(sender, e);
+					break;
+			}
 		}
 
 		private void OnDeleteNodeClick(object sender, EventArgs e)
@@ -262,7 +277,6 @@ namespace WorldBuilder.Forms
 			MessageBox.Show("Automated generation complete."); //todo: there were some numbers here
 		}
 
-		private readonly Stopwatch progressTimer = new Stopwatch();
 		private void OnAutoGenProgress(double progress)
 		{
 			if (progressTimer.ElapsedMilliseconds < 200) return;
@@ -271,7 +285,7 @@ namespace WorldBuilder.Forms
 			{
 				progressTimer.Restart();
 				Application.DoEvents();
-				progressBar1.Value = (int) (progressBar1.Maximum*Math.Min(progress, 1d));
+				progressBar1.Value = (int)(progressBar1.Maximum*Math.Min(progress, 1d));
 			}
 		}
 
@@ -308,23 +322,6 @@ namespace WorldBuilder.Forms
 			EnableInterface(true);
 		}
 
-		private void OnCloseClick(object sender, EventArgs e)
-		{
-			Close();
-		}
-
-		private void OnNodeKeyPress(object sender, KeyEventArgs e)
-		{
-			switch (e.KeyCode)
-			{
-				case Keys.Delete:
-					OnDeleteNodeClick(sender, e);
-					break;
-				case Keys.Add:
-				case Keys.Insert:
-					OnAddNodeClick(sender, e);
-					break;
-			}
-		}
+		private void OnCloseClick(object sender, EventArgs e) { Close(); }
 	}
 }
