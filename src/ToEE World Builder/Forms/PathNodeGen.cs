@@ -254,6 +254,7 @@ namespace WorldBuilder.Forms
 			progressTimer.Start();
 			progressBar1.Visible = true;
 			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.FromX, autoGenDlg.ToX, autoGenDlg.FromY, autoGenDlg.ToY, autoGenDlg.Step, vicinity, OnAutoGenProgress);
+			progressTimer.Reset();
 			progressBar1.Visible = false;
 			foreach (PathNode node in nodeCollection.SortedValues)
 				lstNodes.Items.Add(node);
