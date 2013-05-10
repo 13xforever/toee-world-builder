@@ -81,10 +81,11 @@ namespace WorldBuilder
 		/// <summary>
 		/// Generate automated path nodes
 		/// </summary>
-		public static PathNodeCollection AutoGenerate(int fromX, int toX, int fromY, int toY, int step, double vicinity)
+		public static PathNodeCollection AutoGenerate(int fromX, int toX, int fromY, int toY, int step, double vicinity, Action<double> onProgress)
 		{
 			var result = new PathNodeCollection();
 			for (var x = fromX; x <= toX; x += step)
+			{
 				for (var y = fromY; y <= toY; y += step)
 				{
 					var tile = new[]
@@ -102,8 +103,13 @@ namespace WorldBuilder
 						.Where(t => t.Item1 >= 0 && t.Item1 <= 0x3ff && t.Item2 >= 0 && t.Item2 <= 0x0fff)
 						.FirstOrDefault(n => PathNodeHelper.IsAvailableTile(n.Item1, n.Item2));
 					if (tile != null)
+					{
 						result.Add(new PathNode(result.TopId + 1, (uint) tile.Item1, (uint) tile.Item2, 0f, 0f), vicinity);
+						onProgress((double)((x - fromX)*(toY - fromY) + y) / ((toX - fromX)*(toY - fromY)));
+					}
 				}
+				onProgress((double) ((x - fromX + 1)*(toY - fromY))/((toX - fromX)*(toY - fromY)));
+			}
 			return result;
 		}
 

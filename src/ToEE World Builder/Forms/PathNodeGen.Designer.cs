@@ -68,6 +68,7 @@ namespace WorldBuilder.Forms
 			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.pathNodesGroup = new System.Windows.Forms.GroupBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
+			this.progressBar1 = new System.Windows.Forms.ProgressBar();
 			this.menuStrip1.SuspendLayout();
 			this.pathNodesGroup.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -231,28 +232,32 @@ namespace WorldBuilder.Forms
 			// newToolStripMenuItem
 			// 
 			this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-			this.newToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+			this.newToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.newToolStripMenuItem.Text = "&New";
 			this.newToolStripMenuItem.Click += new System.EventHandler(this.OnNewPndFileClick);
 			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.openToolStripMenuItem.Text = "&Open...";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.OnOpenPndFileClick);
 			// 
 			// saveToolStripMenuItem
 			// 
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-			this.saveToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+			this.saveToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.saveToolStripMenuItem.Text = "&Save...";
 			this.saveToolStripMenuItem.Click += new System.EventHandler(this.OnSavePndFileClick);
 			// 
 			// exitToolStripMenuItem
 			// 
 			this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-			this.exitToolStripMenuItem.Size = new System.Drawing.Size(112, 22);
+			this.exitToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
+			this.exitToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
 			this.exitToolStripMenuItem.Text = "E&xit";
 			this.exitToolStripMenuItem.Click += new System.EventHandler(this.OnCloseClick);
 			// 
@@ -365,16 +370,16 @@ namespace WorldBuilder.Forms
 			// 
 			this.autoPathnodeGeneratorToolStripMenuItem.Name = "autoPathnodeGeneratorToolStripMenuItem";
 			this.autoPathnodeGeneratorToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-			this.autoPathnodeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
-			this.autoPathnodeGeneratorToolStripMenuItem.Text = "&Auto Path Node Generation...";
+			this.autoPathnodeGeneratorToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+			this.autoPathnodeGeneratorToolStripMenuItem.Text = "&Auto Generate Nodes...";
 			this.autoPathnodeGeneratorToolStripMenuItem.Click += new System.EventHandler(this.OnAutogeneratePathClick);
 			// 
 			// regenerateToolStripMenuItem
 			// 
 			this.regenerateToolStripMenuItem.Name = "regenerateToolStripMenuItem";
 			this.regenerateToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-			this.regenerateToolStripMenuItem.Size = new System.Drawing.Size(271, 22);
-			this.regenerateToolStripMenuItem.Text = "&Regenerate";
+			this.regenerateToolStripMenuItem.Size = new System.Drawing.Size(238, 22);
+			this.regenerateToolStripMenuItem.Text = "&Rebuild Links";
 			this.regenerateToolStripMenuItem.Click += new System.EventHandler(this.OnRegenerateLinksClick);
 			// 
 			// timer
@@ -384,6 +389,7 @@ namespace WorldBuilder.Forms
 			// 
 			// pathNodesGroup
 			// 
+			this.pathNodesGroup.Controls.Add(this.progressBar1);
 			this.pathNodesGroup.Controls.Add(this.lstNodes);
 			this.pathNodesGroup.Controls.Add(this.label4);
 			this.pathNodesGroup.Controls.Add(this.label5);
@@ -412,6 +418,14 @@ namespace WorldBuilder.Forms
 			this.groupBox1.TabIndex = 24;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Linked Nodes";
+			// 
+			// progressBar1
+			// 
+			this.progressBar1.Location = new System.Drawing.Point(7, 367);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.Size = new System.Drawing.Size(329, 23);
+			this.progressBar1.TabIndex = 19;
+			this.progressBar1.Visible = false;
 			// 
 			// PathNodeGen
 			// 
@@ -475,5 +489,6 @@ namespace WorldBuilder.Forms
 		private ToolStripMenuItem saveToolStripMenuItem;
 		private ToolStripMenuItem exitToolStripMenuItem;
 		private ToolStripMenuItem regenerateToolStripMenuItem;
+		private ProgressBar progressBar1;
 	}
 }

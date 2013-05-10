@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,6 +19,7 @@ namespace WorldBuilder.Forms
 		public PathNodeGen()
 		{
 			InitializeComponent();
+			progressBar1.Maximum = progressBar1.Width;
 			controls = new Control[] {menuStrip1, btnAddNode, btnDelNode, btnGotoPND, NodeX, NodeY, NodeOfsX, NodeOfsY};
 			vicinitySwitch = new[]
 								{
@@ -249,11 +251,27 @@ namespace WorldBuilder.Forms
 			EnableInterface(false);
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.FromX, autoGenDlg.ToX, autoGenDlg.FromY, autoGenDlg.ToY, autoGenDlg.Step, vicinity);
+			progressTimer.Start();
+			progressBar1.Visible = true;
+			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.FromX, autoGenDlg.ToX, autoGenDlg.FromY, autoGenDlg.ToY, autoGenDlg.Step, vicinity, OnAutoGenProgress);
+			progressBar1.Visible = false;
 			foreach (PathNode node in nodeCollection.SortedValues)
 				lstNodes.Items.Add(node);
 			EnableInterface(true);
 			MessageBox.Show("Automated generation complete."); //todo: there were some numbers here
+		}
+
+		private readonly Stopwatch progressTimer = new Stopwatch();
+		private void OnAutoGenProgress(double progress)
+		{
+			if (progressTimer.ElapsedMilliseconds < 200) return;
+
+			lock (progressTimer)
+			{
+				progressTimer.Restart();
+				Application.DoEvents();
+				progressBar1.Value = (int) (progressBar1.Maximum*Math.Min(progress, 1d));
+			}
 		}
 
 		private void OnTimerTick(object sender, EventArgs e)
