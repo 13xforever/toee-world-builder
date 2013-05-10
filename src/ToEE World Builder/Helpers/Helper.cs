@@ -752,13 +752,13 @@ namespace WorldBuilder.Helpers
 			return (uint)(x | y);
 		}
 
-		public static uint SEC_GetSectorCorrespondence(int worldY, int worldX) //todo: why in this order?
+		public static uint SEC_GetSectorCorrespondence(int worldX, int worldY) //todo: why in this order?
 		{
-			if (worldX > 0x0FFF) throw new ArgumentOutOfRangeException("worldX", "World X should be in range [0..0x0FFF]");
-			if (worldY > 0x3FFF) throw new ArgumentOutOfRangeException("worldY", "World Y should be in range [0..0x3FFF]");
+			if (worldX > 0x3FFF) throw new ArgumentOutOfRangeException("worldX", "World Y should be in range [0..0x3FFF]");
+			if (worldY > 0x0FFF) throw new ArgumentOutOfRangeException("worldY", "World X should be in range [0..0x0FFF]");
 
-			int secX = (int)((worldX << 20) & 0xfc000000); // (worldX/64)*4 and then << 24;
-			int secY = worldY >> 6; // worldY/64;
+			int secX = (int)((worldY << 20) & 0xfc000000); // (worldY/64)*4 and then << 24;
+			int secY = worldX >> 6; // worldX/64;
 			return (uint)(secX | secY);
 		}
 

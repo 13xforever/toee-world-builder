@@ -81,7 +81,6 @@ namespace WorldBuilder
 		/// <summary>
 		/// Generate automated path nodes
 		/// </summary>
-		/// <returns></returns>
 		public static PathNodeCollection AutoGenerate(int fromX, int toX, int fromY, int toY, int step, double vicinity)
 		{
 			var result = new PathNodeCollection();
@@ -89,19 +88,21 @@ namespace WorldBuilder
 				for (var y = fromY; y <= toY; y += step)
 				{
 					var tile = new[]
-						{
-							Tuple.Create(x    , y    ),
-							Tuple.Create(x + 3, y    ),
-							Tuple.Create(x    , y + 3),
-							Tuple.Create(x    , y - 3),
-							Tuple.Create(x - 3, y    ),
-							Tuple.Create(x + 3, y + 3),
-							Tuple.Create(x - 3, y - 3),
-							Tuple.Create(x + 3, y - 3),
-							Tuple.Create(x - 3, y + 3),
-						}.FirstOrDefault(n => PathNodeHelper.IsAvailableTile(n.Item1, n.Item2));
+									{
+										Tuple.Create(x, y),
+										Tuple.Create(x + 3, y),
+										Tuple.Create(x, y + 3),
+										Tuple.Create(x, y - 3),
+										Tuple.Create(x - 3, y),
+										Tuple.Create(x + 3, y + 3),
+										Tuple.Create(x - 3, y - 3),
+										Tuple.Create(x + 3, y - 3),
+										Tuple.Create(x - 3, y + 3),
+									}
+						.Where(t => t.Item1 >= 0 && t.Item1 <= 0x3ff && t.Item2 >= 0 && t.Item2 <= 0x0fff)
+						.FirstOrDefault(n => PathNodeHelper.IsAvailableTile(n.Item1, n.Item2));
 					if (tile != null)
-						result.Add(new PathNode(result.TopId, (uint) tile.Item1, (uint) tile.Item2, 0f, 0f), vicinity);
+						result.Add(new PathNode(result.TopId + 1, (uint) tile.Item1, (uint) tile.Item2, 0f, 0f), vicinity);
 				}
 			return result;
 		}
@@ -117,7 +118,6 @@ namespace WorldBuilder
 					PathNode node = reader.ReadPathNode();
 					result[node.Id] = node;
 					uint goalsCount = reader.ReadUInt32();
-
 					for (int j = 0; j < goalsCount; j++)
 					{
 						uint goalId = reader.ReadUInt32();

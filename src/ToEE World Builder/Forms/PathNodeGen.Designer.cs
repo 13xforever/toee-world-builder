@@ -39,8 +39,6 @@ namespace WorldBuilder.Forms
 			this.label1 = new System.Windows.Forms.Label();
 			this.btnGeneratePND = new System.Windows.Forms.Button();
 			this.lstNodes = new System.Windows.Forms.ListBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
 			this.label4 = new System.Windows.Forms.Label();
 			this.label5 = new System.Windows.Forms.Label();
 			this.NodeX = new System.Windows.Forms.TextBox();
@@ -54,17 +52,6 @@ namespace WorldBuilder.Forms
 			this.label8 = new System.Windows.Forms.Label();
 			this.lstLinks = new System.Windows.Forms.ListBox();
 			this.btnGotoPND = new System.Windows.Forms.Button();
-			this.mnuPathTolerance = new System.Windows.Forms.MainMenu(this.components);
-			this.menuItem1 = new System.Windows.Forms.MenuItem();
-			this.menuItem2a = new System.Windows.Forms.MenuItem();
-			this.menuItem3a = new System.Windows.Forms.MenuItem();
-			this.menuItem4a = new System.Windows.Forms.MenuItem();
-			this.menuItem5a = new System.Windows.Forms.MenuItem();
-			this.menuItem6a = new System.Windows.Forms.MenuItem();
-			this.menuItem7a = new System.Windows.Forms.MenuItem();
-			this.menuItem8a = new System.Windows.Forms.MenuItem();
-			this.menuItem9 = new System.Windows.Forms.MenuItem();
-			this.menuItem10a = new System.Windows.Forms.MenuItem();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.NET2Menu = new System.Windows.Forms.ToolStripMenuItem();
 			this.toleranceMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -156,24 +143,6 @@ namespace WorldBuilder.Forms
 			this.lstNodes.Size = new System.Drawing.Size(304, 372);
 			this.lstNodes.TabIndex = 6;
 			this.lstNodes.SelectedIndexChanged += new System.EventHandler(this.OnSelectedNodeChanged);
-			// 
-			// label2
-			// 
-			this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.label2.Location = new System.Drawing.Point(0, 464);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(640, 1);
-			this.label2.TabIndex = 7;
-			this.label2.Text = "label2";
-			// 
-			// label3
-			// 
-			this.label3.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.label3.Location = new System.Drawing.Point(320, 25);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(1, 439);
-			this.label3.TabIndex = 8;
-			this.label3.Text = "label3";
 			// 
 			// label4
 			// 
@@ -292,82 +261,6 @@ namespace WorldBuilder.Forms
 			this.btnGotoPND.Text = "Go to this Node";
 			this.btnGotoPND.Click += new System.EventHandler(this.OnJumpToNodeClick);
 			// 
-			// mnuPathTolerance
-			// 
-			this.mnuPathTolerance.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem1});
-			// 
-			// menuItem1
-			// 
-			this.menuItem1.Index = 0;
-			this.menuItem1.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
-            this.menuItem2a,
-            this.menuItem3a,
-            this.menuItem4a,
-            this.menuItem5a,
-            this.menuItem6a,
-            this.menuItem7a,
-            this.menuItem8a,
-            this.menuItem9,
-            this.menuItem10a});
-			this.menuItem1.Text = "Tolerance";
-			this.menuItem1.Visible = false;
-			// 
-			// menuItem2a
-			// 
-			this.menuItem2a.Index = 0;
-			this.menuItem2a.Text = "19 (Rigid)";
-			this.menuItem2a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem3a
-			// 
-			this.menuItem3a.Index = 1;
-			this.menuItem3a.Text = "20";
-			this.menuItem3a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem4a
-			// 
-			this.menuItem4a.Index = 2;
-			this.menuItem4a.Text = "21";
-			this.menuItem4a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem5a
-			// 
-			this.menuItem5a.Checked = true;
-			this.menuItem5a.Index = 3;
-			this.menuItem5a.Text = "22 (Default/Recommended)";
-			this.menuItem5a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem6a
-			// 
-			this.menuItem6a.Index = 4;
-			this.menuItem6a.Text = "23";
-			this.menuItem6a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem7a
-			// 
-			this.menuItem7a.Index = 5;
-			this.menuItem7a.Text = "24";
-			this.menuItem7a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem8a
-			// 
-			this.menuItem8a.Index = 6;
-			this.menuItem8a.Text = "25 (Lax)";
-			this.menuItem8a.Click += new System.EventHandler(this.OnChangeToleranceClick);
-			// 
-			// menuItem9
-			// 
-			this.menuItem9.Index = 7;
-			this.menuItem9.Text = "-";
-			// 
-			// menuItem10a
-			// 
-			this.menuItem10a.Index = 8;
-			this.menuItem10a.Shortcut = System.Windows.Forms.Shortcut.F1;
-			this.menuItem10a.Text = "What is Tolerance?";
-			this.menuItem10a.Click += new System.EventHandler(this.OnToleranceHelpClick);
-			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.GripMargin = new System.Windows.Forms.Padding(2);
@@ -399,7 +292,7 @@ namespace WorldBuilder.Forms
 			// 
 			// toleranceMenuItem1
 			// 
-			this.toleranceMenuItem1.Name = "experimentalToolStripMenuItem";
+			this.toleranceMenuItem1.Name = "toleranceMenuItem1";
 			this.toleranceMenuItem1.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem1.Text = "7 (Experimental)";
 			this.toleranceMenuItem1.Visible = false;
@@ -407,21 +300,21 @@ namespace WorldBuilder.Forms
 			// 
 			// toleranceMenuItem2
 			// 
-			this.toleranceMenuItem2.Name = "menuItem2";
+			this.toleranceMenuItem2.Name = "toleranceMenuItem2";
 			this.toleranceMenuItem2.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem2.Text = "19 (Rigid)";
 			this.toleranceMenuItem2.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem3
 			// 
-			this.toleranceMenuItem3.Name = "menuItem3";
+			this.toleranceMenuItem3.Name = "toleranceMenuItem3";
 			this.toleranceMenuItem3.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem3.Text = "20";
 			this.toleranceMenuItem3.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem4
 			// 
-			this.toleranceMenuItem4.Name = "menuItem4";
+			this.toleranceMenuItem4.Name = "toleranceMenuItem4";
 			this.toleranceMenuItem4.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem4.Text = "21";
 			this.toleranceMenuItem4.Click += new System.EventHandler(this.OnChangeToleranceClick);
@@ -430,28 +323,28 @@ namespace WorldBuilder.Forms
 			// 
 			this.toleranceMenuItem5.Checked = true;
 			this.toleranceMenuItem5.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.toleranceMenuItem5.Name = "menuItem5";
+			this.toleranceMenuItem5.Name = "toleranceMenuItem5";
 			this.toleranceMenuItem5.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem5.Text = "22 (Recommended)";
 			this.toleranceMenuItem5.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem6
 			// 
-			this.toleranceMenuItem6.Name = "menuItem6";
+			this.toleranceMenuItem6.Name = "toleranceMenuItem6";
 			this.toleranceMenuItem6.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem6.Text = "23";
 			this.toleranceMenuItem6.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem7
 			// 
-			this.toleranceMenuItem7.Name = "menuItem7";
+			this.toleranceMenuItem7.Name = "toleranceMenuItem7";
 			this.toleranceMenuItem7.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem7.Text = "24";
 			this.toleranceMenuItem7.Click += new System.EventHandler(this.OnChangeToleranceClick);
 			// 
 			// toleranceMenuItem8
 			// 
-			this.toleranceMenuItem8.Name = "menuItem8";
+			this.toleranceMenuItem8.Name = "toleranceMenuItem8";
 			this.toleranceMenuItem8.Size = new System.Drawing.Size(178, 22);
 			this.toleranceMenuItem8.Text = "25 (Lax)";
 			this.toleranceMenuItem8.Click += new System.EventHandler(this.OnChangeToleranceClick);
@@ -492,7 +385,7 @@ namespace WorldBuilder.Forms
 			// PathNodeGen
 			// 
 			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.ClientSize = new System.Drawing.Size(634, 479);
+			this.ClientSize = new System.Drawing.Size(634, 506);
 			this.Controls.Add(this.btnGotoPND);
 			this.Controls.Add(this.lstLinks);
 			this.Controls.Add(this.label8);
@@ -506,8 +399,6 @@ namespace WorldBuilder.Forms
 			this.Controls.Add(this.NodeX);
 			this.Controls.Add(this.label5);
 			this.Controls.Add(this.label4);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.label2);
 			this.Controls.Add(this.lstNodes);
 			this.Controls.Add(this.btnGeneratePND);
 			this.Controls.Add(this.label1);
@@ -518,9 +409,7 @@ namespace WorldBuilder.Forms
 			this.Controls.Add(this.menuStrip1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
 			this.MainMenuStrip = this.menuStrip1;
-			this.Menu = this.mnuPathTolerance;
 			this.Name = "PathNodeGen";
-			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
 			this.Text = "Path Node Editor/Generator";
 			this.Load += new System.EventHandler(this.OnLoad);
@@ -540,9 +429,7 @@ namespace WorldBuilder.Forms
 		private System.Windows.Forms.Button btnQuitPND;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.Button btnGeneratePND;
-		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ListBox lstNodes;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label label4;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox NodeX;
@@ -556,17 +443,6 @@ namespace WorldBuilder.Forms
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.ListBox lstLinks;
 		private System.Windows.Forms.Button btnGotoPND;
-		private System.Windows.Forms.MainMenu mnuPathTolerance;
-		private System.Windows.Forms.MenuItem menuItem1;
-		private System.Windows.Forms.MenuItem menuItem2a;
-		private System.Windows.Forms.MenuItem menuItem3a;
-		private System.Windows.Forms.MenuItem menuItem4a;
-		private System.Windows.Forms.MenuItem menuItem5a;
-		private System.Windows.Forms.MenuItem menuItem6a;
-		private System.Windows.Forms.MenuItem menuItem7a;
-		private System.Windows.Forms.MenuItem menuItem8a;
-		private System.Windows.Forms.MenuItem menuItem9;
-		private System.Windows.Forms.MenuItem menuItem10a;
 		private MenuStrip menuStrip1;
 		private ToolStripMenuItem NET2Menu;
 		private ToolStripMenuItem toleranceMenuItem2;

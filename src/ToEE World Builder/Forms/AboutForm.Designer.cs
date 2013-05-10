@@ -256,7 +256,7 @@ namespace WorldBuilder
 			this.label15.Name = "label15";
 			this.label15.Size = new System.Drawing.Size(400, 23);
 			this.label15.TabIndex = 17;
-			this.label15.Text = "Sitra Achara";
+			this.label15.Text = "Sitra Achara, 13xforever";
 			this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// AboutForm

@@ -239,12 +239,12 @@ namespace WorldBuilder.Forms
 		private void OnAutogeneratePathClick(object sender, EventArgs e)
 		{
 			var autoGenDlg = new PathNodeAutoGen();
-			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.r_Step == -1) return;
+			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.Step == -1) return;
 
 			// New PND file
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.r_FX, autoGenDlg.r_TX, autoGenDlg.r_FY, autoGenDlg.r_TY, autoGenDlg.r_Step, vicinity);
+			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.FromX, autoGenDlg.ToX, autoGenDlg.FromY, autoGenDlg.ToY, autoGenDlg.Step, vicinity);
 			foreach (PathNode node in nodeCollection.SortedValues)
 				lstNodes.Items.Add(node);
 			EnableInterface(true);

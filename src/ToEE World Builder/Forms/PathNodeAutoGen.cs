@@ -1,32 +1,55 @@
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace WorldBuilder
 {
 	public partial class PathNodeAutoGen : Form
 	{
-		public int r_FX = -1;
-		public int r_FY = -1;
-		public int r_Step = -1;
-		public int r_TX = -1;
-		public int r_TY = -1;
+		public int FromX;
+		public int FromY;
+		public int Step;
+		public int ToX;
+		public int ToY;
 
-		public PathNodeAutoGen() { InitializeComponent(); }
-
-		private void btnOK_Click(object sender, EventArgs e)
+		public PathNodeAutoGen()
 		{
-			r_FX = int.Parse(FX.Text);
-			r_FY = int.Parse(FY.Text);
-			r_TX = int.Parse(TX.Text);
-			r_TY = int.Parse(TY.Text);
+			InitializeComponent();
+			OnSteppingScroll(null, null);
+		}
 
-			if ((r_TX < r_FX) || (r_TY < r_FY))
+		private static void Swap<T>(ref T a, ref T b) where T : struct
+		{
+			var tmp = a;
+			a = b;
+			b = tmp;
+		}
+
+		private void OnSteppingScroll(object sender, EventArgs e)
+		{
+			steppingToolTip.SetToolTip(stepping, stepping.Value.ToString());
+		}
+
+		private void OnClosing(object sender, FormClosingEventArgs e)
+		{
+			var errorMsg = new StringBuilder();
+			if (!int.TryParse(FX.Text, out FromX) || FromX < 0 || FromX > 0x3fff ||
+				!int.TryParse(TX.Text, out ToX) || ToX < 0 || ToX > 0x3fff)
+				errorMsg.AppendLine("At least one of the X values are not in a valid format. All numbers should be integer values in range [0-16383].");
+
+			if (!int.TryParse(FY.Text, out FromY) || FromY < 0 || FromY > 0x0fff ||
+				!int.TryParse(TY.Text, out ToY) || ToY < 0 || ToY > 0x0fff)
+				errorMsg.AppendLine("At least one of the Y values are not in a valid format. All numbers should be integer values in range [0-4095].");
+
+			if (errorMsg.Length > 0)
 			{
-				MessageBox.Show("An invalid coordinate box was specified!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-				return;
+				MessageBox.Show(errorMsg.ToString(), null, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				e.Cancel = true;
 			}
 
-			r_Step = int.Parse(txtStepping.Text);
+			if (ToX < FromX) Swap(ref ToX, ref FromX);
+			if (ToY < FromY) Swap(ref ToY, ref FromY);
+			Step = stepping.Value;
 		}
 	}
 }
