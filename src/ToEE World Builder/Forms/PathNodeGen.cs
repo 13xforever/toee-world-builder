@@ -14,7 +14,6 @@ namespace WorldBuilder.Forms
 		private PathNodeCollection nodeCollection = new PathNodeCollection();
 		private double vicinity = 22d; // Tolerance for detecting neighboring nodes, in tiles (experimental, other possible values are 22.5 and 21.5)
 		private bool isDirty;
-		private static readonly string SectorsPath = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "Sectors");
 
 		public PathNodeGen()
 		{
@@ -239,64 +238,17 @@ namespace WorldBuilder.Forms
 
 		private void OnAutogeneratePathClick(object sender, EventArgs e)
 		{
-			//todo: clean up after converting return values to uint?
 			var autoGenDlg = new PathNodeAutoGen();
 			if (autoGenDlg.ShowDialog() != DialogResult.OK || autoGenDlg.r_Step == -1) return;
 
 			// New PND file
 			lstNodes.Items.Clear();
 			lstLinks.Items.Clear();
-			nodeCollection = new PathNodeCollection();
+			nodeCollection = PathNodeCollection.AutoGenerate(autoGenDlg.r_FX, autoGenDlg.r_TX, autoGenDlg.r_FY, autoGenDlg.r_TY, autoGenDlg.r_Step, vicinity);
+			foreach (PathNode node in nodeCollection.SortedValues)
+				lstNodes.Items.Add(node);
 			EnableInterface(true);
-
-			// Generate automated path nodes
-			//todo: move to PathNodeCollection after dealing with IsAvailableTile as OnAddNodeClick is hot
-			for (int x = autoGenDlg.r_FX; x <= autoGenDlg.r_TX; x += autoGenDlg.r_Step)
-				for (int y = autoGenDlg.r_FY; y <= autoGenDlg.r_TY; y += autoGenDlg.r_Step)
-				{
-					var tile = new[]
-						{
-							Tuple.Create(x    , y    ),
-							Tuple.Create(x + 3, y    ),
-							Tuple.Create(x    , y + 3),
-							Tuple.Create(x    , y - 3),
-							Tuple.Create(x - 3, y    ),
-							Tuple.Create(x + 3, y + 3),
-							Tuple.Create(x - 3, y - 3),
-							Tuple.Create(x + 3, y - 3),
-							Tuple.Create(x - 3, y + 3),
-						}.FirstOrDefault(n => IsAvailableTile(n.Item1, n.Item2));
-						if (tile != null)
-						{
-							DisplayNode(tile.Item1, tile.Item2, 0f, 0f);
-							OnAddNodeClick(sender, e);
-						}
-					}
 			MessageBox.Show("Automated generation complete."); //todo: there were some numbers here
-		}
-
-		private static bool IsAvailableTile(int x, int y)
-		{
-			//todo: nasty mix of responsibility
-			string sector = Helper.SEC_GetSectorCorrespondence(x, y).ToString();
-			string sectfile = Path.Combine(SectorsPath, sector + ".sec");
-			if (!File.Exists(sectfile)) return false; // check if this sector tile is taken first
-
-			//todo: cache loaded files to skip them for consecutive calls
-			using (var stream = new FileStream(sectfile, FileMode.Open))
-			using (var reader = new BinaryReader(stream))
-			{
-				int maxX, maxY, minX, minY;
-				Helper.Sec_GetMinMax(sector, out minY, out maxY, out minX, out maxX);
-				uint lightsCount = reader.ReadUInt32();
-				for (int i = 0; i < lightsCount; i++)
-					LightEditorEx.LoadLightFromSEC(reader);
-				int distX = x - minX;
-				int distY = y - minY;
-				int skipLength = (distY*64 + distX)*16;
-				stream.Seek(skipLength, SeekOrigin.Current);
-				return reader.ReadUInt64() <= 32;
-			}
 		}
 
 		private void OnTimerTick(object sender, EventArgs e)

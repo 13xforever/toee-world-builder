@@ -78,6 +78,34 @@ namespace WorldBuilder
 			}
 		}
 
+		/// <summary>
+		/// Generate automated path nodes
+		/// </summary>
+		/// <returns></returns>
+		public static PathNodeCollection AutoGenerate(int fromX, int toX, int fromY, int toY, int step, double vicinity)
+		{
+			var result = new PathNodeCollection();
+			for (var x = fromX; x <= toX; x += step)
+				for (var y = fromY; y <= toY; y += step)
+				{
+					var tile = new[]
+						{
+							Tuple.Create(x    , y    ),
+							Tuple.Create(x + 3, y    ),
+							Tuple.Create(x    , y + 3),
+							Tuple.Create(x    , y - 3),
+							Tuple.Create(x - 3, y    ),
+							Tuple.Create(x + 3, y + 3),
+							Tuple.Create(x - 3, y - 3),
+							Tuple.Create(x + 3, y - 3),
+							Tuple.Create(x - 3, y + 3),
+						}.FirstOrDefault(n => PathNodeHelper.IsAvailableTile(n.Item1, n.Item2));
+					if (tile != null)
+						result.Add(new PathNode(result.TopId, (uint) tile.Item1, (uint) tile.Item2, 0f, 0f), vicinity);
+				}
+			return result;
+		}
+
 		public static PathNodeCollection Read(string filename)
 		{
 			var result = new PathNodeCollection();
