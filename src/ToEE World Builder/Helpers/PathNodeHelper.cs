@@ -1,5 +1,6 @@
 using System.IO;
 using System.Windows.Forms;
+using WorldBuilder.Forms;
 
 namespace WorldBuilder.Helpers
 {

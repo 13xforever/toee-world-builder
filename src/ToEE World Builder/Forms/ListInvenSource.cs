@@ -3,7 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class ListInvenSource : Form
 	{

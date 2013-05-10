@@ -2,7 +2,7 @@ using System;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class CreatePartsysHID : Form
 	{

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class SectorAnalysis : Form
 	{

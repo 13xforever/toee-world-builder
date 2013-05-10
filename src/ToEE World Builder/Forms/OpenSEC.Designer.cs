@@ -1,11 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.IO;
-
-namespace WorldBuilder
+﻿namespace WorldBuilder.Forms
 {
 	public partial class OpenSEC
 	{

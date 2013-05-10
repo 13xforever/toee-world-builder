@@ -1,15 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
-using System.Data;
-using System.IO;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Threading;
+﻿using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class Worlded
 	{

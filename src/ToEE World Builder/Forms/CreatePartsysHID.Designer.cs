@@ -1,4 +1,4 @@
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
     partial class CreatePartsysHID
     {

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	/// <summary>
 	/// Summary description for AboutForm.

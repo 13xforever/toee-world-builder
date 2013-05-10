@@ -2,7 +2,7 @@ using System;
 using System.Text;
 using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class PathNodeAutoGen : Form
 	{

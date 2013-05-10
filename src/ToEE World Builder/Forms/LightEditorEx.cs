@@ -4,7 +4,7 @@ using System.IO;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class LightEditorEx : Form
 	{
@@ -66,7 +66,7 @@ namespace WorldBuilder
 			w_sec.Write(light.light_sec.partsys2.id);
 		}
 
-		// write back a complete 108-byte light
+		// write back a complete 107-byte light
 		public void WriteLightComplete(BinaryWriter w_sec, Helper.LightEx light)
 		{
 			WriteLightPrimary(w_sec, light);

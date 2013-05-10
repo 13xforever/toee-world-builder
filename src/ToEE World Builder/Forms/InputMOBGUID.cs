@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Forms;
 
-namespace WorldBuilder
+namespace WorldBuilder.Forms
 {
 	public partial class InputMOBGUID : Form
 	{
