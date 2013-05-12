@@ -17,7 +17,7 @@ namespace WorldBuilder.Helpers
 					return ProtoList;
 
 				//read default list from resources
-				using (var stream = MiscHelper.GetResourceStreamThatEndsWith(".pfr"))
+				using (var stream = ResourceHelper.GetResourceStreamThatEndsWith(".pfr"))
 					if (stream != null)
 						using (var reader = new StreamReader(stream))
 							ReadPatchList(reader, ProtoList);

@@ -146,7 +146,7 @@ namespace WorldBuilder.Forms
 					string s_Proto = protos_complete[i].ToString();
 					string[] proto_details = s_Proto.Replace((char) 0x0B, ' ').Split('\t');
 					string s_Proto_ID = proto_details[0];
-					string s_description = Helper.Proto_By_ID[s_Proto_ID].ToString();
+					string s_description = MobHelper.ProtoById[s_Proto_ID].ToString();
 
 
 					//23 - name ID

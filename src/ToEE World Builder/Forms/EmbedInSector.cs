@@ -18,7 +18,7 @@ namespace WorldBuilder.Forms
 
 		private void EmbedInSector_Load(object sender, EventArgs e)
 		{
-			tAutoSector.Text = Helper.SectorName;
+			tAutoSector.Text = MobHelper.SectorName;
 
 			if (File.Exists(Path.GetDirectoryName(Application.ExecutablePath) + "\\Sectors\\" + tAutoSector.Text))
 				tAutoSector.Text += " (exists, object will be added)";

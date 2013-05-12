@@ -292,10 +292,10 @@ namespace WorldBuilder.Forms
 		private void OnTimerTick(object sender, EventArgs e)
 		{
 			// v2.0.0: Interoperability with ToEE console support
-			if (!File.Exists(Helper.InteropPath)) return;
+			if (!File.Exists(MobHelper.InteropPath)) return;
 
 			string worldBuilderLogData = null;
-			try { worldBuilderLogData = File.ReadLines(Helper.InteropPath).FirstOrDefault(); } catch {}
+			try { worldBuilderLogData = File.ReadLines(MobHelper.InteropPath).FirstOrDefault(); } catch {}
 			if (string.IsNullOrEmpty(worldBuilderLogData)) return;
 
 			string[] logPart = worldBuilderLogData.Split(' ');
@@ -311,7 +311,7 @@ namespace WorldBuilder.Forms
 					else
 						MessageBox.Show("Please create a path node file first! (e.g. click 'New' or 'Open')",
 										"Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-					try { File.Delete(Helper.InteropPath); } catch {}
+					try { File.Delete(MobHelper.InteropPath); } catch {}
 					return;
 			}
 		}

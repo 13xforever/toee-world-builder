@@ -22,7 +22,7 @@ namespace WorldBuilder.Forms
 			if (ver.FileBuildPart > 0)
 				verAsString.Append(".").Append(ver.FileBuildPart);
 
-			using (var stream = MiscHelper.GetResourceStreamThatEndsWith("build.ver"))
+			using (var stream = ResourceHelper.GetResourceStreamThatEndsWith("build.ver"))
 				if (stream != null)
 					using (var reader = new StreamReader(stream, Encoding.UTF8, false))
 					{

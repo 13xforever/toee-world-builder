@@ -41,15 +41,15 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x34, SeekOrigin.Begin);
 					uint type = br.ReadUInt32();
 					br.BaseStream.Seek(0x3A, SeekOrigin.Begin);
-					long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
+					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
 					br.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 					uint x_coord = br.ReadUInt32();
 					uint y_coord = br.ReadUInt32();
 					br.Close();
 
 					string COMPATIBLE = "(MOB OBJECT)";
-					MOB_LIST.Items.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + Helper.Proto_By_ID[proto_id.ToString()] + "\t(" + proto_id + ")");
-					mobListMemory.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + Helper.Proto_By_ID[proto_id.ToString()] + "\t(" + proto_id + ")");
+					MOB_LIST.Items.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + MobHelper.ProtoById[proto_id.ToString()] + "\t(" + proto_id + ")");
+					mobListMemory.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + MobHelper.ProtoById[proto_id.ToString()] + "\t(" + proto_id + ")");
 				}
 				catch (Exception)
 				{
@@ -61,12 +61,12 @@ namespace WorldBuilder.Forms
 			// Restore last opened MOB position
 			try
 			{
-				if (Helper.LastOpenedMOB != "")
-					MOB_LIST.SelectedItem = Helper.LastOpenedMOB;
+				if (MobHelper.LastOpenedMob != "")
+					MOB_LIST.SelectedItem = MobHelper.LastOpenedMob;
 			}
 			catch (Exception)
 			{
-				Helper.LastOpenedMOB = "";
+				MobHelper.LastOpenedMob = "";
 			}
 		}
 
@@ -86,7 +86,7 @@ namespace WorldBuilder.Forms
 
 		private void btnOpen_Click(object sender, EventArgs e)
 		{
-			Helper.LastOpenedMOB = MOB_LIST.Items[MOB_LIST.SelectedIndex].ToString();
+			MobHelper.LastOpenedMob = MOB_LIST.Items[MOB_LIST.SelectedIndex].ToString();
 			FileToOpen = MOB_LIST.Items[MOB_LIST.SelectedIndex].ToString().Split('\t')[0];
 		}
 

@@ -52,12 +52,12 @@ namespace WorldBuilder.Forms
 						};
 
 					// Load the wall flags (using a MOB routine to carry out the task)
-					string WallBitmap = Helper.MOB_BytesToBitmap(wflagbytes);
+					string WallBitmap = MobHelper.BytesToBitmap(wflagbytes);
 
 					// Test for BLOCKED
 					for (int T = 9; T <= 17; T++)
 					{
-						if (Helper.MOB_GetPropertyState(WallBitmap, T) == TriState.True)
+						if (MobHelper.GetPropertyState(WallBitmap, T) == TriState.True)
 						{
 							ptr_vp.FillRectangle(Brushes.RoyalBlue, 630 - (10*X1), 10*Y1, 10, 10);
 							break;
@@ -67,7 +67,7 @@ namespace WorldBuilder.Forms
 					// Test for FLYOVER
 					for (int T = 18; T <= 26; T++)
 					{
-						if (Helper.MOB_GetPropertyState(WallBitmap, T) == TriState.True)
+						if (MobHelper.GetPropertyState(WallBitmap, T) == TriState.True)
 						{
 							ptr_vp.FillRectangle(Brushes.DarkCyan, 630 - (10*X1), 10*Y1, 10, 10);
 							break;
@@ -75,7 +75,7 @@ namespace WorldBuilder.Forms
 					}
 
 					// Test for FLYOVER/COVER
-					if (Helper.MOB_GetPropertyState(WallBitmap, 27) == TriState.True)
+					if (MobHelper.GetPropertyState(WallBitmap, 27) == TriState.True)
 					{
 						ptr_vp.FillRectangle(Brushes.LimeGreen, 630 - (10*X1), 10*Y1, 10, 10);
 					}
@@ -89,7 +89,7 @@ namespace WorldBuilder.Forms
 						{
 							for (int j = 0; j <= 2; j++)
 							{
-								if (Helper.MOB_GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4) == TriState.True)
+								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4) == TriState.True)
 								{
 									ptr_vp.FillRectangle(Brushes.Sienna, 630 - (10*X1), 10*Y1, 7, 7);
 									break;
@@ -107,7 +107,7 @@ namespace WorldBuilder.Forms
 						{
 							for (int j = 0; j <= 2; j++)
 							{
-								if (Helper.MOB_GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 1) == TriState.True)
+								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 1) == TriState.True)
 								{
 									ptr_vp.FillRectangle(Brushes.DarkGoldenrod, 630 - (10*X1), 10*Y1, 7, 7);
 									break;
@@ -125,7 +125,7 @@ namespace WorldBuilder.Forms
 						{
 							for (int j = 0; j <= 2; j++)
 							{
-								if (Helper.MOB_GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 2) == TriState.True)
+								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 2) == TriState.True)
 								{
 									ptr_vp.FillRectangle(Brushes.DarkGray, 630 - (10*X1), 10*Y1, 7, 7);
 									break;
@@ -143,7 +143,7 @@ namespace WorldBuilder.Forms
 						{
 							for (int j = 0; j <= 2; j++)
 							{
-								if (Helper.MOB_GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 3) == TriState.True)
+								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 3) == TriState.True)
 								{
 									ptr_vp.FillRectangle(Brushes.Tomato, 630 - (10*X1), 10*Y1, 7, 7);
 									break;

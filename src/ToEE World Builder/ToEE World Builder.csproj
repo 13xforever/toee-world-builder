@@ -53,6 +53,7 @@
     <DebugType>full</DebugType>
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <OutputPath>bin\Release\</OutputPath>
@@ -136,9 +137,12 @@
     <Compile Include="Forms\FormWithIcon.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Helpers\DcRankHelper.cs" />
+    <Compile Include="Helpers\GenHelper.cs" />
     <Compile Include="Helpers\IntelliProperties.cs" />
     <Compile Include="Helpers\Maybe.cs" />
-    <Compile Include="Helpers\MiscHelper.cs" />
+    <Compile Include="Helpers\MobHelper.cs" />
+    <Compile Include="Helpers\ResourceHelper.cs" />
     <Compile Include="PathNodeCollection.cs" />
     <Compile Include="PathNode.cs" />
     <Compile Include="MobTypes.cs" />

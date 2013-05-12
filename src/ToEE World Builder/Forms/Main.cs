@@ -133,21 +133,21 @@ namespace WorldBuilder.Forms
 						MessageBox.Show("Your configuration file may be outdated. Please check your WB configuration (ENSURE THAT THE PATH TO TOEE-TO-WB BRIDGE IS NOT EMPTY!) and save it again.", "Obsolete configuration format", MessageBoxButtons.OK,
 										MessageBoxIcon.Warning);
 						tWBBridge.Text = "C:\\";
-						Helper.InteropPath = "C:\\wb200_il.lri";
+						MobHelper.InteropPath = "C:\\wb200_il.lri";
 					}
 					if (tWBBridge.Text[tWBBridge.Text.Length - 1] == '\\')
-						Helper.InteropPath = tWBBridge.Text + "wb200_il.lri";
+						MobHelper.InteropPath = tWBBridge.Text + "wb200_il.lri";
 					else
-						Helper.InteropPath = tWBBridge.Text + "\\wb200_il.lri";
+						MobHelper.InteropPath = tWBBridge.Text + "\\wb200_il.lri";
 				}
 				catch (Exception)
 				{
 					MessageBox.Show("Your configuration file is outdated. Please check your WB configuration and save it again.", "Obsolete configuration format", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 					tWBBridge.Text = "C:\\";
-					Helper.InteropPath = "C:\\wb200_il.lri";
+					MobHelper.InteropPath = "C:\\wb200_il.lri";
 				}
-				if (File.Exists(Helper.InteropPath))
-					File.Delete(Helper.InteropPath);
+				if (File.Exists(MobHelper.InteropPath))
+					File.Delete(MobHelper.InteropPath);
 
 				cfg.Close();
 			}
@@ -286,7 +286,7 @@ namespace WorldBuilder.Forms
 				try
 				{
 					Proto_Types.Add(TARGET_LINE, proto[1].Trim());
-					Helper.Proto_By_ID.Add(ID, DESC);
+					MobHelper.ProtoById.Add(ID, DESC);
 				}
 				catch (Exception)
 				{
@@ -372,13 +372,13 @@ namespace WorldBuilder.Forms
 
 			SetInterfaceState(true);
 
-			Helper.MOB_GenerateGUID(out MOB_GUID, out MOB_GUID_BYTES);
+			MobHelper.GenerateGuid(out MOB_GUID, out MOB_GUID_BYTES);
 
 			MobileName.Text = MOB_GUID;
 			Prototype.SelectedIndex = 0;
-			MOB_BITMAP = Helper.MOB_CreateBitmap(Helper.GEN_GetMobileType(MobType.Text));
-			MOB_BITMAP = Helper.MOB_SetProperty(MOB_BITMAP, 0);
-			MOB_OBJFLAGS_BITMAP = Helper.MOB_CreateBitmap(1);
+			MOB_BITMAP = MobHelper.CreateBitmap(GenHelper.GetMobileType(MobType.Text));
+			MOB_BITMAP = MobHelper.SetProperty(MOB_BITMAP, 0);
+			MOB_OBJFLAGS_BITMAP = MobHelper.CreateBitmap(1);
 			MOB_PROP_152 = new byte[24];
 			MOB_PROP_SUBINV = new byte[24];
 			IMPORTED_ENTRY30 = new ArrayList();
@@ -430,9 +430,9 @@ namespace WorldBuilder.Forms
 			}
 
 			// RESET: reset the MOB property bitmap here
-			MOB_BITMAP = Helper.MOB_CreateBitmap(Helper.GEN_GetMobileType(MobType.Text));
-			MOB_BITMAP = Helper.MOB_SetProperty(MOB_BITMAP, 0);
-			MOB_OBJFLAGS_BITMAP = Helper.MOB_CreateBitmap(1);
+			MOB_BITMAP = MobHelper.CreateBitmap(GenHelper.GetMobileType(MobType.Text));
+			MOB_BITMAP = MobHelper.SetProperty(MOB_BITMAP, 0);
+			MOB_OBJFLAGS_BITMAP = MobHelper.CreateBitmap(1);
 			MOB_PROP_152 = new byte[24];
 			MOB_PROP_SUBINV = new byte[24];
 			CHEST_INV = new ArrayList();
@@ -527,12 +527,12 @@ namespace WorldBuilder.Forms
 				data_16 = r_mob.ReadUInt16(); // Number of properties. Ignored due to being auto-detected.
 
 				// Read the bitmap
-				// int BitmapSize = Helper.MOB_GetNumberofBitmapBlocks(Helper.GEN_GetMobileType(MobType.Text));
-				int BitmapSize = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) MOB_TYPE_F);
+				// int BitmapSize = MobHelper.GetNumberofBitmapBlocks(GenHelper.GetMobileType(MobType.Text));
+				int BitmapSize = MobHelper.GetNumberofBitmapBlocks((MobTypes) MOB_TYPE_F);
 				int BitmapNoBytes = BitmapSize*4;
 				var BitmapBytes = new byte[BitmapNoBytes];
 				BitmapBytes = r_mob.ReadBytes(BitmapNoBytes);
-				MOB_BITMAP = Helper.MOB_BytesToBitmap(BitmapBytes);
+				MOB_BITMAP = MobHelper.BytesToBitmap(BitmapBytes);
 
 				SetInterfaceState(true);
 
@@ -692,10 +692,10 @@ namespace WorldBuilder.Forms
 
 			// Do we have to embed in a sector? If so, use type 0x00 GUID,
 			// otherwise use type 0x02 GUID
-			if (Helper.EmbedMode)
+			if (MobHelper.EmbedMode)
 			{
 				MOB_GUID_BYTES[0] = 0x00;
-				Helper.EmbedMode = false;
+				MobHelper.EmbedMode = false;
 			}
 			else
 			{
@@ -704,12 +704,12 @@ namespace WorldBuilder.Forms
 
 			try
 			{
-				w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
+				w_mob.Write(MobHelper.ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 				w_mob.Write(MOB_GUID_BYTES);
-				w_mob.Write((int) Helper.GEN_GetMobileType(MobType.Text));
-				w_mob.Write(Helper.MOB_GetNumberOfProperties(MOB_BITMAP));
+				w_mob.Write((int) GenHelper.GetMobileType(MobType.Text));
+				w_mob.Write(MobHelper.GetNumberOfProperties(MOB_BITMAP));
 
-				ArrayList BitmapBytes = Helper.MOB_BitmapToBytes(MOB_BITMAP);
+				ArrayList BitmapBytes = MobHelper.BitmapToBytes(MOB_BITMAP);
 
 				foreach (object block in BitmapBytes)
 					w_mob.Write((byte) block);
@@ -759,7 +759,7 @@ namespace WorldBuilder.Forms
 				return;
 
 			// IMPORTANT: Check for errors
-			if (Helper.MOB_GetPropertyState(MOB_BITMAP, 152) == TriState.True && tParent.Text.Substring(0, 2) != "G_")
+			if (MobHelper.GetPropertyState(MOB_BITMAP, 152) == TriState.True && tParent.Text.Substring(0, 2) != "G_")
 			{
 				MessageBox.Show("Warning: You have specified an option to include a back-reference to the parent container but you forgot to choose the container itself. Please correct the error before saving.", "Error", MessageBoxButtons.OK,
 								MessageBoxIcon.Exclamation);
@@ -867,7 +867,7 @@ namespace WorldBuilder.Forms
 		{
 			for (int i = 0; i < 512; i++)
 			{
-				TriState state = Helper.MOB_GetPropertyState(MOB_BITMAP, i);
+				TriState state = MobHelper.GetPropertyState(MOB_BITMAP, i);
 				if (state == TriState.True)
 				{
 					// Main code to save props
@@ -975,7 +975,7 @@ namespace WorldBuilder.Forms
 							// obj_f_secretdoor_flags
 							var sdflags = (int) GetSecretDoorFlags();
 							// now, we need to embed the door DC in here
-							sdflags = Helper.MAKE_DC(sdflags, int.Parse(vSDDC.Text));
+							sdflags = DcRankHelper.MakeDc(sdflags, int.Parse(vSDDC.Text));
 							w_mob.Write(sdflags);
 							break;
 						case 47:
@@ -986,7 +986,7 @@ namespace WorldBuilder.Forms
 						case 48:
 							// obj_f_secretdoor_dc
 							int sddc = 0;
-							sddc = Helper.MAKE_DC(sddc, int.Parse(vSDDC.Text));
+							sddc = DcRankHelper.MakeDc(sddc, int.Parse(vSDDC.Text));
 							w_mob.Write(sddc);
 							break;
 						case 53:
@@ -1227,7 +1227,7 @@ namespace WorldBuilder.Forms
 							ArrayList ar_tmp;
 							try
 							{
-								ar_tmp = Helper.MOB_BitmapToBytes(vAI64.Text);
+								ar_tmp = MobHelper.BitmapToBytes(vAI64.Text);
 							}
 							catch (Exception)
 							{
@@ -1263,7 +1263,7 @@ namespace WorldBuilder.Forms
 
 			for (int i = 0; i < 512; i++)
 			{
-				TriState state = Helper.MOB_GetPropertyState(MOB_BITMAP, i);
+				TriState state = MobHelper.GetPropertyState(MOB_BITMAP, i);
 				if (state == TriState.True)
 				{
 #if DEBUG
@@ -1377,7 +1377,7 @@ namespace WorldBuilder.Forms
 							p_OSDF.Checked = true;
 							SetSecretDoorFlags((uint) SDFlags);
 							// we need to load the DC from here, I believe
-							vSDDC.Text = Helper.GET_DC(SDFlags).ToString();
+							vSDDC.Text = DcRankHelper.GetDc(SDFlags).ToString();
 							break;
 						case 47:
 							// obj_f_secretdoor_effectname
@@ -1475,7 +1475,7 @@ namespace WorldBuilder.Forms
 							LEADING_BYTE = r_mob.ReadByte();
 							MOB_PROP_152 = r_mob.ReadBytes(24);
 							//tParent.Text = Path.GetFileNameWithoutExtension(input_filename);
-							tParent.Text = Helper.GEN_ConvertBytesToStringGUID(MOB_PROP_152);
+							tParent.Text = GenHelper.ConvertBytesToStringGuid(MOB_PROP_152);
 							pParent.Checked = true;
 							break;
 						case 153:
@@ -1575,7 +1575,7 @@ namespace WorldBuilder.Forms
 							// obj_f_critter_pad_i_1 (exported)
 							uint Pad1 = r_mob.ReadUInt32();
 							if (Pad1 != 0)
-								MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 293, true);
+								MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 293, true);
 							IMPORTED_ENTRY293 = Pad1;
 							break;
 						case 307:
@@ -1631,12 +1631,12 @@ namespace WorldBuilder.Forms
 						case 360:
 							// obj_f_npc_standpoint_day_INTERNAL_DO_NOT_USE
 							r_mob.ReadBytes(9);
-							MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 360, false);
+							MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 360, false);
 							break;
 						case 361:
 							// obj_f_npc_standpoint_night_INTERNAL_DO_NOT_USE
 							r_mob.ReadBytes(9);
-							MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 361, false);
+							MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 361, false);
 							break;
 						case 362:
 							// obj_f_npc_faction
@@ -1647,7 +1647,7 @@ namespace WorldBuilder.Forms
 							LEADING_BYTE = r_mob.ReadByte();
 							MOB_PROP_SUBINV = r_mob.ReadBytes(24);
 							//tSubInv.Text = Path.GetFileNameWithoutExtension(input_filename);
-							tSubInv.Text = Helper.GEN_ConvertBytesToStringGUID(MOB_PROP_SUBINV);
+							tSubInv.Text = GenHelper.ConvertBytesToStringGuid(MOB_PROP_SUBINV);
 							pSubInv.Checked = true;
 							break;
 						case 370:
@@ -1659,7 +1659,7 @@ namespace WorldBuilder.Forms
 						case 381:
 							// obj_f_npc_ai_flags64
 							LEADING_BYTE = r_mob.ReadByte();
-							vAI64.Text = Helper.GEN_UInt64_To_Bitmap(r_mob.ReadUInt64());
+							vAI64.Text = GenHelper.UInt64ToBitmap(r_mob.ReadUInt64());
 							pAI64.Checked = true;
 							break;
 						case 391:
@@ -1704,7 +1704,7 @@ namespace WorldBuilder.Forms
 
 			if (SAR_POS_ABL == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_ABL = sarc_idx;
 			}
@@ -1747,7 +1747,7 @@ namespace WorldBuilder.Forms
 
 		private void UnpackGeneratorData(uint gdata)
 		{
-			string gbitmap = Helper.GEN_UInt32_To_Bitmap(gdata);
+			string gbitmap = GenHelper.UInt32ToBitmap(gdata);
 			var _gdata = (int) gdata;
 
 			if ((gdata & ((uint) Math.Pow(2, 27))) != 0)
@@ -1780,7 +1780,7 @@ namespace WorldBuilder.Forms
 			vNPCGSpawnTotal.Text = Helper.GET_TOTAL(_gdata).ToString();
 
 			// NPC rate flags setup
-			if (Helper.MOB_GetPropertyState(MOB_BITMAP, 353) == TriState.True)
+			if (MobHelper.GetPropertyState(MOB_BITMAP, 353) == TriState.True)
 			{
 				uint flags = GetNPCFlags();
 				int rate = Helper.GET_NPCGEN((int) flags);
@@ -1857,7 +1857,7 @@ namespace WorldBuilder.Forms
 			for (uint r = 0; r < bytes_to_add; r++)
 				i_Target.Add(r_mob.ReadByte());
 
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, entry_ID, true);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, entry_ID, true);
 			return i_Target;
 		}
 
@@ -1894,7 +1894,7 @@ namespace WorldBuilder.Forms
 			for (int i = 0; i < CONTAINER_INV_LIST_IDX; i++)
 			{
 				byte[] GUID = r_mob.ReadBytes(24);
-				string s_GUID = Helper.GEN_ConvertBytesToStringGUID(GUID);
+				string s_GUID = GenHelper.ConvertBytesToStringGuid(GUID);
 
 				try
 				{
@@ -1902,7 +1902,7 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
 					int proto = br.ReadInt32();
 					br.Close();
-					vChestInv.Items.Add(Helper.Proto_By_ID[proto.ToString()] + "\t\t\t\t" + s_GUID);
+					vChestInv.Items.Add(MobHelper.ProtoById[proto.ToString()] + "\t\t\t\t" + s_GUID);
 				}
 				catch (Exception)
 				{
@@ -1926,7 +1926,7 @@ namespace WorldBuilder.Forms
 			for (int i = 0; i < NPC_INV_LIST_IDX; i++)
 			{
 				byte[] GUID = r_mob.ReadBytes(24);
-				string s_GUID = Helper.GEN_ConvertBytesToStringGUID(GUID);
+				string s_GUID = GenHelper.ConvertBytesToStringGuid(GUID);
 
 				try
 				{
@@ -1934,7 +1934,7 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
 					int proto = br.ReadInt32();
 					br.Close();
-					vNpcInv.Items.Add(Helper.Proto_By_ID[proto.ToString()] + "\t\t\t\t" + s_GUID);
+					vNpcInv.Items.Add(MobHelper.ProtoById[proto.ToString()] + "\t\t\t\t" + s_GUID);
 				}
 				catch (Exception)
 				{
@@ -1956,7 +1956,7 @@ namespace WorldBuilder.Forms
 
 			if (SAR_POS_MDX == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_MDX = sarc_idx;
 			}
@@ -1979,7 +1979,7 @@ namespace WorldBuilder.Forms
 
 			if (SAR_POS == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS = sarc_idx;
 			}
@@ -2006,7 +2006,7 @@ namespace WorldBuilder.Forms
 
 			if (SAR_POS_NPC == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_NPC = sarc_idx;
 			}
@@ -2034,7 +2034,7 @@ namespace WorldBuilder.Forms
 			// SARC
 			if (SAR_POS_FCN == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_FCN = sarc_idx;
 			}
@@ -2058,7 +2058,7 @@ namespace WorldBuilder.Forms
 			// SARC
 			if (SAR_POS_WAY == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_WAY = sarc_idx;
 			}
@@ -2094,7 +2094,7 @@ namespace WorldBuilder.Forms
 			// SARC
 			if (SAR_POS_STN == 0)
 			{
-				uint sarc_idx = Helper.MOB_GenerateSARC(chkObjIDGen.Checked);
+				uint sarc_idx = MobHelper.GenerateSarc(chkObjIDGen.Checked);
 				w_mob.Write(sarc_idx); // Unknown, currently used by SARC system
 				SAR_POS_STN = sarc_idx;
 			}
@@ -2285,13 +2285,13 @@ namespace WorldBuilder.Forms
 		private void pReach_CheckedChanged(object sender, EventArgs e)
 		{
 			vReach.Enabled = pReach.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 317, vReach.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 317, vReach.Enabled);
 		}
 
 		private void pRotation_CheckedChanged(object sender, EventArgs e)
 		{
 			vRotation.Enabled = pRotation.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 33, vRotation.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 33, vRotation.Enabled);
 		}
 
 		private void btnChgGUID_Click(object sender, EventArgs e)
@@ -2302,7 +2302,7 @@ namespace WorldBuilder.Forms
 					"Please confirm GUID modification", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
-			Helper.MOB_GenerateGUID(out MOB_GUID, out MOB_GUID_BYTES);
+			MobHelper.GenerateGuid(out MOB_GUID, out MOB_GUID_BYTES);
 			MobileName.Text = MOB_GUID;
 		}
 
@@ -3248,7 +3248,7 @@ namespace WorldBuilder.Forms
 
 		private void SetContainerFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_CFlag00.Checked = false;
 			v_CFlag01.Checked = false;
@@ -3264,37 +3264,37 @@ namespace WorldBuilder.Forms
 			v_CFlag11.Checked = false;
 			v_CFlag12.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_CFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_CFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_CFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_CFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_CFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_CFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_CFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_CFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_CFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_CFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_CFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_CFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_CFlag12.Checked = true;
 		}
 
 		private void SetSecretDoorFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_SDFlag00.Checked = false;
 			v_SDFlag01.Checked = false;
@@ -3329,75 +3329,75 @@ namespace WorldBuilder.Forms
 			v_SDFlag30.Checked = false;
 			v_SDFlag31.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_SDFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_SDFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_SDFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_SDFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_SDFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_SDFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_SDFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_SDFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_SDFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_SDFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_SDFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_SDFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_SDFlag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				v_SDFlag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				v_SDFlag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				v_SDFlag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				v_SDFlag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				v_SDFlag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				v_SDFlag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				v_SDFlag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				v_SDFlag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				v_SDFlag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				v_SDFlag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				v_SDFlag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				v_SDFlag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				v_SDFlag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				v_SDFlag26.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				v_SDFlag27.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 28) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 28) == TriState.True)
 				v_SDFlag28.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 29) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 29) == TriState.True)
 				v_SDFlag29.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 30) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 30) == TriState.True)
 				v_SDFlag30.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 31) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 31) == TriState.True)
 				v_SDFlag31.Checked = true;
 		}
 
 		private void SetSceneryFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_SFlag00.Checked = false;
 			v_SFlag01.Checked = false;
@@ -3413,31 +3413,31 @@ namespace WorldBuilder.Forms
 			v_SFlag11.Checked = false;
 			v_SFlag12.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_SFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_SFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_SFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_SFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_SFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_SFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_SFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_SFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_SFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_SFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_SFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_SFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_SFlag12.Checked = true;
 		}
 
@@ -3456,12 +3456,12 @@ namespace WorldBuilder.Forms
 			v_WFlag10.Enabled = p_OWF.Checked;
 			v_WFlag11.Enabled = p_OWF.Checked;
 			v_WFlag12.Enabled = p_OWF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 187, p_OWF.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 187, p_OWF.Enabled);
 		}
 
 		private void SetWeaponFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_WFlag00.Checked = false;
 			v_WFlag01.Checked = false;
@@ -3477,31 +3477,31 @@ namespace WorldBuilder.Forms
 			v_WFlag11.Checked = false;
 			v_WFlag12.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_WFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_WFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_WFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_WFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_WFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_WFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_WFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_WFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_WFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_WFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_WFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_WFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_WFlag12.Checked = true;
 		}
 
@@ -3520,12 +3520,12 @@ namespace WorldBuilder.Forms
 			v_SFlag10.Enabled = p_OSCF.Checked;
 			v_SFlag11.Enabled = p_OSCF.Checked;
 			v_SFlag12.Enabled = p_OSCF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 121, p_OSCF.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 121, p_OSCF.Enabled);
 		}
 
 		private void SetArmorFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_OAFlag00.Checked = false;
 			v_OAFlag01.Checked = false;
@@ -3533,21 +3533,21 @@ namespace WorldBuilder.Forms
 			v_OAFlag03.Checked = false;
 			v_OAFlag04.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_OAFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_OAFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_OAFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_OAFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_OAFlag04.Checked = true;
 		}
 
 		private void SetNPCFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_NFlag00.Checked = false;
 			v_NFlag01.Checked = false;
@@ -3582,76 +3582,76 @@ namespace WorldBuilder.Forms
 			v_NFlag30.Checked = false;
 			v_NFlag31.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_NFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_NFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_NFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_NFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_NFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_NFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_NFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_NFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_NFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_NFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_NFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_NFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_NFlag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				v_NFlag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				v_NFlag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				v_NFlag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				v_NFlag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				v_NFlag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				v_NFlag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				v_NFlag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				v_NFlag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				v_NFlag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				v_NFlag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				v_NFlag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				v_NFlag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				v_NFlag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				v_NFlag26.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				v_NFlag27.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 28) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 28) == TriState.True)
 				v_NFlag28.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 29) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 29) == TriState.True)
 				v_NFlag29.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 30) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 30) == TriState.True)
 				v_NFlag30.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 31) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 31) == TriState.True)
 				v_NFlag31.Checked = true;
 		}
 
 
 		private void SetItemFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			pItmFlag00.Checked = false;
 			pItmFlag01.Checked = false;
@@ -3681,65 +3681,65 @@ namespace WorldBuilder.Forms
 			pItmFlag25.Checked = false;
 			pItmFlag26.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				pItmFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				pItmFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				pItmFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				pItmFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				pItmFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				pItmFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				pItmFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				pItmFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				pItmFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				pItmFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				pItmFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				pItmFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				pItmFlag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				pItmFlag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				pItmFlag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				pItmFlag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				pItmFlag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				pItmFlag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				pItmFlag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				pItmFlag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				pItmFlag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				pItmFlag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				pItmFlag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				pItmFlag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				pItmFlag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				pItmFlag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				pItmFlag26.Checked = true;
 		}
 
 		private void SetCritterFlags1(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_C1Flag00.Checked = false;
 			v_C1Flag01.Checked = false;
@@ -3774,75 +3774,75 @@ namespace WorldBuilder.Forms
 			v_C1Flag30.Checked = false;
 			v_C1Flag31.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_C1Flag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_C1Flag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_C1Flag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_C1Flag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_C1Flag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_C1Flag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_C1Flag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_C1Flag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_C1Flag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_C1Flag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_C1Flag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_C1Flag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_C1Flag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				v_C1Flag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				v_C1Flag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				v_C1Flag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				v_C1Flag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				v_C1Flag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				v_C1Flag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				v_C1Flag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				v_C1Flag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				v_C1Flag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				v_C1Flag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				v_C1Flag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				v_C1Flag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				v_C1Flag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				v_C1Flag26.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				v_C1Flag27.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 28) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 28) == TriState.True)
 				v_C1Flag28.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 29) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 29) == TriState.True)
 				v_C1Flag29.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 30) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 30) == TriState.True)
 				v_C1Flag30.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 31) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 31) == TriState.True)
 				v_C1Flag31.Checked = true;
 		}
 
 		private void SetCritterFlags2(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_C2Flag00.Checked = false;
 			v_C2Flag01.Checked = false;
@@ -3873,67 +3873,67 @@ namespace WorldBuilder.Forms
 			v_C2Flag26.Checked = false;
 			v_C2Flag27.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_C2Flag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_C2Flag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_C2Flag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_C2Flag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_C2Flag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_C2Flag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_C2Flag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_C2Flag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_C2Flag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_C2Flag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				v_C2Flag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				v_C2Flag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				v_C2Flag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				v_C2Flag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				v_C2Flag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				v_C2Flag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				v_C2Flag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				v_C2Flag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				v_C2Flag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				v_C2Flag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				v_C2Flag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				v_C2Flag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				v_C2Flag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				v_C2Flag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				v_C2Flag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				v_C2Flag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				v_C2Flag26.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				v_C2Flag27.Checked = true;
 		}
 
 		private void SetPortalFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			v_PFlag00.Checked = false;
 			v_PFlag01.Checked = false;
@@ -3946,31 +3946,31 @@ namespace WorldBuilder.Forms
 			v_PFlag08.Checked = false;
 			v_PFlag09.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				v_PFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				v_PFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				v_PFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				v_PFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				v_PFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				v_PFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				v_PFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				v_PFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				v_PFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				v_PFlag09.Checked = true;
 		}
 
 		private void SetObjectFlags(uint FlagsSource)
 		{
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(FlagsSource);
+			string Bitmap = GenHelper.UInt32ToBitmap(FlagsSource);
 
 			pObjFlag00.Checked = false;
 			pObjFlag01.Checked = false;
@@ -4005,94 +4005,94 @@ namespace WorldBuilder.Forms
 			pObjFlag30.Checked = false;
 			pObjFlag31.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				pObjFlag00.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				pObjFlag01.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				pObjFlag02.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				pObjFlag03.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				pObjFlag04.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				pObjFlag05.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				pObjFlag06.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				pObjFlag07.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				pObjFlag08.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				pObjFlag09.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				pObjFlag10.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				pObjFlag11.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				pObjFlag12.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				pObjFlag13.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				pObjFlag14.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				pObjFlag15.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				pObjFlag16.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				pObjFlag17.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				pObjFlag18.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				pObjFlag19.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				pObjFlag20.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				pObjFlag21.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				pObjFlag22.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				pObjFlag23.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				pObjFlag24.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				pObjFlag25.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				pObjFlag26.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				pObjFlag27.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 28) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 28) == TriState.True)
 				pObjFlag28.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 29) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 29) == TriState.True)
 				pObjFlag29.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 30) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 30) == TriState.True)
 				pObjFlag30.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 31) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 31) == TriState.True)
 				pObjFlag31.Checked = true;
 		}
 
 		private void pLockDC_CheckedChanged(object sender, EventArgs e)
 		{
 			vLockDC.Enabled = pLockDC.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 103, vLockDC.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 103, vLockDC.Enabled);
 		}
 
 		private void pInvSlot_CheckedChanged(object sender, EventArgs e)
 		{
 			vInvSlot.Enabled = pInvSlot.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 156, vInvSlot.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 156, vInvSlot.Enabled);
 		}
 
 		private void pParent_CheckedChanged(object sender, EventArgs e)
 		{
 			vParent.Enabled = pParent.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 152, vParent.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 152, vParent.Enabled);
 		}
 
 		private void pModelScale_CheckedChanged(object sender, EventArgs e)
 		{
 			vModelScale.Enabled = pModelScale.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 7, vModelScale.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 7, vModelScale.Enabled);
 		}
 
 		private void vParent_Click(object sender, EventArgs e)
@@ -4139,7 +4139,7 @@ namespace WorldBuilder.Forms
 			pObjFlag29.Enabled = pObjFlags.Checked;
 			pObjFlag30.Enabled = pObjFlags.Checked;
 			pObjFlag31.Enabled = pObjFlags.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 21, pObjFlags.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 21, pObjFlags.Checked);
 		}
 
 		private void p_OCOF_CheckedChanged(object sender, EventArgs e)
@@ -4157,7 +4157,7 @@ namespace WorldBuilder.Forms
 			v_CFlag10.Enabled = p_OCOF.Checked;
 			v_CFlag11.Enabled = p_OCOF.Checked;
 			v_CFlag12.Enabled = p_OCOF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 102, p_OCOF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 102, p_OCOF.Checked);
 		}
 
 		private void p_OSDF_CheckedChanged(object sender, EventArgs e)
@@ -4194,7 +4194,7 @@ namespace WorldBuilder.Forms
 			v_SDFlag29.Enabled = p_OSDF.Checked;
 			v_SDFlag30.Enabled = p_OSDF.Checked;
 			v_SDFlag31.Enabled = p_OSDF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 46, p_OSDF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 46, p_OSDF.Checked);
 		}
 
 		private void p_OPF_CheckedChanged(object sender, EventArgs e)
@@ -4209,7 +4209,7 @@ namespace WorldBuilder.Forms
 			v_PFlag07.Enabled = p_OPF.Checked;
 			v_PFlag08.Enabled = p_OPF.Checked;
 			v_PFlag09.Enabled = p_OPF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 88, p_OPF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 88, p_OPF.Checked);
 		}
 
 		private void p_ONF_CheckedChanged(object sender, EventArgs e)
@@ -4246,7 +4246,7 @@ namespace WorldBuilder.Forms
 			v_NFlag29.Enabled = p_ONF.Checked;
 			v_NFlag30.Enabled = p_ONF.Checked;
 			v_NFlag31.Enabled = p_ONF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 353, p_ONF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 353, p_ONF.Checked);
 		}
 
 		private void p_OIF_CheckedChanged(object sender, EventArgs e)
@@ -4278,7 +4278,7 @@ namespace WorldBuilder.Forms
 			pItmFlag24.Enabled = p_OIF.Checked;
 			pItmFlag25.Enabled = p_OIF.Checked;
 			pItmFlag26.Enabled = p_OIF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 151, p_OIF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 151, p_OIF.Checked);
 		}
 
 		private void p_OCF_CheckedChanged(object sender, EventArgs e)
@@ -4315,7 +4315,7 @@ namespace WorldBuilder.Forms
 			v_C1Flag29.Enabled = p_OCF.Checked;
 			v_C1Flag30.Enabled = p_OCF.Checked;
 			v_C1Flag31.Enabled = p_OCF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 283, p_OCF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 283, p_OCF.Checked);
 		}
 
 		private void p_OCF2_CheckedChanged(object sender, EventArgs e)
@@ -4348,7 +4348,7 @@ namespace WorldBuilder.Forms
 			v_C2Flag25.Enabled = p_OCF2.Checked;
 			v_C2Flag26.Enabled = p_OCF2.Checked;
 			v_C2Flag27.Enabled = p_OCF2.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 284, p_OCF2.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 284, p_OCF2.Checked);
 		}
 
 		private void p_OARF_CheckedChanged(object sender, EventArgs e)
@@ -4358,13 +4358,13 @@ namespace WorldBuilder.Forms
 			v_OAFlag02.Enabled = p_OARF.Checked;
 			v_OAFlag03.Enabled = p_OARF.Checked;
 			v_OAFlag04.Enabled = p_OARF.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 219, p_OARF.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 219, p_OARF.Checked);
 		}
 
 		private void pInvenSource_CheckedChanged(object sender, EventArgs e)
 		{
 			vInvenSource.Enabled = pInvenSource.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 107, vInvenSource.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 107, vInvenSource.Enabled);
 		}
 
 		private void pChestInv_CheckedChanged(object sender, EventArgs e)
@@ -4390,8 +4390,8 @@ namespace WorldBuilder.Forms
 			btnChestInvGUID.Enabled = pChestInv.Checked;
 			tChestMoneyAmt.Enabled = pChestInv.Checked;
 			pChestInvSlot.Enabled = pChestInv.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 105, pChestInv.Checked);
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 106, pChestInv.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 105, pChestInv.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 106, pChestInv.Checked);
 		}
 
 		private void btnRemoveChestInv_Click(object sender, EventArgs e)
@@ -4458,7 +4458,7 @@ namespace WorldBuilder.Forms
 			// + Generate a mobile object for the given item +
 			string ITEM_GUID = "";
 			var ITEM_GUID_BYTES = new byte[24];
-			Helper.MOB_GenerateGUID(out ITEM_GUID, out ITEM_GUID_BYTES);
+			MobHelper.GenerateGuid(out ITEM_GUID, out ITEM_GUID_BYTES);
 			ProtoName += "\t\t\t\t" + ITEM_GUID;
 
 			var mob = new FileStream("Mobiles\\" + ITEM_GUID + ".mob", FileMode.Create);
@@ -4468,22 +4468,22 @@ namespace WorldBuilder.Forms
 
 			int ITEM_INDEX_TO_MOBTYPE = MobType.Items.IndexOf(Proto_Types[ChestInvProtos.Items[ChestInvProtos.SelectedIndex]].ToString());
 			string ITEM_TYPE = MobType.Items[ITEM_INDEX_TO_MOBTYPE].ToString();
-			string ITEM_BITMAP = Helper.MOB_CreateBitmap(Helper.GEN_GetMobileType(ITEM_TYPE));
+			string ITEM_BITMAP = MobHelper.CreateBitmap(GenHelper.GetMobileType(ITEM_TYPE));
 
-			w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
+			w_mob.Write(MobHelper.ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 			w_mob.Write(ITEM_GUID_BYTES);
-			w_mob.Write((int) Helper.GEN_GetMobileType(ITEM_TYPE));
+			w_mob.Write((int) GenHelper.GetMobileType(ITEM_TYPE));
 
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 0, true); // Location
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 21, true); // Flags
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 152, true); // Parent object back-reference
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 156, true); // Material slot
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 0, true); // Location
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 21, true); // Flags
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 152, true); // Parent object back-reference
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 156, true); // Material slot
 
 			if (IS_MONEY)
-				ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 230, true); // Money quantity
+				ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 230, true); // Money quantity
 
-			w_mob.Write(Helper.MOB_GetNumberOfProperties(ITEM_BITMAP));
-			ArrayList BitmapBytes = Helper.MOB_BitmapToBytes(ITEM_BITMAP);
+			w_mob.Write(MobHelper.GetNumberOfProperties(ITEM_BITMAP));
+			ArrayList BitmapBytes = MobHelper.BitmapToBytes(ITEM_BITMAP);
 			foreach (object block in BitmapBytes)
 				w_mob.Write((byte) block);
 
@@ -4547,91 +4547,91 @@ namespace WorldBuilder.Forms
 		private void pOffsetX_CheckedChanged(object sender, EventArgs e)
 		{
 			vOffsetX.Enabled = pOffsetX.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 1, vOffsetX.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 1, vOffsetX.Enabled);
 		}
 
 		private void pOffsetY_CheckedChanged(object sender, EventArgs e)
 		{
 			vOffsetY.Enabled = pOffsetY.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 2, vOffsetY.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 2, vOffsetY.Enabled);
 		}
 
 		private void pOfsZ_CheckedChanged(object sender, EventArgs e)
 		{
 			vOfsZ.Enabled = pOfsZ.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 53, vOfsZ.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 53, vOfsZ.Enabled);
 		}
 
 		private void pRadius_CheckedChanged(object sender, EventArgs e)
 		{
 			vRadius.Enabled = pRadius.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 38, vRadius.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 38, vRadius.Enabled);
 		}
 
 		private void pSpdWalk_CheckedChanged(object sender, EventArgs e)
 		{
 			vSpdWalk.Enabled = pSpdWalk.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 34, vSpdWalk.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 34, vSpdWalk.Enabled);
 		}
 
 		private void pItemAmt_CheckedChanged(object sender, EventArgs e)
 		{
 			vItemAmt.Enabled = pItemAmt.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 167, vItemAmt.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 167, vItemAmt.Enabled);
 		}
 
 		private void pSpdRun_CheckedChanged(object sender, EventArgs e)
 		{
 			vSpdRun.Enabled = pSpdRun.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 35, vSpdRun.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 35, vSpdRun.Enabled);
 		}
 
 		private void pHeight_CheckedChanged(object sender, EventArgs e)
 		{
 			vHeight.Enabled = pHeight.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 39, vHeight.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 39, vHeight.Enabled);
 		}
 
 		private void pMoneyQuantity_CheckedChanged(object sender, EventArgs e)
 		{
 			vMoneyQuantity.Enabled = pMoneyQuantity.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 230, vHeight.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 230, vHeight.Enabled);
 		}
 
 		private void pTeleport_CheckedChanged(object sender, EventArgs e)
 		{
 			vTeleport.Enabled = pTeleport.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 126, vTeleport.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 126, vTeleport.Enabled);
 		}
 
 		private void pHP_CheckedChanged(object sender, EventArgs e)
 		{
 			vHP.Enabled = pHP.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 26, vHP.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 26, vHP.Enabled);
 		}
 
 		private void pACAdj_CheckedChanged(object sender, EventArgs e)
 		{
 			vACAdj.Enabled = pACAdj.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 220, vACAdj.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 220, vACAdj.Enabled);
 		}
 
 		private void pFaction_CheckedChanged(object sender, EventArgs e)
 		{
 			vFaction.Enabled = pFaction.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 362, vFaction.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 362, vFaction.Enabled);
 		}
 
 		private void pHPAdj_CheckedChanged(object sender, EventArgs e)
 		{
 			vHPAdj.Enabled = pHPAdj.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 27, vHPAdj.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 27, vHPAdj.Enabled);
 		}
 
 		private void pHPDmg_CheckedChanged(object sender, EventArgs e)
 		{
 			vHPDmg.Enabled = pHPDmg.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 28, vHPDmg.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 28, vHPDmg.Enabled);
 		}
 
 		// + NPC Inventory functions +
@@ -4658,8 +4658,8 @@ namespace WorldBuilder.Forms
 			btnNpcInvGUID.Enabled = pNpcInv.Checked;
 			tNpcMoneyAmt.Enabled = pNpcInv.Checked;
 			pNpcInvSlot.Enabled = pNpcInv.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 308, pNpcInv.Checked);
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 309, pNpcInv.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 308, pNpcInv.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 309, pNpcInv.Checked);
 		}
 
 		private void pWaypoints_CheckedChanged(object sender, EventArgs e)
@@ -4682,7 +4682,7 @@ namespace WorldBuilder.Forms
 			cAnimWpt.Enabled = pWaypoints.Checked;
 			btnWayAdd.Enabled = pWaypoints.Checked;
 			btnWayDel.Enabled = pWaypoints.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 358, pWaypoints.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 358, pWaypoints.Checked);
 		}
 
 		private void btnNpcInvGUID_Click(object sender, EventArgs e)
@@ -4757,7 +4757,7 @@ namespace WorldBuilder.Forms
 			// + Generate a mobile object for the given item +
 			string ITEM_GUID = "";
 			var ITEM_GUID_BYTES = new byte[24];
-			Helper.MOB_GenerateGUID(out ITEM_GUID, out ITEM_GUID_BYTES);
+			MobHelper.GenerateGuid(out ITEM_GUID, out ITEM_GUID_BYTES);
 			ProtoName += "\t\t\t\t" + ITEM_GUID;
 
 			var mob = new FileStream("Mobiles\\" + ITEM_GUID + ".mob", FileMode.Create);
@@ -4767,22 +4767,22 @@ namespace WorldBuilder.Forms
 
 			int ITEM_INDEX_TO_MOBTYPE = MobType.Items.IndexOf(Proto_Types[NpcInvProtos.Items[NpcInvProtos.SelectedIndex]].ToString());
 			string ITEM_TYPE = MobType.Items[ITEM_INDEX_TO_MOBTYPE].ToString();
-			string ITEM_BITMAP = Helper.MOB_CreateBitmap(Helper.GEN_GetMobileType(ITEM_TYPE));
+			string ITEM_BITMAP = MobHelper.CreateBitmap(GenHelper.GetMobileType(ITEM_TYPE));
 
-			w_mob.Write(Helper.MOB_ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
+			w_mob.Write(MobHelper.ReturnHeader(proto, true, /*chkObjIDGen.Checked*/ true));
 			w_mob.Write(ITEM_GUID_BYTES);
-			w_mob.Write((int) Helper.GEN_GetMobileType(ITEM_TYPE));
+			w_mob.Write((int) GenHelper.GetMobileType(ITEM_TYPE));
 
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 0, true); // Location
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 21, true); // Flags
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 152, true); // Parent object back-reference
-			ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 156, true); // Material slot
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 0, true); // Location
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 21, true); // Flags
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 152, true); // Parent object back-reference
+			ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 156, true); // Material slot
 
 			if (IS_MONEY)
-				ITEM_BITMAP = Helper.MOB_ModifyProperty(ITEM_BITMAP, 230, true); // Money quantity
+				ITEM_BITMAP = MobHelper.ModifyProperty(ITEM_BITMAP, 230, true); // Money quantity
 
-			w_mob.Write(Helper.MOB_GetNumberOfProperties(ITEM_BITMAP));
-			ArrayList BitmapBytes = Helper.MOB_BitmapToBytes(ITEM_BITMAP);
+			w_mob.Write(MobHelper.GetNumberOfProperties(ITEM_BITMAP));
+			ArrayList BitmapBytes = MobHelper.BitmapToBytes(ITEM_BITMAP);
 			foreach (object block in BitmapBytes)
 				w_mob.Write((byte) block);
 
@@ -4854,13 +4854,13 @@ namespace WorldBuilder.Forms
 			}
 
 			vNpcInvenSource.Enabled = pNpcInvenSource.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 310, vNpcInvenSource.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 310, vNpcInvenSource.Enabled);
 		}
 
 		private void pSubInv_CheckedChanged(object sender, EventArgs e)
 		{
 			vSubInv.Enabled = pSubInv.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 364, vSubInv.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 364, vSubInv.Enabled);
 		}
 
 		private void vSubInv_Click(object sender, EventArgs e)
@@ -4884,7 +4884,7 @@ namespace WorldBuilder.Forms
 			vMoneyIdx2.Enabled = pMoneyIdx.Checked;
 			vMoneyIdx3.Enabled = pMoneyIdx.Checked;
 			vMoneyIdx4.Enabled = pMoneyIdx.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 307, vMoneyIdx1.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 307, vMoneyIdx1.Enabled);
 		}
 
 		private void pChestInvSlot_CheckedChanged(object sender, EventArgs e)
@@ -4894,92 +4894,92 @@ namespace WorldBuilder.Forms
 
 		private void pDispatcher_CheckedChanged(object sender, EventArgs e)
 		{
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 44, pDispatcher.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 44, pDispatcher.Checked);
 		}
 
 		private void pPLockDC_CheckedChanged(object sender, EventArgs e)
 		{
 			vPLockDC.Enabled = pPLockDC.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 89, pPLockDC.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 89, pPLockDC.Checked);
 		}
 
 		private void pAmmoAmt_CheckedChanged(object sender, EventArgs e)
 		{
 			vAmmoAmt.Enabled = pAmmoAmt.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 210, pAmmoAmt.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 210, pAmmoAmt.Checked);
 		}
 
 		private void pSDDC_CheckedChanged(object sender, EventArgs e)
 		{
 			vSDDC.Enabled = pSDDC.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 48, pSDDC.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 48, pSDDC.Checked);
 		}
 
 		private void pObjName_CheckedChanged(object sender, EventArgs e)
 		{
 			vObjName.Enabled = pObjName.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 23, pObjName.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 23, pObjName.Checked);
 		}
 
 		private void pEffName_CheckedChanged(object sender, EventArgs e)
 		{
 			vEffName.Enabled = pEffName.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 47, pEffName.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 47, pEffName.Checked);
 		}
 
 		private void pACMaxDex_CheckedChanged(object sender, EventArgs e)
 		{
 			vACMaxDex.Enabled = pACMaxDex.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 221, pACMaxDex.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 221, pACMaxDex.Checked);
 		}
 
 		private void pAI64_CheckedChanged(object sender, EventArgs e)
 		{
 			vAI64.Enabled = pAI64.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 381, pAI64.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 381, pAI64.Checked);
 		}
 
 		private void pTransparency_CheckedChanged(object sender, EventArgs e)
 		{
 			vTransparency.Enabled = pTransparency.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 6, pTransparency.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 6, pTransparency.Checked);
 		}
 
 		private void pSpellFail_CheckedChanged(object sender, EventArgs e)
 		{
 			vSpellFail.Enabled = pSpellFail.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 222, pSpellFail.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 222, pSpellFail.Checked);
 		}
 
 		private void pArmorChk_CheckedChanged(object sender, EventArgs e)
 		{
 			vArmorChk.Enabled = pArmorChk.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 223, pArmorChk.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 223, pArmorChk.Checked);
 		}
 
 		private void pTeleDest_CheckedChanged(object sender, EventArgs e)
 		{
 			vTeleX.Enabled = pTeleDest.Checked;
 			vTeleY.Enabled = pTeleDest.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 313, pTeleDest.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 313, pTeleDest.Checked);
 		}
 
 		private void pTeleMap_CheckedChanged(object sender, EventArgs e)
 		{
 			vTeleMap.Enabled = pTeleMap.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 314, pTeleMap.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 314, pTeleMap.Checked);
 		}
 
 		private void pNotify1_CheckedChanged(object sender, EventArgs e)
 		{
 			vNotify1.Enabled = pNotify1.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 91, pNotify1.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 91, pNotify1.Checked);
 		}
 
 		private void pNotify2_CheckedChanged(object sender, EventArgs e)
 		{
 			vNotify2.Enabled = pNotify2.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 108, pNotify2.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 108, pNotify2.Checked);
 		}
 
 		private void pNPCGenData_CheckedChanged(object sender, EventArgs e)
@@ -5000,32 +5000,32 @@ namespace WorldBuilder.Forms
 			vNPCGSpawnAll.Enabled = pNPCGenData.Checked;
 			vNPCGSpawnConcurrent.Enabled = pNPCGenData.Checked;
 			vNPCGSpawnTotal.Enabled = pNPCGenData.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 370, pNPCGenData.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 370, pNPCGenData.Checked);
 		}
 
 		private void pWeight_CheckedChanged(object sender, EventArgs e)
 		{
 			vWeight.Enabled = pWeight.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 153, pWeight.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 153, pWeight.Checked);
 		}
 
 		private void pWorth_CheckedChanged(object sender, EventArgs e)
 		{
 			vWorth.Enabled = pWorth.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 154, pWorth.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 154, pWorth.Checked);
 		}
 
 		private void pPKeyID_CheckedChanged(object sender, EventArgs e)
 		{
 			vPKeyID.Enabled = pPKeyID.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 90, pPKeyID.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 90, pPKeyID.Checked);
 		}
 
 
 		private void pLevelup_CheckedChanged(object sender, EventArgs e)
 		{
 			vLevelup.Enabled = pLevelup.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 319, pLevelup.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 319, pLevelup.Checked);
 		}
 
 		private void pStandpoints_CheckedChanged(object sender, EventArgs e)
@@ -5045,19 +5045,19 @@ namespace WorldBuilder.Forms
 			vDayJP.Enabled = pStandpoints.Checked;
 			vNightJP.Enabled = pStandpoints.Checked;
 			pScoutPoint.Enabled = pStandpoints.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 391, pStandpoints.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 391, pStandpoints.Checked);
 		}
 
 		private void pKeyID_CheckedChanged(object sender, EventArgs e)
 		{
 			vKeyID.Enabled = pKeyID.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 104, pKeyID.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 104, pKeyID.Checked);
 		}
 
 		private void pKeyID2_CheckedChanged(object sender, EventArgs e)
 		{
 			vKeyID2.Enabled = pKeyID2.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 255, pKeyID2.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 255, pKeyID2.Checked);
 		}
 
 		// EMBED IN SECTORS
@@ -5073,7 +5073,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// FIX: BETA R1.1
-			Helper.SectorName = Helper.SEC_GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
+			MobHelper.SectorName = Helper.SEC_GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
 			var e_sect = new EmbedInSector();
 			if (e_sect.ShowDialog() == DialogResult.OK)
 			{
@@ -5092,7 +5092,7 @@ namespace WorldBuilder.Forms
 				// Phase 1: save the temporary object file
 				string tempobj = Path.GetDirectoryName(Application.ExecutablePath) + "\\temp.obj";
 				__MOB_OVERRIDE_NAME = tempobj;
-				Helper.EmbedMode = true; // R1.3: Embed mode to set guid type 0x00
+				MobHelper.EmbedMode = true; // R1.3: Embed mode to set guid type 0x00
 				SaveMOB();
 
 				// Phase 2: Find out the total number of objects in the sector file
@@ -5141,17 +5141,17 @@ namespace WorldBuilder.Forms
 			vWayRot.Text = wp.Rotation.ToString();
 			vWayDelay.Text = wp.delay.ToString();
 
-			string Bitmap = Helper.GEN_UInt32_To_Bitmap(wp.flags);
+			string Bitmap = GenHelper.UInt32ToBitmap(wp.flags);
 
 			cRotWpt.Checked = false;
 			cDelayWpt.Checked = false;
 			cAnimWpt.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				cRotWpt.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				cDelayWpt.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				cAnimWpt.Checked = true;
 		}
 
@@ -5171,19 +5171,19 @@ namespace WorldBuilder.Forms
 			vFactionsIdx.Enabled = pFactions.Checked;
 			btnAddFaction.Enabled = pFactions.Checked;
 			btnDelFaction.Enabled = pFactions.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 362, vFactions.Enabled);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 362, vFactions.Enabled);
 		}
 
 		private void pRace_CheckedChanged(object sender, EventArgs e)
 		{
 			vRace.Enabled = pRace.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 287, pRace.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 287, pRace.Checked);
 		}
 
 		private void pGender_CheckedChanged(object sender, EventArgs e)
 		{
 			vGender.Enabled = pGender.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 288, pGender.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 288, pGender.Checked);
 		}
 
 		private void pAbilities_CheckedChanged(object sender, EventArgs e)
@@ -5194,7 +5194,7 @@ namespace WorldBuilder.Forms
 			vINT.Enabled = pAbilities.Checked;
 			vWIS.Enabled = pAbilities.Checked;
 			vCHA.Enabled = pAbilities.Checked;
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 285, pAbilities.Checked);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 285, pAbilities.Checked);
 		}
 
 		private void btnAddFaction_Click(object sender, EventArgs e)
@@ -5287,12 +5287,12 @@ namespace WorldBuilder.Forms
 				return;
 
 			if (chkCleanScripts.Checked)
-				MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 30, false);
+				MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 30, false);
 
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 40, false);
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 41, false);
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 42, false);
-			MOB_BITMAP = Helper.MOB_ModifyProperty(MOB_BITMAP, 73, false);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 40, false);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 41, false);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 42, false);
+			MOB_BITMAP = MobHelper.ModifyProperty(MOB_BITMAP, 73, false);
 
 			MessageBox.Show("Done", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -8045,18 +8045,18 @@ namespace WorldBuilder.Forms
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 						uint type = readobj.ReadUInt32();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
-						long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
+						long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
 						readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 						uint x_coord = readobj.ReadUInt32();
 						uint y_coord = readobj.ReadUInt32();
 						// + GUID +
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x1C, SeekOrigin.Begin);
-						string proto_guid = Helper.GEN_ConvertBytesToStringGUID(readobj.ReadBytes(24));
+						string proto_guid = GenHelper.ConvertBytesToStringGuid(readobj.ReadBytes(24));
 						// - GUID -
 						string proto_name = "";
 						try
 						{
-							proto_name = Helper.Proto_By_ID[proto_id.ToString()].ToString();
+							proto_name = MobHelper.ProtoById[proto_id.ToString()].ToString();
 						}
 						catch (Exception)
 						{
@@ -8113,7 +8113,7 @@ namespace WorldBuilder.Forms
 					var r_svb = new BinaryReader(new FileStream(SVBFile, FileMode.Open));
 
 					for (int i = 0; i < 2304; i++)
-						SVB_Bitmap += Helper.GEN_UInt64_To_Bitmap(r_svb.ReadUInt64());
+						SVB_Bitmap += GenHelper.UInt64ToBitmap(r_svb.ReadUInt64());
 
 					// +DEBUG+
 					// MessageBox.Show(SVB_Bitmap.Length.ToString());
@@ -8319,7 +8319,7 @@ namespace WorldBuilder.Forms
 				else
 				{
 					var w_svb = new BinaryWriter(new FileStream(SVBFile, FileMode.Create));
-					ArrayList svb_bytes = Helper.MOB_BitmapToBytes(SVB_Bitmap);
+					ArrayList svb_bytes = MobHelper.BitmapToBytes(SVB_Bitmap);
 
 					foreach (object block in svb_bytes)
 						w_svb.Write((byte) block);
@@ -8331,7 +8331,7 @@ namespace WorldBuilder.Forms
 			{
 				// flush all the data to disk
 				var w_svb = new BinaryWriter(new FileStream(SVBFile, FileMode.Create));
-				ArrayList svb_bytes = Helper.MOB_BitmapToBytes(SVB_Bitmap);
+				ArrayList svb_bytes = MobHelper.BitmapToBytes(SVB_Bitmap);
 
 				foreach (object block in svb_bytes)
 					w_svb.Write((byte) block);
@@ -8598,7 +8598,7 @@ namespace WorldBuilder.Forms
 				};
 
 			// Load the wall flags (using a MOB routine to carry out the task)
-			string WallBitmap = Helper.MOB_BytesToBitmap(wflagbytes);
+			string WallBitmap = MobHelper.BytesToBitmap(wflagbytes);
 			GetWallFlags(WallBitmap);
 
 			// Load the SVB data
@@ -8608,42 +8608,42 @@ namespace WorldBuilder.Forms
 				int SVB_index = Helper.SVB_GetTileAddress(RealTX, RealTY);
 
 				// Load the properties
-				SVB1_UR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index) == TriState.True) ? true : false;
-				SVB2_UR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 1) == TriState.True) ? true : false;
-				SVB3_UR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 2) == TriState.True) ? true : false;
-				SVB4_UR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 3) == TriState.True) ? true : false;
-				SVB1_UM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 4) == TriState.True) ? true : false;
-				SVB2_UM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 4 + 1) == TriState.True) ? true : false;
-				SVB3_UM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 4 + 2) == TriState.True) ? true : false;
-				SVB4_UM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 4 + 3) == TriState.True) ? true : false;
-				SVB1_UL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 8) == TriState.True) ? true : false;
-				SVB2_UL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 8 + 1) == TriState.True) ? true : false;
-				SVB3_UL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 8 + 2) == TriState.True) ? true : false;
-				SVB4_UL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 8 + 3) == TriState.True) ? true : false;
-				SVB1_MR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4) == TriState.True) ? true : false;
-				SVB2_MR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 1) == TriState.True) ? true : false;
-				SVB3_MR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 2) == TriState.True) ? true : false;
-				SVB4_MR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 3) == TriState.True) ? true : false;
-				SVB1_MM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4) == TriState.True) ? true : false;
-				SVB2_MM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 1) == TriState.True) ? true : false;
-				SVB3_MM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 2) == TriState.True) ? true : false;
-				SVB4_MM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 3) == TriState.True) ? true : false;
-				SVB1_ML.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8) == TriState.True) ? true : false;
-				SVB2_ML.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 1) == TriState.True) ? true : false;
-				SVB3_ML.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 2) == TriState.True) ? true : false;
-				SVB4_ML.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 3) == TriState.True) ? true : false;
-				SVB1_LR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4) == TriState.True) ? true : false;
-				SVB2_LR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 1) == TriState.True) ? true : false;
-				SVB3_LR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 2) == TriState.True) ? true : false;
-				SVB4_LR.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 3) == TriState.True) ? true : false;
-				SVB1_LM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4) == TriState.True) ? true : false;
-				SVB2_LM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 1) == TriState.True) ? true : false;
-				SVB3_LM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 2) == TriState.True) ? true : false;
-				SVB4_LM.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 3) == TriState.True) ? true : false;
-				SVB1_LL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8) == TriState.True) ? true : false;
-				SVB2_LL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 1) == TriState.True) ? true : false;
-				SVB3_LL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 2) == TriState.True) ? true : false;
-				SVB4_LL.Checked = (Helper.MOB_GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 3) == TriState.True) ? true : false;
+				SVB1_UR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index) == TriState.True) ? true : false;
+				SVB2_UR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 1) == TriState.True) ? true : false;
+				SVB3_UR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 2) == TriState.True) ? true : false;
+				SVB4_UR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 3) == TriState.True) ? true : false;
+				SVB1_UM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 4) == TriState.True) ? true : false;
+				SVB2_UM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 4 + 1) == TriState.True) ? true : false;
+				SVB3_UM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 4 + 2) == TriState.True) ? true : false;
+				SVB4_UM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 4 + 3) == TriState.True) ? true : false;
+				SVB1_UL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 8) == TriState.True) ? true : false;
+				SVB2_UL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 8 + 1) == TriState.True) ? true : false;
+				SVB3_UL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 8 + 2) == TriState.True) ? true : false;
+				SVB4_UL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 8 + 3) == TriState.True) ? true : false;
+				SVB1_MR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4) == TriState.True) ? true : false;
+				SVB2_MR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 1) == TriState.True) ? true : false;
+				SVB3_MR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 2) == TriState.True) ? true : false;
+				SVB4_MR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 3) == TriState.True) ? true : false;
+				SVB1_MM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4) == TriState.True) ? true : false;
+				SVB2_MM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 1) == TriState.True) ? true : false;
+				SVB3_MM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 2) == TriState.True) ? true : false;
+				SVB4_MM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 4 + 3) == TriState.True) ? true : false;
+				SVB1_ML.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8) == TriState.True) ? true : false;
+				SVB2_ML.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 1) == TriState.True) ? true : false;
+				SVB3_ML.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 2) == TriState.True) ? true : false;
+				SVB4_ML.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 192*4 + 8 + 3) == TriState.True) ? true : false;
+				SVB1_LR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4) == TriState.True) ? true : false;
+				SVB2_LR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 1) == TriState.True) ? true : false;
+				SVB3_LR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 2) == TriState.True) ? true : false;
+				SVB4_LR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 3) == TriState.True) ? true : false;
+				SVB1_LM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4) == TriState.True) ? true : false;
+				SVB2_LM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 1) == TriState.True) ? true : false;
+				SVB3_LM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 2) == TriState.True) ? true : false;
+				SVB4_LM.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 4 + 3) == TriState.True) ? true : false;
+				SVB1_LL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8) == TriState.True) ? true : false;
+				SVB2_LL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 1) == TriState.True) ? true : false;
+				SVB3_LL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 2) == TriState.True) ? true : false;
+				SVB4_LL.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index + 384*4 + 8 + 3) == TriState.True) ? true : false;
 			}
 			else /* SVB file is empty, but we must make sure that flags are cleared anyway */
 			{
@@ -8775,7 +8775,7 @@ namespace WorldBuilder.Forms
 				FLAGS += 0x08000000;
 
 			// Convert flags to a byte array for WallFlagX variables
-			byte[] flagbytes = Helper.GEN_ConvertFlagsToByteArray(FLAGS);
+			byte[] flagbytes = GenHelper.ConvertFlagsToByteArray(FLAGS);
 
 			// Set the wall flags
 			WallFlag4 = flagbytes[0];
@@ -8840,61 +8840,61 @@ namespace WorldBuilder.Forms
 			TILE_FLYOVER_LL.Checked = false;
 			TILE_FLYOVER_COVER.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(Bitmap, 0) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 0) == TriState.True)
 				TILE_BLOCKS.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 1) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 1) == TriState.True)
 				TILE_SINKS.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 2) == TriState.True)
 				TILE_CAN_FLY_OVER.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 3) == TriState.True)
 				TILE_ICY.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 4) == TriState.True)
 				TILE_NATURAL.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 5) == TriState.True)
 				TILE_SOUNDPROOF.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 6) == TriState.True)
 				TILE_INDOOR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 7) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 7) == TriState.True)
 				TILE_REFLECTIVE.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 8) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 8) == TriState.True)
 				TILE_BLOCKS_VISION.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 9) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 9) == TriState.True)
 				TILE_BLOCKS_UR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 10) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 10) == TriState.True)
 				TILE_BLOCKS_UM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 11) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 11) == TriState.True)
 				TILE_BLOCKS_UL.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 12) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 12) == TriState.True)
 				TILE_BLOCKS_MR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 13) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 13) == TriState.True)
 				TILE_BLOCKS_MM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 14) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 14) == TriState.True)
 				TILE_BLOCKS_ML.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 15) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 15) == TriState.True)
 				TILE_BLOCKS_LR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 16) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 16) == TriState.True)
 				TILE_BLOCKS_LM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 17) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 17) == TriState.True)
 				TILE_BLOCKS_LL.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 18) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 18) == TriState.True)
 				TILE_FLYOVER_UR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 19) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 19) == TriState.True)
 				TILE_FLYOVER_UM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 20) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 20) == TriState.True)
 				TILE_FLYOVER_UL.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 21) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 21) == TriState.True)
 				TILE_FLYOVER_MR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 22) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 22) == TriState.True)
 				TILE_FLYOVER_MM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 23) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 23) == TriState.True)
 				TILE_FLYOVER_ML.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 24) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 24) == TriState.True)
 				TILE_FLYOVER_LR.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 25) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 25) == TriState.True)
 				TILE_FLYOVER_LM.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 26) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 26) == TriState.True)
 				TILE_FLYOVER_LL.Checked = true;
-			if (Helper.MOB_GetPropertyState(Bitmap, 27) == TriState.True)
+			if (MobHelper.GetPropertyState(Bitmap, 27) == TriState.True)
 				TILE_FLYOVER_COVER.Checked = true;
 
 			return;
@@ -8905,42 +8905,42 @@ namespace WorldBuilder.Forms
 			//string SVB_destprop = "000000000000000000000000000000000000";
 			//int SVB_index = 0;
 
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index, SVB1_UR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 1, SVB2_UR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 2, SVB3_UR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 3, SVB4_UR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 4, SVB1_UM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 5, SVB2_UM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 6, SVB3_UM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 7, SVB4_UM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 8, SVB1_UL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 9, SVB2_UL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 10, SVB3_UL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 11, SVB4_UL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4, SVB1_MR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 1, SVB2_MR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 2, SVB3_MR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 3, SVB4_MR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 4, SVB1_MM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 5, SVB2_MM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 6, SVB3_MM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 7, SVB4_MM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 8, SVB1_ML.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 9, SVB2_ML.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 10, SVB3_ML.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 192*4 + 11, SVB4_ML.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4, SVB1_LR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 1, SVB2_LR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 2, SVB3_LR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 3, SVB4_LR.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 4, SVB1_LM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 5, SVB2_LM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 6, SVB3_LM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 7, SVB4_LM.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 8, SVB1_LL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 9, SVB2_LL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 10, SVB3_LL.Checked);
-			SVB_destprop = Helper.MOB_ModifyProperty(SVB_destprop, SVB_index + 384*4 + 11, SVB4_LL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index, SVB1_UR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 1, SVB2_UR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 2, SVB3_UR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 3, SVB4_UR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 4, SVB1_UM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 5, SVB2_UM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 6, SVB3_UM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 7, SVB4_UM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 8, SVB1_UL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 9, SVB2_UL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 10, SVB3_UL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 11, SVB4_UL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4, SVB1_MR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 1, SVB2_MR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 2, SVB3_MR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 3, SVB4_MR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 4, SVB1_MM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 5, SVB2_MM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 6, SVB3_MM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 7, SVB4_MM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 8, SVB1_ML.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 9, SVB2_ML.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 10, SVB3_ML.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 192*4 + 11, SVB4_ML.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4, SVB1_LR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 1, SVB2_LR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 2, SVB3_LR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 3, SVB4_LR.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 4, SVB1_LM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 5, SVB2_LM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 6, SVB3_LM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 7, SVB4_LM.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 8, SVB1_LL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 9, SVB2_LL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 10, SVB3_LL.Checked);
+			SVB_destprop = MobHelper.ModifyProperty(SVB_destprop, SVB_index + 384*4 + 11, SVB4_LL.Checked);
 
 			return SVB_destprop;
 		}
@@ -9522,15 +9522,15 @@ namespace WorldBuilder.Forms
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 					uint type = readobj.ReadUInt32();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
-					long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
+					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
 					readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 					uint x_coord = readobj.ReadUInt32();
 					uint y_coord = readobj.ReadUInt32();
 					// + GUID +
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x1C, SeekOrigin.Begin);
-					string proto_guid = Helper.GEN_ConvertBytesToStringGUID(readobj.ReadBytes(24));
+					string proto_guid = GenHelper.ConvertBytesToStringGuid(readobj.ReadBytes(24));
 					// - GUID -
-					string proto_name = Helper.Proto_By_ID[proto_id.ToString()].ToString();
+					string proto_name = MobHelper.ProtoById[proto_id.ToString()].ToString();
 
 					static_objguid.Add(proto_guid);
 					SecObjList.Items.Add(itm.ToString() + ":\t(" + x_coord.ToString() + "," + y_coord.ToString() + ")\t\t\t" + proto_name);
@@ -9688,13 +9688,13 @@ namespace WorldBuilder.Forms
 		private void WM_SysMsg_Tick(object sender, EventArgs e)
 		{
 			// v2.0.0: Interoperability with ToEE console support
-			if (File.Exists(Helper.InteropPath))
+			if (File.Exists(MobHelper.InteropPath))
 			{
 				bool DATA_PASS_ON = false;
 				string wbl_data = "";
 				try
 				{
-					var sr = new StreamReader(Helper.InteropPath);
+					var sr = new StreamReader(MobHelper.InteropPath);
 					wbl_data = sr.ReadLine();
 					sr.Close();
 				}
@@ -9715,7 +9715,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create or open an object first! (e.g. click 'New' or 'Open')", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9731,7 +9731,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create or open an object first! (e.g. click 'New' or 'Open')", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9745,7 +9745,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create a waypoints entry first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9764,7 +9764,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create a waypoints entry first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9779,7 +9779,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create a standpoints entry first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9793,7 +9793,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create a standpoints entry first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9807,7 +9807,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please create a scout standpoint entry first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9825,7 +9825,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please open a jump point file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -9835,7 +9835,7 @@ namespace WorldBuilder.Forms
 							break;
 					}
 					if (!DATA_PASS_ON)
-						File.Delete(Helper.InteropPath);
+						File.Delete(MobHelper.InteropPath);
 				}
 			}
 

@@ -94,40 +94,40 @@ namespace WorldBuilder.Forms
 		// create 32-bit flags based on currently set options
 		private uint GetLightFlags()
 		{
-			string FLAGS_BMP = Helper.MOB_CreateBitmap(4);
+			string FLAGS_BMP = MobHelper.CreateBitmap(4);
 
 			if (StateOn.Checked)
 			{
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 1);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 1);
 			}
 			else if (StateLockedOn.Checked)
 			{
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 0);
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 1);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 0);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 1);
 			}
 			else if (StateDestroyed.Checked)
 			{
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 0);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 0);
 			}
 
 			if (FlagAnimated.Checked)
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 2);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 2);
 			if (FlagViewControls.Checked)
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 3);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 3);
 			if (FlagUsePrimaryLight.Checked)
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 4);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 4);
 			if (FlagUsePriPartSys.Checked)
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 5);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 5);
 			if (FlagUseSecondaryLight.Checked)
-				FLAGS_BMP = Helper.MOB_SetProperty(FLAGS_BMP, 6);
+				FLAGS_BMP = MobHelper.SetProperty(FLAGS_BMP, 6);
 
-			return Helper.GEN_Bitmap_To_UInt32(FLAGS_BMP);
+			return GenHelper.BitmapToUInt32(FLAGS_BMP);
 		}
 
 		// set flag checkboxes based on a 32-bit flag field
 		private void SetLightFlags(uint flags)
 		{
-			string FLAGS_BMP = Helper.GEN_UInt32_To_Bitmap(flags);
+			string FLAGS_BMP = GenHelper.UInt32ToBitmap(flags);
 
 			if ((FLAGS_BMP[0] == '0') && (FLAGS_BMP[1] == '0'))
 			{
@@ -158,27 +158,27 @@ namespace WorldBuilder.Forms
 				StateLockedOn.Checked = false;
 			}
 
-			if (Helper.MOB_GetPropertyState(FLAGS_BMP, 2) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAGS_BMP, 2) == TriState.True)
 				FlagAnimated.Checked = true;
 			else
 				FlagAnimated.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(FLAGS_BMP, 3) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAGS_BMP, 3) == TriState.True)
 				FlagViewControls.Checked = true;
 			else
 				FlagViewControls.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(FLAGS_BMP, 4) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAGS_BMP, 4) == TriState.True)
 				FlagUsePrimaryLight.Checked = true;
 			else
 				FlagUsePrimaryLight.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(FLAGS_BMP, 5) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAGS_BMP, 5) == TriState.True)
 				FlagUsePriPartSys.Checked = true;
 			else
 				FlagUsePriPartSys.Checked = false;
 
-			if (Helper.MOB_GetPropertyState(FLAGS_BMP, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAGS_BMP, 6) == TriState.True)
 				FlagUseSecondaryLight.Checked = true;
 			else
 				FlagUseSecondaryLight.Checked = false;
@@ -269,10 +269,10 @@ namespace WorldBuilder.Forms
 			_light.light_pri.light1.handle = br.ReadUInt64();
 
 			_light.light_pri.light1.flags = br.ReadUInt32();
-			FLAG_BITMAP = Helper.GEN_UInt32_To_Bitmap(_light.light_pri.light1.flags);
-			if (Helper.MOB_GetPropertyState(FLAG_BITMAP, 5) == TriState.True)
+			FLAG_BITMAP = GenHelper.UInt32ToBitmap(_light.light_pri.light1.flags);
+			if (MobHelper.GetPropertyState(FLAG_BITMAP, 5) == TriState.True)
 				HAS_PRIMARY_PARTSYS = true;
-			if (Helper.MOB_GetPropertyState(FLAG_BITMAP, 6) == TriState.True)
+			if (MobHelper.GetPropertyState(FLAG_BITMAP, 6) == TriState.True)
 				HAS_SECONDARY_LIGHT = true;
 
 			_light.light_pri.light1.type = br.ReadUInt32();
@@ -358,10 +358,10 @@ namespace WorldBuilder.Forms
 				bool HAS_PRIMARY_PARTSYS = false;
 				bool HAS_SECONDARY_LIGHT = false;
 
-				string FLAG_BITMAP = Helper.GEN_UInt32_To_Bitmap(lt.light_pri.light1.flags);
-				if (Helper.MOB_GetPropertyState(FLAG_BITMAP, 5) == TriState.True)
+				string FLAG_BITMAP = GenHelper.UInt32ToBitmap(lt.light_pri.light1.flags);
+				if (MobHelper.GetPropertyState(FLAG_BITMAP, 5) == TriState.True)
 					HAS_PRIMARY_PARTSYS = true;
-				if (Helper.MOB_GetPropertyState(FLAG_BITMAP, 6) == TriState.True)
+				if (MobHelper.GetPropertyState(FLAG_BITMAP, 6) == TriState.True)
 					HAS_SECONDARY_LIGHT = true;
 
 				WriteLightCompleteEx(bw, lt, HAS_PRIMARY_PARTSYS, HAS_SECONDARY_LIGHT, false);
@@ -698,13 +698,13 @@ namespace WorldBuilder.Forms
 		private void tmrLGT_Tick(object sender, EventArgs e)
 		{
 			// v2.0.0: Interoperability with ToEE console support
-			if (File.Exists(Helper.InteropPath))
+			if (File.Exists(MobHelper.InteropPath))
 			{
 				string wbl_data = "";
 				bool DATA_PASS_ON = false;
 				try
 				{
-					var sr = new StreamReader(Helper.InteropPath);
+					var sr = new StreamReader(MobHelper.InteropPath);
 					wbl_data = sr.ReadLine();
 					sr.Close();
 				}
@@ -720,14 +720,14 @@ namespace WorldBuilder.Forms
 						case "LGTLOC": // location -> light coords
 							if (PriX.Enabled)
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								PriX.Text = wbl_data_arr[1];
 								PriY.Text = wbl_data_arr[2];
 								return;
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please open a sector file in the light editor first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -737,7 +737,7 @@ namespace WorldBuilder.Forms
 					}
 
 					if (!DATA_PASS_ON)
-						File.Delete(Helper.InteropPath);
+						File.Delete(MobHelper.InteropPath);
 				}
 			}
 		}

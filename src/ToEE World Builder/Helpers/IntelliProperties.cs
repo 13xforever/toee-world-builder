@@ -831,7 +831,7 @@ namespace WorldBuilder.Helpers
 				reader = new StreamReader("ToEE World Builder.ftd");
 			else
 			{
-				var stream = MiscHelper.GetResourceStreamThatEndsWith(".ftd");
+				var stream = ResourceHelper.GetResourceStreamThatEndsWith(".ftd");
 				if (stream == null)
 					return Empty;
 

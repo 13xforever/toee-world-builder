@@ -94,7 +94,7 @@ namespace WorldBuilder.Forms
 				{
 					NXD node = LoadNode(br);
 					nxd_nodes.Add(node);
-					lstMOBs.Items.Add(Helper.GEN_ConvertBytesToStringGUID(node.G_GUID));
+					lstMOBs.Items.Add(GenHelper.ConvertBytesToStringGuid(node.G_GUID));
 				}
 			}
 		}
@@ -205,13 +205,13 @@ namespace WorldBuilder.Forms
 		private void tmrDNE_Tick(object sender, EventArgs e)
 		{
 			// v2.0.0: Interoperability with ToEE console support
-			if (File.Exists(Helper.InteropPath))
+			if (File.Exists(MobHelper.InteropPath))
 			{
 				string wbl_data = "";
 				bool DATA_PASS_ON = false;
 				try
 				{
-					var sr = new StreamReader(Helper.InteropPath);
+					var sr = new StreamReader(MobHelper.InteropPath);
 					wbl_data = sr.ReadLine();
 					sr.Close();
 				}
@@ -227,7 +227,7 @@ namespace WorldBuilder.Forms
 						case "DAYLOC": // location -> day node
 							if (DayX.Enabled)
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								DayX.Text = wbl_data_arr[1];
 								DayY.Text = wbl_data_arr[2];
 								DayMap.Text = wbl_data_arr[3];
@@ -235,14 +235,14 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please open a transition file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
 						case "NGTLOC": // location -> night node
 							if (NightX.Enabled)
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								NightX.Text = wbl_data_arr[1];
 								NightY.Text = wbl_data_arr[2];
 								NightMap.Text = wbl_data_arr[3];
@@ -250,7 +250,7 @@ namespace WorldBuilder.Forms
 							}
 							else
 							{
-								File.Delete(Helper.InteropPath);
+								File.Delete(MobHelper.InteropPath);
 								MessageBox.Show("Please open a transition file first!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 								return;
 							}
@@ -260,7 +260,7 @@ namespace WorldBuilder.Forms
 					}
 
 					if (!DATA_PASS_ON)
-						File.Delete(Helper.InteropPath);
+						File.Delete(MobHelper.InteropPath);
 				}
 			}
 		}

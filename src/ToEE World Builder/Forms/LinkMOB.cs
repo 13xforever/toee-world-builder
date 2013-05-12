@@ -41,7 +41,7 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x34, SeekOrigin.Begin);
 					uint type = br.ReadUInt32();
 					br.BaseStream.Seek(0x3A, SeekOrigin.Begin);
-					long BlocksToSkip = Helper.MOB_GetNumberofBitmapBlocks((MobTypes) type);
+					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
 					br.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 					uint x_coord = br.ReadUInt32();
 					uint y_coord = br.ReadUInt32();
@@ -49,7 +49,7 @@ namespace WorldBuilder.Forms
 					br.Close();
 
 					string COMPATIBLE = "(MOB OBJECT)";
-					MOB_LIST.Items.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + Helper.Proto_By_ID[proto_id.ToString()]);
+					MOB_LIST.Items.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + MobHelper.ProtoById[proto_id.ToString()]);
 				}
 				catch (Exception)
 				{

@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace WorldBuilder.Helpers
 {
-	public static class MiscHelper
+	public static class ResourceHelper
 	{
 		public static Stream GetResourceStreamThatEndsWith(string name)
 		{
