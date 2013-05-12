@@ -67,8 +67,8 @@ namespace WorldBuilder.Forms
 			this.regenerateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.timer = new System.Windows.Forms.Timer(this.components);
 			this.pathNodesGroup = new System.Windows.Forms.GroupBox();
-			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.progressBar1 = new System.Windows.Forms.ProgressBar();
+			this.groupBox1 = new System.Windows.Forms.GroupBox();
 			this.menuStrip1.SuspendLayout();
 			this.pathNodesGroup.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -89,7 +89,7 @@ namespace WorldBuilder.Forms
 			this.lstNodes.Location = new System.Drawing.Point(6, 19);
 			this.lstNodes.Name = "lstNodes";
 			this.lstNodes.Size = new System.Drawing.Size(330, 372);
-			this.lstNodes.TabIndex = 6;
+			this.lstNodes.TabIndex = 5;
 			this.lstNodes.SelectedIndexChanged += new System.EventHandler(this.OnSelectedNodeChanged);
 			this.lstNodes.KeyDown += new System.Windows.Forms.KeyEventHandler(this.OnNodeKeyPress);
 			// 
@@ -117,7 +117,7 @@ namespace WorldBuilder.Forms
 			this.NodeX.Location = new System.Drawing.Point(28, 397);
 			this.NodeX.Name = "NodeX";
 			this.NodeX.Size = new System.Drawing.Size(40, 20);
-			this.NodeX.TabIndex = 11;
+			this.NodeX.TabIndex = 0;
 			this.NodeX.Text = "0";
 			// 
 			// NodeY
@@ -126,7 +126,7 @@ namespace WorldBuilder.Forms
 			this.NodeY.Location = new System.Drawing.Point(96, 397);
 			this.NodeY.Name = "NodeY";
 			this.NodeY.Size = new System.Drawing.Size(40, 20);
-			this.NodeY.TabIndex = 12;
+			this.NodeY.TabIndex = 1;
 			this.NodeY.Text = "0";
 			// 
 			// label6
@@ -144,7 +144,7 @@ namespace WorldBuilder.Forms
 			this.NodeOfsX.Location = new System.Drawing.Point(196, 397);
 			this.NodeOfsX.Name = "NodeOfsX";
 			this.NodeOfsX.Size = new System.Drawing.Size(40, 20);
-			this.NodeOfsX.TabIndex = 14;
+			this.NodeOfsX.TabIndex = 2;
 			this.NodeOfsX.Text = "0";
 			// 
 			// label7
@@ -162,7 +162,7 @@ namespace WorldBuilder.Forms
 			this.NodeOfsY.Location = new System.Drawing.Point(296, 397);
 			this.NodeOfsY.Name = "NodeOfsY";
 			this.NodeOfsY.Size = new System.Drawing.Size(40, 20);
-			this.NodeOfsY.TabIndex = 16;
+			this.NodeOfsY.TabIndex = 3;
 			this.NodeOfsY.Text = "0";
 			// 
 			// btnAddNode
@@ -171,7 +171,7 @@ namespace WorldBuilder.Forms
 			this.btnAddNode.Location = new System.Drawing.Point(93, 423);
 			this.btnAddNode.Name = "btnAddNode";
 			this.btnAddNode.Size = new System.Drawing.Size(75, 23);
-			this.btnAddNode.TabIndex = 17;
+			this.btnAddNode.TabIndex = 4;
 			this.btnAddNode.Text = "Add Node";
 			this.btnAddNode.Click += new System.EventHandler(this.OnAddNodeClick);
 			// 
@@ -181,7 +181,7 @@ namespace WorldBuilder.Forms
 			this.btnDelNode.Location = new System.Drawing.Point(174, 423);
 			this.btnDelNode.Name = "btnDelNode";
 			this.btnDelNode.Size = new System.Drawing.Size(75, 23);
-			this.btnDelNode.TabIndex = 18;
+			this.btnDelNode.TabIndex = 6;
 			this.btnDelNode.Text = "Delete Node";
 			this.btnDelNode.Click += new System.EventHandler(this.OnDeleteNodeClick);
 			// 
@@ -192,7 +192,7 @@ namespace WorldBuilder.Forms
 			this.lstLinks.Location = new System.Drawing.Point(6, 19);
 			this.lstLinks.Name = "lstLinks";
 			this.lstLinks.Size = new System.Drawing.Size(330, 372);
-			this.lstLinks.TabIndex = 20;
+			this.lstLinks.TabIndex = 7;
 			this.lstLinks.DoubleClick += new System.EventHandler(this.OnJumpToNodeClick);
 			// 
 			// btnGotoPND
@@ -201,7 +201,7 @@ namespace WorldBuilder.Forms
 			this.btnGotoPND.Location = new System.Drawing.Point(116, 423);
 			this.btnGotoPND.Name = "btnGotoPND";
 			this.btnGotoPND.Size = new System.Drawing.Size(96, 23);
-			this.btnGotoPND.TabIndex = 21;
+			this.btnGotoPND.TabIndex = 8;
 			this.btnGotoPND.Text = "Go to this Node";
 			this.btnGotoPND.Click += new System.EventHandler(this.OnJumpToNodeClick);
 			// 
@@ -348,7 +348,7 @@ namespace WorldBuilder.Forms
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(175, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(215, 6);
 			// 
 			// menuItem10
 			// 
@@ -408,6 +408,14 @@ namespace WorldBuilder.Forms
 			this.pathNodesGroup.TabStop = false;
 			this.pathNodesGroup.Text = "Path Nodes";
 			// 
+			// progressBar1
+			// 
+			this.progressBar1.Location = new System.Drawing.Point(7, 367);
+			this.progressBar1.Name = "progressBar1";
+			this.progressBar1.Size = new System.Drawing.Size(329, 23);
+			this.progressBar1.TabIndex = 19;
+			this.progressBar1.Visible = false;
+			// 
 			// groupBox1
 			// 
 			this.groupBox1.Controls.Add(this.lstLinks);
@@ -418,14 +426,6 @@ namespace WorldBuilder.Forms
 			this.groupBox1.TabIndex = 24;
 			this.groupBox1.TabStop = false;
 			this.groupBox1.Text = "Linked Nodes";
-			// 
-			// progressBar1
-			// 
-			this.progressBar1.Location = new System.Drawing.Point(7, 367);
-			this.progressBar1.Name = "progressBar1";
-			this.progressBar1.Size = new System.Drawing.Size(329, 23);
-			this.progressBar1.TabIndex = 19;
-			this.progressBar1.Visible = false;
 			// 
 			// PathNodeGen
 			// 

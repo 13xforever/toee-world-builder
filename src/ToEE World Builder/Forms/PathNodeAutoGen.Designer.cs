@@ -63,7 +63,7 @@ namespace WorldBuilder.Forms
 			this.FX.Location = new System.Drawing.Point(85, 19);
 			this.FX.Name = "FX";
 			this.FX.Size = new System.Drawing.Size(60, 20);
-			this.FX.TabIndex = 1;
+			this.FX.TabIndex = 0;
 			this.FX.Text = "0";
 			// 
 			// label2
@@ -80,7 +80,7 @@ namespace WorldBuilder.Forms
 			this.FY.Location = new System.Drawing.Point(180, 19);
 			this.FY.Name = "FY";
 			this.FY.Size = new System.Drawing.Size(60, 20);
-			this.FY.TabIndex = 3;
+			this.FY.TabIndex = 1;
 			this.FY.Text = "0";
 			// 
 			// label3
@@ -97,7 +97,7 @@ namespace WorldBuilder.Forms
 			this.TY.Location = new System.Drawing.Point(180, 45);
 			this.TY.Name = "TY";
 			this.TY.Size = new System.Drawing.Size(60, 20);
-			this.TY.TabIndex = 7;
+			this.TY.TabIndex = 3;
 			this.TY.Text = "0";
 			// 
 			// label4
@@ -114,7 +114,7 @@ namespace WorldBuilder.Forms
 			this.TX.Location = new System.Drawing.Point(85, 45);
 			this.TX.Name = "TX";
 			this.TX.Size = new System.Drawing.Size(60, 20);
-			this.TX.TabIndex = 5;
+			this.TX.TabIndex = 2;
 			this.TX.Text = "0";
 			// 
 			// label5
@@ -132,7 +132,7 @@ namespace WorldBuilder.Forms
 			this.btnOK.Location = new System.Drawing.Point(67, 148);
 			this.btnOK.Name = "btnOK";
 			this.btnOK.Size = new System.Drawing.Size(75, 23);
-			this.btnOK.TabIndex = 13;
+			this.btnOK.TabIndex = 5;
 			this.btnOK.Text = "Generate";
 			this.btnOK.UseVisualStyleBackColor = true;
 			// 
@@ -142,7 +142,7 @@ namespace WorldBuilder.Forms
 			this.btnCancel.Location = new System.Drawing.Point(148, 148);
 			this.btnCancel.Name = "btnCancel";
 			this.btnCancel.Size = new System.Drawing.Size(75, 23);
-			this.btnCancel.TabIndex = 14;
+			this.btnCancel.TabIndex = 6;
 			this.btnCancel.Text = "Cancel";
 			this.btnCancel.UseVisualStyleBackColor = true;
 			// 
@@ -181,7 +181,7 @@ namespace WorldBuilder.Forms
 			this.stepping.Minimum = 5;
 			this.stepping.Name = "stepping";
 			this.stepping.Size = new System.Drawing.Size(155, 45);
-			this.stepping.TabIndex = 9;
+			this.stepping.TabIndex = 4;
 			this.stepping.Value = 10;
 			this.stepping.Scroll += new System.EventHandler(this.OnSteppingScroll);
 			// 
