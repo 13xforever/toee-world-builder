@@ -66,13 +66,13 @@ namespace WorldBuilder.Forms
 			// label1
 			// 
 			this.label1.BackColor = System.Drawing.Color.Black;
-			this.label1.Font = new System.Drawing.Font("Arial", 20.25F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.label1.Font = new System.Drawing.Font("Arial", 18F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Italic))), System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label1.ForeColor = System.Drawing.Color.LightSkyBlue;
 			this.label1.Location = new System.Drawing.Point(0, 175);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(400, 40);
 			this.label1.TabIndex = 2;
-			this.label1.Text = "World Builder.NET2 v2.0.5a";
+			this.label1.Text = "World Builder vX.Y.Z (ABCDEF0)";
 			this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// label2
