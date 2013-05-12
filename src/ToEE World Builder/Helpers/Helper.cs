@@ -33,52 +33,28 @@ namespace WorldBuilder.Helpers
 		/// <summary>
 		///     Hash function - HashPJW. Returns a 32-bit uint value from a string.
 		/// </summary>
-		public static uint hashpjw(string ptr)
+		public static uint PjwHash(string ptr)
 		{
 			uint val = 0;
-
-			for (int i = 0; i < ptr.Length; i++)
+			foreach (char c in ptr)
 			{
-				uint tmp;
-				val = (val << 4) + ptr[i];
+				val = (val << 4) + c;
+				uint tmp = val & 0xf0000000;
+				if (tmp == 0) continue;
 
-				tmp = (val & 0xf0000000);
-				if (tmp != 0)
-				{
-					val = val ^ (tmp >> 24);
-					val = val ^ tmp;
-				}
+				val = val ^ (tmp >> 24) ^ tmp;
 			}
 			return val;
 		}
 
-		/// <summary>
-		///     ElfHash - another hashing function. Used for lights.
-		/// </summary>
-		public static uint HashID_Generate(string str)
-		{
-			uint h = 0, g;
-			for (int i = 0; i < str.Length; i++)
-			{
-				uint cur = str[i];
-				if (cur >= 'a' && cur <= 'z') cur -= ('a' - 'A');
-				h = (h << 4) + cur;
-				g = h & 0xF0000000;
-				if (g != 0)
-					h ^= g >> 24;
-				h &= ~g;
-			}
-			return h;
-		}
-
-		public static int GENERATOR_BITS = 0x07F80000;
-		public static int GENERATOR_POS = 19;
-		public static int SPAWNMAX_BITS = 0x0007C000;
-		public static int SPAWNMAX_POS = 14;
-		public static int TOTAL_BITS = 0x00003F80;
-		public static int TOTAL_POS = 7;
-		public static int NPCGEN_BITS = 0x00E00000;
-		public static int NPCGEN_POS = 21;
+		private const int GENERATOR_BITS = 0x07F80000;
+		private const int GENERATOR_POS = 19;
+		private const int SPAWNMAX_BITS = 0x0007C000;
+		private const int SPAWNMAX_POS = 14;
+		private const int TOTAL_BITS = 0x00003F80;
+		private const int TOTAL_POS = 7;
+		private const int NPCGEN_BITS = 0x00E00000;
+		private const int NPCGEN_POS = 21;
 
 		public static int GET_GENID(int target)
 		{
