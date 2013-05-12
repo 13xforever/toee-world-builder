@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace WorldBuilder.Forms
 {
-	public partial class PathNodeAutoGen : Form
+	internal partial class PathNodeAutoGen : FormWithIcon
 	{
 		public int FromX;
 		public int FromY;

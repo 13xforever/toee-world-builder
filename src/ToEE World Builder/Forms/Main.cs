@@ -13,7 +13,7 @@ using WorldBuilder.Helpers;
 
 namespace WorldBuilder.Forms
 {
-	public partial class Worlded : Form
+	internal partial class Worlded : FormWithIcon
 	{
 		public Worlded()
 		{
@@ -81,6 +81,8 @@ namespace WorldBuilder.Forms
 
 		private void Worlded_Load(object sender, EventArgs e)
 		{
+			//Program.Splash.Do(frm => frm.Close());
+
 			// If there's no SARC file, recreate it
 			if (!File.Exists("ToEE World Builder.sar"))
 			{
@@ -162,8 +164,7 @@ namespace WorldBuilder.Forms
 			if (SPLASH_STATE == 0)
 			{
 				tmrSplash.Interval = 50;
-				SPLASH_STATE++;
-				s.Show();
+				SPLASH_STATE = 1;
 				return;
 			}
 
@@ -294,7 +295,7 @@ namespace WorldBuilder.Forms
 			}
 
 			SetInterfaceState(false);
-			s.Dispose();
+			Program.Splash.Hide();
 
 			// Set the default data for certain boxes
 			cmbTileSound.SelectedIndex = 2;

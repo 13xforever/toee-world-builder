@@ -6,16 +6,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
 namespace WorldBuilder.Forms
 {
-	public partial class AboutForm : Form
+	internal partial class AboutForm : FormWithIcon
 	{
 		public AboutForm()
 		{
 			InitializeComponent();
+
 			var ver = FileVersionInfo.GetVersionInfo(Assembly.GetEntryAssembly().Location);
 			var verAsString = new StringBuilder("World Builder v")
 				.Append(ver.FileMajorPart).Append(".").Append(ver.FileMinorPart);

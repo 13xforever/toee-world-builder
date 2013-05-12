@@ -5,7 +5,7 @@ namespace WorldBuilder.Forms
 	/// <summary>
 	/// Summary description for AboutForm.
 	/// </summary>
-	public partial class AboutForm
+	internal partial class AboutForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -116,7 +116,7 @@ namespace WorldBuilder.Forms
 			this.button1.BackColor = System.Drawing.Color.WhiteSmoke;
 			this.button1.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-			this.button1.Location = new System.Drawing.Point(156, 521);
+			this.button1.Location = new System.Drawing.Point(154, 521);
 			this.button1.Name = "button1";
 			this.button1.Size = new System.Drawing.Size(92, 24);
 			this.button1.TabIndex = 6;
@@ -278,11 +278,13 @@ namespace WorldBuilder.Forms
 			this.Controls.Add(this.label1);
 			this.Controls.Add(this.ToEE);
 			this.DoubleBuffered = true;
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "AboutForm";
+			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "About Temple of Elemental Evil World Builder";
 			((System.ComponentModel.ISupportInitialize)(this.ToEE)).EndInit();
 			this.ResumeLayout(false);

@@ -2,7 +2,7 @@
 
 namespace WorldBuilder.Forms
 {
-	public partial class PathNodeGen
+	internal partial class PathNodeGen
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -434,10 +434,14 @@ namespace WorldBuilder.Forms
 			this.Controls.Add(this.groupBox1);
 			this.Controls.Add(this.pathNodesGroup);
 			this.Controls.Add(this.menuStrip1);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
 			this.MainMenuStrip = this.menuStrip1;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "PathNodeGen";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Path Node Editor/Generator";
 			this.Load += new System.EventHandler(this.OnLoad);
 			this.menuStrip1.ResumeLayout(false);

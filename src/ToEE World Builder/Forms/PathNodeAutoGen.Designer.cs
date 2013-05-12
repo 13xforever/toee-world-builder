@@ -1,6 +1,6 @@
 namespace WorldBuilder.Forms
 {
-    partial class PathNodeAutoGen
+	internal partial class PathNodeAutoGen
     {
         /// <summary>
         /// Required designer variable.
@@ -198,9 +198,13 @@ namespace WorldBuilder.Forms
 			this.Controls.Add(this.label8);
 			this.Controls.Add(this.btnCancel);
 			this.Controls.Add(this.btnOK);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "PathNodeAutoGen";
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+			this.ShowIcon = false;
+			this.ShowInTaskbar = false;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "Automated Path Node Generation";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.OnClosing);
 			this.groupBox1.ResumeLayout(false);

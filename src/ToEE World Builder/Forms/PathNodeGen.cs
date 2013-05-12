@@ -8,7 +8,7 @@ using WorldBuilder.Helpers;
 
 namespace WorldBuilder.Forms
 {
-	public partial class PathNodeGen : Form
+	internal partial class PathNodeGen : FormWithIcon
 	{
 		private readonly Control[] controls;
 		private readonly Stopwatch progressTimer = new Stopwatch();
