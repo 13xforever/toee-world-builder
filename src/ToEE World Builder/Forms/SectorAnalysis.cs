@@ -41,7 +41,7 @@ namespace WorldBuilder.Forms
 			{
 				for (int Y1 = 0; Y1 < 64; Y1++)
 				{
-					var tile = (byte[]) Helper.SectorTiles[Y1*64 + X1];
+					var tile = (byte[]) SecHelper.SectorTiles[Y1*64 + X1];
 
 					byte[] wflagbytes =
 						{
@@ -83,7 +83,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT1 (EXTEND)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = Helper.SVB_GetTileAddress(X1, Y1); // ptr to UL corner
+						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1); // ptr to UL corner
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -101,7 +101,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT2 (END)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = Helper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -119,7 +119,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT3 (ARCHWAY)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = Helper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -137,7 +137,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT4 (ARCHWAY)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = Helper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -155,11 +155,11 @@ namespace WorldBuilder.Forms
 					// Test for HSD WATER
 					if (HSD_BMP.GetUpperBound(0) > 1000) /* safety check */
 					{
-						int HSD_index = Helper.HSD_GetTileAddress(X1, Y1) - 1;
+						int HSD_index = HsdHelper.HSD_GetTileAddress(X1, Y1) - 1;
 
 						for (int T = 0; T < 9; T++)
 						{
-							if (Helper.HSD_Tiles[HSD_index + T] != 0x00)
+							if (HsdHelper.HSD_Tiles[HSD_index + T] != 0x00)
 							{
 								ptr_vp.FillRectangle(Brushes.PowderBlue, 630 - (10*X1) + 4, 10*Y1 + 4, 6, 6);
 								break;

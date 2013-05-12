@@ -15,7 +15,7 @@ namespace WorldBuilder.Forms
 		{
 			try
 			{
-				Sec1.Text = Helper.SEC_GetSectorCorrespondence(int.Parse(ObjX.Text), int.Parse(ObjY.Text)).ToString() + ".sec";
+				Sec1.Text = SecHelper.SEC_GetSectorCorrespondence(int.Parse(ObjX.Text), int.Parse(ObjY.Text)).ToString() + ".sec";
 			}
 			catch (Exception)
 			{
@@ -40,8 +40,8 @@ namespace WorldBuilder.Forms
 				{
 					for (int Y = _fromY; Y <= _toY; Y++)
 					{
-						secname = Helper.SEC_GetSectorCorrespondence(X, Y).ToString();
-						Helper.SEC_GetXY(secname, out SX, out SY);
+						secname = SecHelper.SEC_GetSectorCorrespondence(X, Y).ToString();
+						SecHelper.SEC_GetXY(secname, out SX, out SY);
 						if (!(lstSecs.Items.Contains(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")")))
 							lstSecs.Items.Add(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")");
 					}

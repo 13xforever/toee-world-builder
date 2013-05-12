@@ -139,10 +139,16 @@
     </Compile>
     <Compile Include="Helpers\DcRankHelper.cs" />
     <Compile Include="Helpers\GenHelper.cs" />
+    <Compile Include="Helpers\HsdHelper.cs" />
     <Compile Include="Helpers\IntelliProperties.cs" />
+    <Compile Include="Helpers\LightExHelper.cs" />
+    <Compile Include="Helpers\LightHelper.cs" />
     <Compile Include="Helpers\Maybe.cs" />
     <Compile Include="Helpers\MobHelper.cs" />
     <Compile Include="Helpers\ResourceHelper.cs" />
+    <Compile Include="Helpers\SecHelper.cs" />
+    <Compile Include="Helpers\SvbHelper.cs" />
+    <Compile Include="Helpers\WaypointHelper.cs" />
     <Compile Include="PathNodeCollection.cs" />
     <Compile Include="PathNode.cs" />
     <Compile Include="MobTypes.cs" />

@@ -153,7 +153,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Memory setup: initialize runtime-critical arrays
-			Helper.HSD_Tiles = Helper.HSD_NewArray();
+			HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
 
 			// Display splash screen and enter worlded loading routine
 			tmrSplash.Enabled = true;
@@ -2074,7 +2074,7 @@ namespace WorldBuilder.Forms
 			// Structure
 			for (int i = 0; i < vWaypoints.Items.Count; i++)
 			{
-				Helper.SaveWaypoint(w_mob, (Helper.WaypointInfo) NPC_WAYPOINTS[i]);
+				WaypointHelper.SaveWaypoint(w_mob, (WaypointHelper.WaypointInfo) NPC_WAYPOINTS[i]);
 			}
 
 			// Post-structure
@@ -2261,7 +2261,7 @@ namespace WorldBuilder.Forms
 			// Load waypoint info
 			for (int i = 0; i < num_way; i++)
 			{
-				Helper.WaypointInfo w_loaded = Helper.LoadWaypoint(r_mob);
+				WaypointHelper.WaypointInfo w_loaded = WaypointHelper.LoadWaypoint(r_mob);
 				bytes_read += 64;
 
 				NPC_WAYPOINTS.Add(w_loaded);
@@ -2679,7 +2679,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Add a WaypointInfo structure to the array
-			NPC_WAYPOINTS.Add(Helper.CreateWaypoint(uint.Parse(vWayX.Text), uint.Parse(vWayY.Text), byte.Parse(vWayAnim1.Text), byte.Parse(vWayAnim2.Text), byte.Parse(vWayAnim3.Text), byte.Parse(vWayAnim4.Text), byte.Parse(vWayAnim5.Text),
+			NPC_WAYPOINTS.Add(WaypointHelper.CreateWaypoint(uint.Parse(vWayX.Text), uint.Parse(vWayY.Text), byte.Parse(vWayAnim1.Text), byte.Parse(vWayAnim2.Text), byte.Parse(vWayAnim3.Text), byte.Parse(vWayAnim4.Text), byte.Parse(vWayAnim5.Text),
 													byte.Parse(vWayAnim6.Text), byte.Parse(vWayAnim7.Text), byte.Parse(vWayAnim8.Text), float.Parse(vWayRot.Text), uint.Parse(vWayDelay.Text), cAnimWpt.Checked, cRotWpt.Checked, cDelayWpt.Checked));
 			vWaypoints.Items.Add("(" + vWayX.Text + ", " + vWayY.Text + "); #" + vWayAnim1.Text + ";#" + vWayAnim2.Text + ";#" + vWayAnim3.Text + ";#" + vWayAnim4.Text + ";#" + vWayAnim5.Text + ";#" + vWayAnim6.Text + ";#" + vWayAnim7.Text + ";#" +
 								vWayAnim8.Text + "; ROT=" + vWayRot.Text + "; DELAY=" + vWayDelay.Text);
@@ -5073,7 +5073,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// FIX: BETA R1.1
-			MobHelper.SectorName = Helper.SEC_GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
+			MobHelper.SectorName = SecHelper.SEC_GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
 			var e_sect = new EmbedInSector();
 			if (e_sect.ShowDialog() == DialogResult.OK)
 			{
@@ -5085,7 +5085,7 @@ namespace WorldBuilder.Forms
 				if (!File.Exists(e_sect.FileName))
 				{
 					var w_sec = new BinaryWriter(new FileStream(e_sect.FileName, FileMode.Create));
-					Helper.SEC_CreateEmptySectorFile(w_sec);
+					SecHelper.SEC_CreateEmptySectorFile(w_sec);
 					w_sec.Close();
 				}
 
@@ -5127,7 +5127,7 @@ namespace WorldBuilder.Forms
 			if (vWaypoints.SelectedIndex == -1)
 				return;
 
-			var wp = (Helper.WaypointInfo) NPC_WAYPOINTS[vWaypoints.SelectedIndex];
+			var wp = (WaypointHelper.WaypointInfo) NPC_WAYPOINTS[vWaypoints.SelectedIndex];
 			vWayX.Text = wp.X.ToString();
 			vWayY.Text = wp.Y.ToString();
 			vWayAnim1.Text = wp.anim1.ToString();
@@ -7833,7 +7833,7 @@ namespace WorldBuilder.Forms
 				LightID.Minimum = 0;
 				LightID.Maximum = 0; // max = # lights created
 				LightID.Value = 0;
-				SetLightEdInterfaceState(0, new Helper.LightInfo());
+				SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 
 				// Load the sector file
 				SecFile = "Sectors\\" + o.FileToOpen + ".sec";
@@ -7846,7 +7846,7 @@ namespace WorldBuilder.Forms
 				SecFile = "Sectors\\" + o.FileToOpen + ".sec";
 
 				int minX, maxX, minY, maxY;
-				Helper.Sec_GetMinMax(o.FileToOpen, out minY, out maxY, out minX, out maxX);
+				SecHelper.Sec_GetMinMax(o.FileToOpen, out minY, out maxY, out minX, out maxX);
 				tu_0_0.Text = string.Format("({0},{1})", minX, minY);
 				tu_X_0.Text = string.Format("({0},{1})", maxX, minY);
 				tu_0_Y.Text = string.Format("({0},{1})", minX, maxY);
@@ -7862,14 +7862,14 @@ namespace WorldBuilder.Forms
 				var r_sec = new BinaryReader(new FileStream(SecFile, FileMode.Open));
 
 				// Cleanup
-				Helper.SectorLights.Clear();
-				Helper.SectorLightsChunk.Clear();
-				Helper.SectorTiles.Clear();
+				SecHelper.SectorLights.Clear();
+				SecHelper.SectorLightsChunk.Clear();
+				SecHelper.SectorTiles.Clear();
 
 				// Load lights
 				uint LightCount = r_sec.ReadUInt32(); // the # of lights
 
-				var light = new Helper.LightInfo();
+				var light = new LightHelper.LightInfo();
 
 				// Check if lights can be loaded	
 				bool CanLoadLights = true;
@@ -7915,14 +7915,14 @@ namespace WorldBuilder.Forms
 				{
 					for (int i = 0; i < LightCount; i++)
 					{
-						Helper.LoadLight(r_sec, ref light);
-						Helper.SectorLights.Add(light);
+						LightHelper.LoadLight(r_sec, ref light);
+						SecHelper.SectorLights.Add(light);
 						LightID.Maximum++;
 						SetLightEdInterfaceState(1, light); // light is passed on
 					}
-					if (Helper.SectorLights.Count > 0)
+					if (SecHelper.SectorLights.Count > 0)
 					{
-						SetLightEdInterfaceState(1, new Helper.LightInfo());
+						SetLightEdInterfaceState(1, new LightHelper.LightInfo());
 						LightID.Maximum--; // compensate for light #0
 						LightID_ValueChanged(null, null); // load light #0
 					}
@@ -7931,7 +7931,7 @@ namespace WorldBuilder.Forms
 				{
 					// Load as one single chunk
 					r_sec.BaseStream.Seek(0, SeekOrigin.Begin);
-					Helper.SectorLightsChunk.Add(r_sec.ReadBytes((int) (real_pos) + 4));
+					SecHelper.SectorLightsChunk.Add(r_sec.ReadBytes((int) (real_pos) + 4));
 				}
 
 				// OLDER WAY OF LOADING LIGHTS, TO BE REMOVED
@@ -7939,7 +7939,7 @@ namespace WorldBuilder.Forms
 
 				// Load tiledata
 				for (int j = 0; j < 4096; j++)
-					Helper.SectorTiles.Add(r_sec.ReadBytes(16));
+					SecHelper.SectorTiles.Add(r_sec.ReadBytes(16));
 
 				// Skip past the unknown empty data
 				r_sec.ReadBytes(48);
@@ -7947,9 +7947,9 @@ namespace WorldBuilder.Forms
 				// Load the unified block of objects 
 				// (objects are loaded as a chunk of bytes, so that the
 				// array can be walked through later by sector object manager)
-				Helper.SectorObjects.Clear();
+				SecHelper.SectorObjects.Clear();
 				while (r_sec.BaseStream.Position != r_sec.BaseStream.Length)
-					Helper.SectorObjects.Add(r_sec.ReadByte());
+					SecHelper.SectorObjects.Add(r_sec.ReadByte());
 
 				r_sec.Close();
 
@@ -7959,12 +7959,12 @@ namespace WorldBuilder.Forms
 				static_objguid = new ArrayList();
 				SetStaticObjInterfaceState(false);
 
-				if (Helper.SectorObjects.Count != 4) /* 0x04 = NO OBJECTS */
+				if (SecHelper.SectorObjects.Count != 4) /* 0x04 = NO OBJECTS */
 				{
 					// First of all, dump SectorObjects to a temporary OFF file
 					var w_off = new BinaryWriter(new FileStream("temp.off", FileMode.Create));
-					for (int i = 0; i < Helper.SectorObjects.Count; i++)
-						w_off.Write((byte) Helper.SectorObjects[i]);
+					for (int i = 0; i < SecHelper.SectorObjects.Count; i++)
+						w_off.Write((byte) SecHelper.SectorObjects[i]);
 					w_off.Close();
 
 					// Walk through the object dump to detect object boundaries
@@ -8124,7 +8124,7 @@ namespace WorldBuilder.Forms
 				else
 				{
 					// Clean up the previous SVB info
-					SVB_Bitmap = Helper.SVB_NewBitmap();
+					SVB_Bitmap = SvbHelper.SVB_NewBitmap();
 				}
 
 				// Load the HSD file, if it exists
@@ -8136,14 +8136,14 @@ namespace WorldBuilder.Forms
 					r_hsd.ReadInt32(); // version tag, skipping it
 
 					for (int i = 0; i < 36864; i++)
-						Helper.HSD_Tiles[i] = r_hsd.ReadByte();
+						HsdHelper.HSD_Tiles[i] = r_hsd.ReadByte();
 
 					r_hsd.Close();
 				}
 				else
 				{
 					// Clean up the previous HSD info
-					Helper.HSD_Tiles = Helper.HSD_NewArray();
+					HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
 				}
 
 				btnLoadTile_Click(null, null); // Load the first tile
@@ -8204,7 +8204,7 @@ namespace WorldBuilder.Forms
 				LightID.Minimum = 0;
 				LightID.Maximum = 0; // max = # lights created
 				LightID.Value = 0;
-				SetLightEdInterfaceState(0, new Helper.LightInfo());
+				SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 
 				// Create a new sector file data
 				SecFile = "Sectors\\" + cn.FileToOpen + ".sec";
@@ -8214,7 +8214,7 @@ namespace WorldBuilder.Forms
 				btnDelObjects.Enabled = true;
 				btnResetTiles.Enabled = true;
 
-				Helper.SEC_CreateNewData();
+				SecHelper.SEC_CreateNewData();
 
 				tu_0_0.Text = String.Format("({0},{1})", cn.minX, cn.minY);
 				tu_X_0.Text = String.Format("({0},{1})", cn.maxX, cn.minY);
@@ -8259,8 +8259,8 @@ namespace WorldBuilder.Forms
 				Light11_Y.Maximum = Light11_Y.Value + 63;
 
 				// Make sure the SVB/HSD data is empty when a new sector is created
-				SVB_Bitmap = Helper.SVB_NewBitmap();
-				Helper.HSD_Tiles = Helper.HSD_NewArray();
+				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
+				HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
 
 				btnLoadTile_Click(null, null); // Load the first tile
 
@@ -8282,28 +8282,28 @@ namespace WorldBuilder.Forms
 
 			var w_sec = new BinaryWriter(new FileStream(SecFile, FileMode.Create));
 
-			if (Helper.SectorLightsChunk.Count == 0)
+			if (SecHelper.SectorLightsChunk.Count == 0)
 			{
-				w_sec.Write(Helper.SectorLights.Count); // the number of light objects
+				w_sec.Write(SecHelper.SectorLights.Count); // the number of light objects
 
-				for (int i = 0; i < Helper.SectorLights.Count; i++)
-					Helper.SaveLight(w_sec, (Helper.LightInfo) Helper.SectorLights[i]);
+				for (int i = 0; i < SecHelper.SectorLights.Count; i++)
+					LightHelper.SaveLight(w_sec, (LightHelper.LightInfo) SecHelper.SectorLights[i]);
 			}
 			else
 			{
-				w_sec.Write((byte[]) Helper.SectorLightsChunk[0]);
+				w_sec.Write((byte[]) SecHelper.SectorLightsChunk[0]);
 			}
 
 			// OLD WAY OF WRITING BACK LIGHTS. TO BE REMOVED.
 			// w_sec.Write((byte[])Helper.SectorLights[i]); // write a light
 
 			for (int i = 0; i < 4096; i++)
-				w_sec.Write((byte[]) Helper.SectorTiles[i]); // write tiledata
+				w_sec.Write((byte[]) SecHelper.SectorTiles[i]); // write tiledata
 
-			Helper.SEC_WriteUnknownEmptyAreas(w_sec); // write unknown stuff
+			SecHelper.SEC_WriteUnknownEmptyAreas(w_sec); // write unknown stuff
 
-			for (int i = 0; i < Helper.SectorObjects.Count; i++)
-				w_sec.Write((byte) Helper.SectorObjects[i]); // write objects
+			for (int i = 0; i < SecHelper.SectorObjects.Count; i++)
+				w_sec.Write((byte) SecHelper.SectorObjects[i]); // write objects
 
 			w_sec.Close();
 
@@ -8340,7 +8340,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Saving the HSD file
-			if (Helper.HSD_CheckIsSaveNecessary())
+			if (HsdHelper.HSD_CheckIsSaveNecessary())
 			{
 				// saving is necessary (at least one subtile is set)
 				var w_hsd = new BinaryWriter(new FileStream(HSDFile, FileMode.Create));
@@ -8348,7 +8348,7 @@ namespace WorldBuilder.Forms
 				w_hsd.Write(0x02); // save the HSD version tag
 
 				for (int i = 0; i < 36864; i++)
-					w_hsd.Write(Helper.HSD_Tiles[i]); // save the tile info
+					w_hsd.Write(HsdHelper.HSD_Tiles[i]); // save the tile info
 
 				w_hsd.Close();
 			}
@@ -8367,7 +8367,7 @@ namespace WorldBuilder.Forms
 					w_hsd.Write(0x02); // save the HSD version tag
 
 					for (int i = 0; i < 36864; i++)
-						w_hsd.Write(Helper.HSD_Tiles[i]); // save the tile info
+						w_hsd.Write(HsdHelper.HSD_Tiles[i]); // save the tile info
 
 					w_hsd.Close();
 				}
@@ -8381,12 +8381,12 @@ namespace WorldBuilder.Forms
 			if (MessageBox.Show("Warning: this operation will delete all lights in this sector!\nAre you sure you want to do this?", "Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
-			Helper.SectorLights.Clear();
-			Helper.SectorLightsChunk.Clear();
+			SecHelper.SectorLights.Clear();
+			SecHelper.SectorLightsChunk.Clear();
 			LightID.Minimum = 0;
 			LightID.Value = 0;
 			LightID.Maximum = 0;
-			SetLightEdInterfaceState(0, new Helper.LightInfo());
+			SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 			btnLightAdd.Enabled = true;
 
 			MessageBox.Show("Lights removed.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -8397,11 +8397,11 @@ namespace WorldBuilder.Forms
 			if (MessageBox.Show("Warning: this operation will delete all objects in this sector!\nAre you sure you want to do this?", "Please confirm operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
 				return;
 
-			Helper.SectorObjects.Clear();
-			Helper.SectorObjects.Add((byte) 0x00);
-			Helper.SectorObjects.Add((byte) 0x00);
-			Helper.SectorObjects.Add((byte) 0x00);
-			Helper.SectorObjects.Add((byte) 0x00);
+			SecHelper.SectorObjects.Clear();
+			SecHelper.SectorObjects.Add((byte) 0x00);
+			SecHelper.SectorObjects.Add((byte) 0x00);
+			SecHelper.SectorObjects.Add((byte) 0x00);
+			SecHelper.SectorObjects.Add((byte) 0x00);
 
 			// v1.1a: Clean up static object cache
 			SecObjList.Items.Clear();
@@ -8424,13 +8424,13 @@ namespace WorldBuilder.Forms
 				tiledata[j] = 0x00;
 
 			for (int i = 0; i < 4096; i++)
-				Helper.SectorTiles[i] = tiledata;
+				SecHelper.SectorTiles[i] = tiledata;
 
 			if (MessageBox.Show("Do you want to clear the sector visibility blocking information for all tiles as well?", "Please confirm additional operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-				SVB_Bitmap = Helper.SVB_NewBitmap();
+				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
 
 			if (MessageBox.Show("Do you want to clear the negative height/water tile information for all tiles as well?", "Please confirm additional operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-				Helper.HSD_Tiles = Helper.HSD_NewArray();
+				HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
 
 			MessageBox.Show("Tile data reset.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -8461,11 +8461,11 @@ namespace WorldBuilder.Forms
 			// CRITICAL: Tile creation routine! Add support for new tile stuff here!
 			SetWallFlags();
 			SetWaterFlags(STX, STY);
-			SVB_Bitmap = SetSVBFlags(SVB_Bitmap, Helper.SVB_GetTileAddress(STX, STY));
+			SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(STX, STY));
 			//SVB_Bitmap = Helper.SVB_SetPropertyLine(SVB_Bitmap, destflags, Helper.SVB_GetTileAddress(STX, STY));
 
-			byte[] tile = Helper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-			Helper.SEC_SetTileData(STX, STY, tile);
+			byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+			SecHelper.SEC_SetTileData(STX, STY, tile);
 
 			chkAutoTile.Checked = INTERNAL_CALLBACK;
 
@@ -8492,9 +8492,9 @@ namespace WorldBuilder.Forms
 					// CRITICAL: Tile creation routine! Add support for new tile stuff here!
 					SetWallFlags();
 					SetWaterFlags(STX, STY);
-					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, Helper.SVB_GetTileAddress(STX, STY));
-					byte[] tile = Helper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-					Helper.SEC_SetTileData(STX, STY, tile);
+					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(STX, STY));
+					byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+					SecHelper.SEC_SetTileData(STX, STY, tile);
 				}
 			}
 
@@ -8555,9 +8555,9 @@ namespace WorldBuilder.Forms
 					// CRITICAL: Tile creation routine! Add support for new tile stuff here!
 					SetWallFlags();
 					SetWaterFlags(Cur_TX, Cur_TY);
-					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, Helper.SVB_GetTileAddress(Cur_TX, Cur_TY));
-					byte[] tile = Helper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-					Helper.SEC_SetTileData(Cur_TX, Cur_TY, tile);
+					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(Cur_TX, Cur_TY));
+					byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+					SecHelper.SEC_SetTileData(Cur_TX, Cur_TY, tile);
 				}
 			}
 
@@ -8574,11 +8574,11 @@ namespace WorldBuilder.Forms
 			if (SEC_CALLBACK)
 			{
 				SEC_CALLBACK = false;
-				tile = (byte[]) Helper.SectorTiles[0];
+				tile = (byte[]) SecHelper.SectorTiles[0];
 			}
 			else
 			{
-				tile = (byte[]) Helper.SectorTiles[RealTY*64 + RealTX];
+				tile = (byte[]) SecHelper.SectorTiles[RealTY*64 + RealTX];
 			}
 
 			// CRITICAL: Load the known tile data (unknown is skipped atm)
@@ -8605,7 +8605,7 @@ namespace WorldBuilder.Forms
 			if (SVB_Bitmap.IndexOf("1") != -1) /* SVB file was loaded or created */
 			{
 				// First, get the index to the first bit of the tile
-				int SVB_index = Helper.SVB_GetTileAddress(RealTX, RealTY);
+				int SVB_index = SvbHelper.SVB_GetTileAddress(RealTX, RealTY);
 
 				// Load the properties
 				SVB1_UR.Checked = (MobHelper.GetPropertyState(SVB_Bitmap, SVB_index) == TriState.True) ? true : false;
@@ -8686,26 +8686,26 @@ namespace WorldBuilder.Forms
 			}
 
 			// Water support (HSD)
-			int HSD_index = Helper.HSD_GetTileAddress(RealTX, RealTY) - 1;
+			int HSD_index = HsdHelper.HSD_GetTileAddress(RealTX, RealTY) - 1;
 
-			HSD_UR.Checked = (Helper.HSD_Tiles[HSD_index] != 0x00) ? true : false;
-			HSD_UM.Checked = (Helper.HSD_Tiles[HSD_index + 1] != 0x00) ? true : false;
-			HSD_UL.Checked = (Helper.HSD_Tiles[HSD_index + 2] != 0x00) ? true : false;
-			HSD_MR.Checked = (Helper.HSD_Tiles[HSD_index + 3] != 0x00) ? true : false;
-			HSD_MM.Checked = (Helper.HSD_Tiles[HSD_index + 4] != 0x00) ? true : false;
-			HSD_ML.Checked = (Helper.HSD_Tiles[HSD_index + 5] != 0x00) ? true : false;
-			HSD_LR.Checked = (Helper.HSD_Tiles[HSD_index + 6] != 0x00) ? true : false;
-			HSD_LM.Checked = (Helper.HSD_Tiles[HSD_index + 7] != 0x00) ? true : false;
-			HSD_LL.Checked = (Helper.HSD_Tiles[HSD_index + 8] != 0x00) ? true : false;
-			HGT_UR.Value = Helper.HSD_Tiles[HSD_index];
-			HGT_UM.Value = Helper.HSD_Tiles[HSD_index + 1];
-			HGT_UL.Value = Helper.HSD_Tiles[HSD_index + 2];
-			HGT_MR.Value = Helper.HSD_Tiles[HSD_index + 3];
-			HGT_MM.Value = Helper.HSD_Tiles[HSD_index + 4];
-			HGT_ML.Value = Helper.HSD_Tiles[HSD_index + 5];
-			HGT_LR.Value = Helper.HSD_Tiles[HSD_index + 6];
-			HGT_LM.Value = Helper.HSD_Tiles[HSD_index + 7];
-			HGT_LL.Value = Helper.HSD_Tiles[HSD_index + 8];
+			HSD_UR.Checked = (HsdHelper.HSD_Tiles[HSD_index] != 0x00) ? true : false;
+			HSD_UM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 1] != 0x00) ? true : false;
+			HSD_UL.Checked = (HsdHelper.HSD_Tiles[HSD_index + 2] != 0x00) ? true : false;
+			HSD_MR.Checked = (HsdHelper.HSD_Tiles[HSD_index + 3] != 0x00) ? true : false;
+			HSD_MM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 4] != 0x00) ? true : false;
+			HSD_ML.Checked = (HsdHelper.HSD_Tiles[HSD_index + 5] != 0x00) ? true : false;
+			HSD_LR.Checked = (HsdHelper.HSD_Tiles[HSD_index + 6] != 0x00) ? true : false;
+			HSD_LM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 7] != 0x00) ? true : false;
+			HSD_LL.Checked = (HsdHelper.HSD_Tiles[HSD_index + 8] != 0x00) ? true : false;
+			HGT_UR.Value = HsdHelper.HSD_Tiles[HSD_index];
+			HGT_UM.Value = HsdHelper.HSD_Tiles[HSD_index + 1];
+			HGT_UL.Value = HsdHelper.HSD_Tiles[HSD_index + 2];
+			HGT_MR.Value = HsdHelper.HSD_Tiles[HSD_index + 3];
+			HGT_MM.Value = HsdHelper.HSD_Tiles[HSD_index + 4];
+			HGT_ML.Value = HsdHelper.HSD_Tiles[HSD_index + 5];
+			HGT_LR.Value = HsdHelper.HSD_Tiles[HSD_index + 6];
+			HGT_LM.Value = HsdHelper.HSD_Tiles[HSD_index + 7];
+			HGT_LL.Value = HsdHelper.HSD_Tiles[HSD_index + 8];
 		}
 
 		// Set the WallFlag variables based on the passability setting
@@ -8785,7 +8785,7 @@ namespace WorldBuilder.Forms
 
 			// SVB: Set the sector visibility blocking from set parameters
 			if (SVB_Bitmap == "ENOSVB")
-				SVB_Bitmap = Helper.SVB_NewBitmap();
+				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
 
 			// DEBUG ONLY
 			// MessageBox.Show(System.Convert.ToString(FLAGS, 2));
@@ -8795,17 +8795,17 @@ namespace WorldBuilder.Forms
 		public void SetWaterFlags(int RealTX, int RealTY)
 		{
 			// Set the water flags
-			int HSD_index = Helper.HSD_GetTileAddress(RealTX, RealTY) - 1;
+			int HSD_index = HsdHelper.HSD_GetTileAddress(RealTX, RealTY) - 1;
 
-			Helper.HSD_ModifyProperty(HSD_index, HSD_UR.Checked, (byte) HGT_UR.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 1, HSD_UM.Checked, (byte) HGT_UM.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 2, HSD_UL.Checked, (byte) HGT_UL.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 3, HSD_MR.Checked, (byte) HGT_MR.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 4, HSD_MM.Checked, (byte) HGT_MM.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 5, HSD_ML.Checked, (byte) HGT_ML.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 6, HSD_LR.Checked, (byte) HGT_LR.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 7, HSD_LM.Checked, (byte) HGT_LM.Value);
-			Helper.HSD_ModifyProperty(HSD_index + 8, HSD_LL.Checked, (byte) HGT_LL.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index, HSD_UR.Checked, (byte) HGT_UR.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 1, HSD_UM.Checked, (byte) HGT_UM.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 2, HSD_UL.Checked, (byte) HGT_UL.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 3, HSD_MR.Checked, (byte) HGT_MR.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 4, HSD_MM.Checked, (byte) HGT_MM.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 5, HSD_ML.Checked, (byte) HGT_ML.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 6, HSD_LR.Checked, (byte) HGT_LR.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 7, HSD_LM.Checked, (byte) HGT_LM.Value);
+			HsdHelper.HSD_ModifyProperty(HSD_index + 8, HSD_LL.Checked, (byte) HGT_LL.Value);
 		}
 
 		// Get the loaded wall flags
@@ -9030,7 +9030,7 @@ namespace WorldBuilder.Forms
 		}
 
 		// Light editor functions
-		private void SetLightEdInterfaceState(int sid, Helper.LightInfo light)
+		private void SetLightEdInterfaceState(int sid, LightHelper.LightInfo light)
 		{
 			switch (sid)
 			{
@@ -9172,9 +9172,9 @@ namespace WorldBuilder.Forms
 		}
 
 		// Create a LightInfo structure from the current data
-		private Helper.LightInfo CreateLightInfo()
+		private LightHelper.LightInfo CreateLightInfo()
 		{
-			var light = new Helper.LightInfo();
+			var light = new LightHelper.LightInfo();
 			light.struct_errorlevel = 0;
 
 			try
@@ -9225,10 +9225,10 @@ namespace WorldBuilder.Forms
 			if (LIGHT_CALLBACK)
 			{
 				LIGHT_CALLBACK = false;
-				SetLightEdInterfaceState(0, new Helper.LightInfo());
+				SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 			}
 
-			SetLightEdInterfaceState(3, (Helper.LightInfo) Helper.SectorLights[(int) LightID.Value]);
+			SetLightEdInterfaceState(3, (LightHelper.LightInfo) SecHelper.SectorLights[(int) LightID.Value]);
 		}
 
 		private void btnLightUpdate_Click(object sender, EventArgs e)
@@ -9240,7 +9240,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 
-			Helper.LightInfo t_light = CreateLightInfo();
+			LightHelper.LightInfo t_light = CreateLightInfo();
 
 			if (t_light.struct_errorlevel == -1)
 			{
@@ -9248,7 +9248,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 
-			Helper.SectorLights[(int) LightID.Value] = t_light;
+			SecHelper.SectorLights[(int) LightID.Value] = t_light;
 			MessageBox.Show("Light updated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
@@ -9266,45 +9266,45 @@ namespace WorldBuilder.Forms
 
 			if (LightID.Value != 0)
 			{
-				Helper.SectorLights.RemoveAt((int) LightID.Value);
+				SecHelper.SectorLights.RemoveAt((int) LightID.Value);
 
 				// Now, tricky stuff: we have to reload the lights and rearrange all
 				// the IDs
 				var p_lightarr = new ArrayList();
 
-				for (int i = 0; i < Helper.SectorLights.Count; i++)
-					p_lightarr.Add(Helper.SectorLights[i]);
+				for (int i = 0; i < SecHelper.SectorLights.Count; i++)
+					p_lightarr.Add(SecHelper.SectorLights[i]);
 
-				Helper.SectorLights = p_lightarr;
+				SecHelper.SectorLights = p_lightarr;
 
 				LightID.Value = 0;
-				LightID.Maximum = Helper.SectorLights.Count - 1;
+				LightID.Maximum = SecHelper.SectorLights.Count - 1;
 
 				MessageBox.Show("Light deleted.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 			}
 			else
 			{
 				// Light ID = #0
-				Helper.SectorLights.RemoveAt((int) LightID.Value);
+				SecHelper.SectorLights.RemoveAt((int) LightID.Value);
 
 				// Now, tricky stuff: we have to reload the lights and rearrange all
 				// the IDs
-				if (Helper.SectorLights.Count > 0)
+				if (SecHelper.SectorLights.Count > 0)
 				{
 					var p_lightarr = new ArrayList();
 
-					for (int i = 0; i < Helper.SectorLights.Count; i++)
-						p_lightarr.Add(Helper.SectorLights[i]);
+					for (int i = 0; i < SecHelper.SectorLights.Count; i++)
+						p_lightarr.Add(SecHelper.SectorLights[i]);
 
-					Helper.SectorLights = p_lightarr;
+					SecHelper.SectorLights = p_lightarr;
 					LightID.Value = 0;
 					LightID.Maximum--;
 					LightID_ValueChanged(null, null); // update #0 location
 				}
 				else
 				{
-					Helper.SectorLights.Clear();
-					SetLightEdInterfaceState(0, new Helper.LightInfo());
+					SecHelper.SectorLights.Clear();
+					SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 				}
 
 				MessageBox.Show("Light deleted.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -9320,11 +9320,11 @@ namespace WorldBuilder.Forms
 			{
 				// there were no lights for this sector, so we need to create a
 				// bank for lights on this map
-				SetLightEdInterfaceState(1, new Helper.LightInfo());
-				var light = new Helper.LightInfo();
+				SetLightEdInterfaceState(1, new LightHelper.LightInfo());
+				var light = new LightHelper.LightInfo();
 				light.loc_x = (uint) Light10_X.Minimum;
 				light.loc_y = (uint) Light11_Y.Minimum;
-				Helper.SectorLights.Add(light);
+				SecHelper.SectorLights.Add(light);
 				SetLightEdInterfaceState(3, light);
 				LightID.Minimum = 0;
 				LightID.Value = 0;
@@ -9334,10 +9334,10 @@ namespace WorldBuilder.Forms
 			else
 			{
 				// just add a new light to this map, use the current light as a prototype
-				Helper.LightInfo light = CreateLightInfo();
+				LightHelper.LightInfo light = CreateLightInfo();
 				light.loc_x = (uint) Light10_X.Value;
 				light.loc_y = (uint) Light11_Y.Value;
-				Helper.SectorLights.Add(light);
+				SecHelper.SectorLights.Add(light);
 				LightID.Maximum++;
 				LightID.Value = LightID.Maximum; //auto pass parameters
 			}
@@ -9396,7 +9396,7 @@ namespace WorldBuilder.Forms
 
 			for (long ptr = ptr_start; ptr < ptr_end; ptr++)
 			{
-				mob_ex.Write((byte) Helper.SectorObjects[(int) ptr]);
+				mob_ex.Write((byte) SecHelper.SectorObjects[(int) ptr]);
 			}
 
 			mob_ex.Close();
@@ -9413,7 +9413,7 @@ namespace WorldBuilder.Forms
 
 			for (long ptr = ptr_start; ptr < ptr_end; ptr++)
 			{
-				Helper.SectorObjects.RemoveAt((int) ptr_start);
+				SecHelper.SectorObjects.RemoveAt((int) ptr_start);
 			}
 
 			// Tricky: we have to reload all the objects now, refill the
@@ -9425,23 +9425,23 @@ namespace WorldBuilder.Forms
 
 			// Acquire the previous count of static objects in a sector
 			// (65536 max... I know it's a hack, but whatever!...)
-			var COUNT_1 = (byte) Helper.SectorObjects[Helper.SectorObjects.Count - 4];
-			var COUNT_2 = (byte) Helper.SectorObjects[Helper.SectorObjects.Count - 3];
+			var COUNT_1 = (byte) SecHelper.SectorObjects[SecHelper.SectorObjects.Count - 4];
+			var COUNT_2 = (byte) SecHelper.SectorObjects[SecHelper.SectorObjects.Count - 3];
 
 			var count = (uint) (COUNT_2*256 + COUNT_1);
 			count--;
 
 			COUNT_1 = (byte) count;
 			COUNT_2 = (byte) (count >> 8);
-			Helper.SectorObjects[Helper.SectorObjects.Count - 4] = COUNT_1;
-			Helper.SectorObjects[Helper.SectorObjects.Count - 3] = COUNT_2;
+			SecHelper.SectorObjects[SecHelper.SectorObjects.Count - 4] = COUNT_1;
+			SecHelper.SectorObjects[SecHelper.SectorObjects.Count - 3] = COUNT_2;
 
-			if (Helper.SectorObjects.Count != 4) /* 0x04 = NO OBJECTS */
+			if (SecHelper.SectorObjects.Count != 4) /* 0x04 = NO OBJECTS */
 			{
 				// First of all, dump SectorObjects to a temporary OFF file
 				var w_off = new BinaryWriter(new FileStream("temp.off", FileMode.Create));
-				for (int i = 0; i < Helper.SectorObjects.Count; i++)
-					w_off.Write((byte) Helper.SectorObjects[i]);
+				for (int i = 0; i < SecHelper.SectorObjects.Count; i++)
+					w_off.Write((byte) SecHelper.SectorObjects[i]);
 				w_off.Close();
 
 				// Walk through the object dump to detect object boundaries
@@ -9566,7 +9566,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 
-			if (Helper.SectorTiles.Count == 0)
+			if (SecHelper.SectorTiles.Count == 0)
 			{
 				MessageBox.Show("No sector is loaded! Load a sector first.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
 				return;
@@ -9581,8 +9581,8 @@ namespace WorldBuilder.Forms
 			if (SVB_Bitmap.Length > 1000)
 				san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-			if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-				san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+			if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+				san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 
 			san.Show();
 		}
@@ -9911,8 +9911,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 
 					SysMsg.SM_PAINT_TILE_QUEUE.Clear();
 					SysMsg.SM_PAINT_TILE = false;
@@ -10311,8 +10311,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB1 = false;
 				}
 				catch (Exception)
@@ -10350,8 +10350,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB2 = false;
 				}
 				catch (Exception)
@@ -10389,8 +10389,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB3 = false;
 				}
 				catch (Exception)
@@ -10428,8 +10428,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (Helper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = Helper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
+						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB4 = false;
 				}
 				catch (Exception)

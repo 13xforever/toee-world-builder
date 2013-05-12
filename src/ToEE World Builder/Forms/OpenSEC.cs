@@ -31,8 +31,8 @@ namespace WorldBuilder.Forms
 			int X, Y, mX, mY, MX, MY;
 			foreach (string sec in secs)
 			{
-				Helper.SEC_GetXY(Path.GetFileNameWithoutExtension(sec), out X, out Y);
-				Helper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(sec), out mY, out MY, out mX, out MX);
+				SecHelper.SEC_GetXY(Path.GetFileNameWithoutExtension(sec), out X, out Y);
+				SecHelper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(sec), out mY, out MY, out mX, out MX);
 				SEC_LIST.Items.Add(string.Format("{0,-20}\t(SX = {1}; SY = {2})\t\tCoordinates from ({3}; {4}) to ({5}; {6})", Path.GetFileNameWithoutExtension(sec), X, Y, mX, mY, MX, MY));
 			}
 		}

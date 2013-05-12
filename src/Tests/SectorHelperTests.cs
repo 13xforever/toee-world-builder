@@ -16,7 +16,7 @@ namespace Tests
 		[TestCase(0x3f, 0xff, Result = 0xfc0000ff)]
 		public uint GetSecNameFromXY(int x, int y)
 		{
-			return Helper.SEC_GetSecNameFromXY(x, y);
+			return SecHelper.SEC_GetSecNameFromXY(x, y);
 		}
 	
 		[Test]
@@ -31,7 +31,7 @@ namespace Tests
 		[TestCase(0x0fff, 0x3fff, Result = 0xfc0000ff)]
 		public uint GetSectorCorrespondence(int x, int y)
 		{
-			return Helper.SEC_GetSectorCorrespondence(y, x);
+			return SecHelper.SEC_GetSectorCorrespondence(y, x);
 		}
 	
 		[Test]
@@ -46,7 +46,7 @@ namespace Tests
 		public void GetMinMax(string sectorName, int minX, int maxX, int minY, int maxY)
 		{
 			int resMinX, resMinY, resMaxX, resMaxY;
-			Helper.Sec_GetMinMax(sectorName, out resMinX, out resMaxX, out resMinY, out resMaxY);
+			SecHelper.Sec_GetMinMax(sectorName, out resMinX, out resMaxX, out resMinY, out resMaxY);
 
 			Assert.That(resMinX, Is.EqualTo(minX));
 			Assert.That(resMinY, Is.EqualTo(minY));

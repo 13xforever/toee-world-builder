@@ -27,8 +27,8 @@ namespace WorldBuilder.Forms
 				// Make sec name from object coordinates
 				CX = int.Parse(ObjX.Text);
 				CY = int.Parse(ObjY.Text);
-				FileToOpen = Helper.SEC_GetSectorCorrespondence(CX, CY).ToString();
-				Helper.Sec_GetMinMax(FileToOpen, out minY, out maxY, out minX, out maxX);
+				FileToOpen = SecHelper.SEC_GetSectorCorrespondence(CX, CY).ToString();
+				SecHelper.Sec_GetMinMax(FileToOpen, out minY, out maxY, out minX, out maxX);
 			}
 			else
 			{
@@ -42,8 +42,8 @@ namespace WorldBuilder.Forms
 
 				CX = int.Parse(SecX.Text);
 				CY = int.Parse(SecY.Text);
-				FileToOpen = Helper.SEC_GetSecNameFromXY(CX, CY).ToString();
-				Helper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(FileToOpen), out minY, out maxY, out minX, out maxX);
+				FileToOpen = SecHelper.SEC_GetSecNameFromXY(CX, CY).ToString();
+				SecHelper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(FileToOpen), out minY, out maxY, out minX, out maxX);
 			}
 
 			if (File.Exists(Path.Combine(SectorsPath, FileToOpen + ".sec")))

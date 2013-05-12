@@ -11,7 +11,7 @@ namespace WorldBuilder.Forms
 		public string cur_sector = ""; // current sector file to be edited
 		public ArrayList data = new ArrayList(); // other data in the sector besides lights
 		public bool int_state = false; // interface state
-		public Helper.LightEx light = new Helper.LightEx(); // a light to be edited
+		public LightExHelper.LightEx light = new LightExHelper.LightEx(); // a light to be edited
 		public ArrayList lights = new ArrayList(); // a collection of all lights to process
 
 		public LightEditorEx()
@@ -20,7 +20,7 @@ namespace WorldBuilder.Forms
 		}
 
 		// write back a basic light
-		public void WriteLightPrimary(BinaryWriter w_sec, Helper.LightEx light)
+		public void WriteLightPrimary(BinaryWriter w_sec, LightExHelper.LightEx light)
 		{
 			w_sec.Write(light.light_pri.light1.handle);
 			w_sec.Write(light.light_pri.light1.flags);
@@ -43,14 +43,14 @@ namespace WorldBuilder.Forms
 		}
 
 		// write back the primary light particle system
-		public void WriteLightPartSys(BinaryWriter w_sec, Helper.LightEx light)
+		public void WriteLightPartSys(BinaryWriter w_sec, LightExHelper.LightEx light)
 		{
 			w_sec.Write(light.light_pri.partsys1.hash_id);
 			w_sec.Write(light.light_pri.partsys1.id);
 		}
 
 		// write back the secondary light structure
-		public void WriteLightSecondary(BinaryWriter w_sec, Helper.LightEx light)
+		public void WriteLightSecondary(BinaryWriter w_sec, LightExHelper.LightEx light)
 		{
 			w_sec.Write(light.light_sec.type);
 			w_sec.Write(light.light_sec.red);
@@ -67,7 +67,7 @@ namespace WorldBuilder.Forms
 		}
 
 		// write back a complete 107-byte light
-		public void WriteLightComplete(BinaryWriter w_sec, Helper.LightEx light)
+		public void WriteLightComplete(BinaryWriter w_sec, LightExHelper.LightEx light)
 		{
 			WriteLightPrimary(w_sec, light);
 			WriteLightPartSys(w_sec, light);
@@ -75,7 +75,7 @@ namespace WorldBuilder.Forms
 		}
 
 		// write back a complete light depending on the required format
-		public void WriteLightCompleteEx(BinaryWriter w_sec, Helper.LightEx light, bool StorePrimaryPartsys, bool StoreSecondaryLight, bool StoreData)
+		public void WriteLightCompleteEx(BinaryWriter w_sec, LightExHelper.LightEx light, bool StorePrimaryPartsys, bool StoreSecondaryLight, bool StoreData)
 		{
 			WriteLightPrimary(w_sec, light);
 			if ((StorePrimaryPartsys) || (StoreSecondaryLight))
@@ -185,9 +185,9 @@ namespace WorldBuilder.Forms
 		}
 
 		// load up a light structure from the current parameters
-		private Helper.LightEx SetupLightStruct()
+		private LightExHelper.LightEx SetupLightStruct()
 		{
-			var _light = new Helper.LightEx();
+			var _light = new LightExHelper.LightEx();
 
 			_light.light_pri.light1.handle = 0;
 			_light.light_pri.light1.flags = GetLightFlags();
@@ -226,7 +226,7 @@ namespace WorldBuilder.Forms
 		}
 
 		// set current parameters according to the light structure passed
-		private void LoadLightStruct(Helper.LightEx _light)
+		private void LoadLightStruct(LightExHelper.LightEx _light)
 		{
 			SetLightFlags(_light.light_pri.light1.flags);
 			PriLightType.SelectedIndex = (int) _light.light_pri.light1.type;
@@ -259,9 +259,9 @@ namespace WorldBuilder.Forms
 		}
 
 		// Load a single light from a sector file, at the current position.
-		public static Helper.LightEx LoadLightFromSEC(BinaryReader br)
+		public static LightExHelper.LightEx LoadLightFromSEC(BinaryReader br)
 		{
-			var _light = new Helper.LightEx();
+			var _light = new LightExHelper.LightEx();
 			bool HAS_PRIMARY_PARTSYS = false;
 			bool HAS_SECONDARY_LIGHT = false;
 			string FLAG_BITMAP;
@@ -354,7 +354,7 @@ namespace WorldBuilder.Forms
 
 			for (int i = 0; i < lights.Count; i++)
 			{
-				var lt = (Helper.LightEx) lights[i];
+				var lt = (LightExHelper.LightEx) lights[i];
 				bool HAS_PRIMARY_PARTSYS = false;
 				bool HAS_SECONDARY_LIGHT = false;
 
@@ -542,9 +542,9 @@ namespace WorldBuilder.Forms
 		}
 
 		// returns a light from an array by ID
-		private Helper.LightEx LightByID(int id)
+		private LightExHelper.LightEx LightByID(int id)
 		{
-			return (Helper.LightEx) lights[id];
+			return (LightExHelper.LightEx) lights[id];
 		}
 
 		private void CurLight_ValueChanged(object sender, EventArgs e)
@@ -635,7 +635,7 @@ namespace WorldBuilder.Forms
 					for (int i = 0; i < lights.Count; i++)
 						p_lightarr.Add(lights[i]);
 
-					Helper.SectorLights = p_lightarr;
+					SecHelper.SectorLights = p_lightarr;
 					CurLight.Value = 0;
 					CurLight.Maximum--;
 					CurLight_ValueChanged(null, null); // update #0 location
