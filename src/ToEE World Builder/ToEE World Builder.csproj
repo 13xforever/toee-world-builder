@@ -138,6 +138,7 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Helpers\DcRankHelper.cs" />
+    <Compile Include="Helpers\GeneratorEncoder.cs" />
     <Compile Include="Helpers\GenHelper.cs" />
     <Compile Include="Helpers\HsdHelper.cs" />
     <Compile Include="Helpers\IntelliProperties.cs" />

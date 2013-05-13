@@ -72,7 +72,6 @@ namespace WorldBuilder.Helpers
 		public static string UInt64ToBitmap(ulong Flags)
 		{
 			string BITMAP = "";
-
 			for (int i = 0; i < 8; i++)
 			{
 				var CURRENT_BYTE = (byte)(Flags >> (8*i));
@@ -84,11 +83,8 @@ namespace WorldBuilder.Helpers
 
 				BITMAP += _BMP2;
 			}
-
 			return BITMAP;
 		}
-
-		public static ulong GetComp2(int number) { return (ulong)(Math.Pow(2, number) - 1); }
 
 		public static string ConvertBytesToStringGuid(byte[] GUID_bytes)
 		{
@@ -114,6 +110,66 @@ namespace WorldBuilder.Helpers
 			bytes[3] = (byte)(flags >> 24);
 
 			return bytes;
+		}
+
+		public const int GeneratorBitsMask	= 0x07f80000;
+		public const int NpcGenBitsMask		= 0x00e00000;
+		public const int SpawnMaxBitsMask	= 0x0007c000;
+		public const int TotalBitsMask		= 0x00003f80;
+		public const int GeneratorBitsPos = 19;
+		public const int NpcGenBitsPos = 21;
+		public const int SpawnMaxPos = 14;
+		public const int TotalBitsPos = 7;
+
+		private static int GetX(int value, int mask, int shift)
+		{
+			return (value & mask) >> shift;
+		}
+
+		private static int MakeX(int oldValue, int newValue, int mask, int shift)
+		{
+			return oldValue & ~mask | ((newValue & (mask >> shift)) << shift);
+		}
+
+
+		public static int GetGenId(int target)
+		{
+			return GetX(target, GeneratorBitsMask, GeneratorBitsPos);
+		}
+
+		public static int GetNpcGen(int target)
+		{
+			return GetX(target, NpcGenBitsMask, NpcGenBitsPos);
+		}
+
+		public static int GetSpawnMax(int target)
+		{
+			return GetX(target, SpawnMaxBitsMask, SpawnMaxPos);
+		}
+
+		public static int GetTotal(int target)
+		{
+			return GetX(target, TotalBitsMask, TotalBitsPos);
+		}
+
+		public static int MakeGenId(int x, int gid)
+		{
+			return MakeX(x, gid, GeneratorBitsMask, GeneratorBitsPos);
+		}
+
+		public static int MakeNpcGen(int x, int ngen)
+		{
+			return MakeX(x, ngen, NpcGenBitsMask, NpcGenBitsPos);
+		}
+
+		public static int MakeSpawnMax(int x, int max)
+		{
+			return MakeX(x, max, SpawnMaxBitsMask, SpawnMaxPos);
+		}
+
+		public static int MakeTotal(int x, int tot)
+		{
+			return MakeX(x, tot, TotalBitsMask, TotalBitsPos);
 		}
 	}
 }

@@ -1718,7 +1718,7 @@ namespace WorldBuilder.Forms
 			w_mob.Write(int.Parse(vWIS.Text));
 			w_mob.Write(int.Parse(vCHA.Text));
 
-			Helper.GetComp2Ex(w_mob, 6);
+			Helper.WriteComp2Ex(w_mob, 6);
 		}
 
 		private uint PackGeneratorData()
@@ -1726,9 +1726,9 @@ namespace WorldBuilder.Forms
 			// Note: spawn rate should be controlled in radiobox event handlers!
 			uint gdata = 0;
 
-			gdata = (uint) Helper.MAKE_GENID((int) gdata, int.Parse(vNPCGenData.Text));
-			gdata = (uint) Helper.MAKE_SPAWNMAX((int) gdata, int.Parse(vNPCGSpawnConcurrent.Text));
-			gdata = (uint) Helper.MAKE_TOTAL((int) gdata, int.Parse(vNPCGSpawnTotal.Text));
+			gdata = (uint) GenHelper.MakeGenId((int) gdata, int.Parse(vNPCGenData.Text));
+			gdata = (uint) GenHelper.MakeSpawnMax((int) gdata, int.Parse(vNPCGSpawnConcurrent.Text));
+			gdata = (uint) GenHelper.MakeTotal((int) gdata, int.Parse(vNPCGSpawnTotal.Text));
 
 			// set flags
 			if (vNPCGDay.Checked)
@@ -1775,15 +1775,15 @@ namespace WorldBuilder.Forms
 			else
 				vNPCGIgnoreTotal.Checked = false;
 
-			vNPCGenData.Text = Helper.GET_GENID(_gdata).ToString();
-			vNPCGSpawnConcurrent.Text = Helper.GET_SPAWNMAX(_gdata).ToString();
-			vNPCGSpawnTotal.Text = Helper.GET_TOTAL(_gdata).ToString();
+			vNPCGenData.Text = GenHelper.GetGenId(_gdata).ToString();
+			vNPCGSpawnConcurrent.Text = GenHelper.GetSpawnMax(_gdata).ToString();
+			vNPCGSpawnTotal.Text = GenHelper.GetTotal(_gdata).ToString();
 
 			// NPC rate flags setup
 			if (MobHelper.GetPropertyState(MOB_BITMAP, 353) == TriState.True)
 			{
 				uint flags = GetNPCFlags();
-				int rate = Helper.GET_NPCGEN((int) flags);
+				int rate = GenHelper.GetNpcGen((int) flags);
 
 				if (rate == 0)
 				{
@@ -1968,7 +1968,7 @@ namespace WorldBuilder.Forms
 			w_mob.Write(uint.Parse(vMoneyIdx3.Text));
 			w_mob.Write(uint.Parse(vMoneyIdx4.Text));
 
-			Helper.GetComp2Ex(w_mob, 4);
+			Helper.WriteComp2Ex(w_mob, 4);
 		}
 
 		private void SaveLinkedMobileObjects(BinaryWriter w_mob)
@@ -1995,7 +1995,7 @@ namespace WorldBuilder.Forms
 				br.Close();
 			}
 
-			Helper.GetComp2Ex(w_mob, (uint) vChestInv.Items.Count);
+			Helper.WriteComp2Ex(w_mob, (uint) vChestInv.Items.Count);
 		}
 
 		private void SaveLinkedMobileObjectsForNPC(BinaryWriter w_mob)
@@ -2022,7 +2022,7 @@ namespace WorldBuilder.Forms
 				br.Close();
 			}
 
-			Helper.GetComp2Ex(w_mob, (uint) vNpcInv.Items.Count);
+			Helper.WriteComp2Ex(w_mob, (uint) vNpcInv.Items.Count);
 		}
 
 		private void SaveNPCFactions(BinaryWriter w_mob)
@@ -2046,7 +2046,7 @@ namespace WorldBuilder.Forms
 				w_mob.Write(uint.Parse((string) vFactions.Items[i]));
 
 			// the post-structure
-			Helper.GetComp2Ex(w_mob, (uint) (vFactions.Items.Count));
+			Helper.WriteComp2Ex(w_mob, (uint) (vFactions.Items.Count));
 		}
 
 		private void SaveNPCWaypoints(BinaryWriter w_mob)
@@ -2078,7 +2078,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Post-structure
-			Helper.GetComp2Ex(w_mob, (uint) (vWaypoints.Items.Count*8 + 2));
+			Helper.WriteComp2Ex(w_mob, (uint) (vWaypoints.Items.Count*8 + 2));
 		}
 
 		private void SaveNPCStandpoints(BinaryWriter w_mob)
@@ -2149,9 +2149,9 @@ namespace WorldBuilder.Forms
 
 			// Post-structure
 			if (!pScoutPoint.Checked)
-				Helper.GetComp2Ex(w_mob, 0x14);
+				Helper.WriteComp2Ex(w_mob, 0x14);
 			else
-				Helper.GetComp2Ex(w_mob, 0x1E);
+				Helper.WriteComp2Ex(w_mob, 0x1E);
 
 			//w_mob.Write((uint)0x02);
 			//w_mob.Write((uint)0x0FFFFF);
@@ -5303,14 +5303,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 0);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 0);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 0);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 0);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5320,14 +5320,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 1);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 1);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 1);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 1);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5337,14 +5337,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 2);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 2);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 2);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 2);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5354,14 +5354,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 3);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 3);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 3);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 3);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5371,14 +5371,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 4);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 4);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 4);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 4);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5388,14 +5388,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 5);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 5);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 5);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 5);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5405,14 +5405,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 6);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 6);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 6);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 6);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5422,14 +5422,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 7);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 7);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) Helper.MAKE_NPCGEN((int) flags, 7);
+				flags = (uint) GenHelper.MakeNpcGen((int) flags, 7);
 				SetNPCFlags(flags);
 			}
 		}
