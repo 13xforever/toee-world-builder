@@ -40,6 +40,8 @@ namespace Tests
 		[TestCase(0x00000000, 0x00, Result = 0x00000000)]
 		[TestCase(0xaaaaaaaa, 0xaa, Result = 0xad52aaaa)] //10101|010 10101|010 10101010 10101010 ← 10101010 = 10101|101 01010|010 10101010 10101010
 		[TestCase(0x55555555, 0x55, Result = 0x52ad5555)] //01010|101 01010|101 01010101 01010101 ← 01010101 = 01010|010 10101|101 01010101 01010101
+		[TestCase(0xaaaaaaaa, 0xaaaaaaaa, Result = 0xad52aaaa)]
+		[TestCase(0x55555555, 0x55555555, Result = 0x52ad5555)]
 		public uint GeneratorEncoderSet(long value1, long value2)
 		{
 			return GeneratorEncoder.GenId.Set((uint)value1, (int)value2);
