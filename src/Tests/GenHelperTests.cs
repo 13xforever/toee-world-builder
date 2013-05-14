@@ -27,7 +27,7 @@ namespace Tests
 		[TestCase(0x00000000, Result = 0x00)]
 		public int GeneratorEncoderGet(long value)
 		{
-			return GenHelper.GetGenId((int)value);
+			return GeneratorEncoder.GenId.Get((int)value);
 		}
 	
 		[Test]
@@ -42,7 +42,7 @@ namespace Tests
 		[TestCase(0x55555555, 0x55, Result = 0x52ad5555)] //01010|101 01010|101 01010101 01010101 ← 01010101 = 01010|010 10101|101 01010101 01010101
 		public uint GeneratorEncoderSet(long value1, long value2)
 		{
-			return (uint)GenHelper.MakeGenId((int)value1, (int)value2);
+			return GeneratorEncoder.GenId.Set((uint)value1, (int)value2);
 		}
 	}
 }

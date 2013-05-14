@@ -1726,9 +1726,9 @@ namespace WorldBuilder.Forms
 			// Note: spawn rate should be controlled in radiobox event handlers!
 			uint gdata = 0;
 
-			gdata = (uint) GenHelper.MakeGenId((int) gdata, int.Parse(vNPCGenData.Text));
-			gdata = (uint) GenHelper.MakeSpawnMax((int) gdata, int.Parse(vNPCGSpawnConcurrent.Text));
-			gdata = (uint) GenHelper.MakeTotal((int) gdata, int.Parse(vNPCGSpawnTotal.Text));
+			gdata = GeneratorEncoder.GenId.Set(gdata, int.Parse(vNPCGenData.Text));
+			gdata = GeneratorEncoder.SpawnMax.Set(gdata, int.Parse(vNPCGSpawnConcurrent.Text));
+			gdata = GeneratorEncoder.Total.Set(gdata, int.Parse(vNPCGSpawnTotal.Text));
 
 			// set flags
 			if (vNPCGDay.Checked)
@@ -1775,15 +1775,15 @@ namespace WorldBuilder.Forms
 			else
 				vNPCGIgnoreTotal.Checked = false;
 
-			vNPCGenData.Text = GenHelper.GetGenId(_gdata).ToString();
-			vNPCGSpawnConcurrent.Text = GenHelper.GetSpawnMax(_gdata).ToString();
-			vNPCGSpawnTotal.Text = GenHelper.GetTotal(_gdata).ToString();
+			vNPCGenData.Text = GeneratorEncoder.GenId.Get(_gdata).ToString();
+			vNPCGSpawnConcurrent.Text = GeneratorEncoder.SpawnMax.Get(_gdata).ToString();
+			vNPCGSpawnTotal.Text = GeneratorEncoder.Total.Get(_gdata).ToString();
 
 			// NPC rate flags setup
 			if (MobHelper.GetPropertyState(MOB_BITMAP, 353) == TriState.True)
 			{
 				uint flags = GetNPCFlags();
-				int rate = GenHelper.GetNpcGen((int) flags);
+				int rate = GeneratorEncoder.NpcGen.Get((int) flags);
 
 				if (rate == 0)
 				{
@@ -5303,14 +5303,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 0);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 0);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 0);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 0);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5320,14 +5320,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 1);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 1);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 1);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 1);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5337,14 +5337,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 2);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 2);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 2);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 2);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5354,14 +5354,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 3);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 3);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 3);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 3);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5371,14 +5371,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 4);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 4);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 4);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 4);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5388,14 +5388,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 5);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 5);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 5);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 5);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5405,14 +5405,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 6);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 6);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 6);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 6);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5422,14 +5422,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 7);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 7);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = (uint) GenHelper.MakeNpcGen((int) flags, 7);
+				flags = GeneratorEncoder.NpcGen.Set(flags, 7);
 				SetNPCFlags(flags);
 			}
 		}
