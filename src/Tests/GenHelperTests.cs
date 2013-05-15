@@ -59,5 +59,42 @@ namespace Tests
 		{
 			return GenHelper.GetMobileType(s);
 		}
+
+		[Test]
+		[TestCase(null, Result = 0x00000000)]
+		[TestCase("", Result = 0x00000000)]
+		[TestCase("0", Result = 0x00000000)]
+		[TestCase("1", Result = 0x00000001)]
+		[TestCase("10", Result = 0x00000001)]
+		[TestCase("01", Result = 0x00000002)]
+		[TestCase("00000000000000000000000000000000", Result = 0x00000000)]
+		[TestCase("00000000000000000000000000000001", Result = 0x80000000)]
+		[TestCase("10000000000000000000000000000000", Result = 0x00000001)]
+		[TestCase("11111111111111111111111111111111", Result = 0xffffffff)]
+		[TestCase("000000000000000000000000000000001", ExpectedException = typeof(ArgumentException))]
+		public uint BitmapToUInt32(string value)
+		{
+			return GenHelper.BitmapToUInt32(value);
+		}
+
+		[Test]
+		[TestCase(0x00000000u, Result = "00000000000000000000000000000000")]
+		[TestCase(0x80000000u, Result = "00000000000000000000000000000001")]
+		[TestCase(0x00000001u, Result = "10000000000000000000000000000000")]
+		[TestCase(0xffffffffu, Result = "11111111111111111111111111111111")]
+		public string UInt32ToBitmap(uint value)
+		{
+			return GenHelper.UInt32ToBitmap(value);
+		}
+
+		[Test]
+		[TestCase(0x0000000000000000u, Result = "0000000000000000000000000000000000000000000000000000000000000000")]
+		[TestCase(0x8000000000000000u, Result = "0000000000000000000000000000000000000000000000000000000000000001")]
+		[TestCase(0x0000000000000001u, Result = "1000000000000000000000000000000000000000000000000000000000000000")]
+		[TestCase(0xffffffffffffffffu, Result = "1111111111111111111111111111111111111111111111111111111111111111")]
+		public string UInt64ToBitmap(ulong value)
+		{
+			return GenHelper.UInt64ToBitmap(value);
+		}
 	}
 }

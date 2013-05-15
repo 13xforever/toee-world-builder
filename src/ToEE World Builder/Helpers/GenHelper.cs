@@ -17,59 +17,44 @@ namespace WorldBuilder.Helpers
 			throw new ArgumentException("Unexpected Error 002: Illegal mobile type string was passed to GetMobileType(string)!");
 		}
 
-		public static uint BitmapToUInt32(string Bitmap)
+		public static uint BitmapToUInt32(string bitmap)
 		{
-			uint BIT_INT = 0;
-			uint BIT_FLAG = 0;
+			if (string.IsNullOrEmpty(bitmap)) return 0;
+			if (bitmap.Length > 32) throw new ArgumentException("Bitmap should not exceed 32 bits.", "bitmap");
 
-			for (int i = Bitmap.Length - 1; i >= 0; i--)
+			uint result = 0;
+			for (int i = bitmap.Length - 1; i >= 0; i--)
 			{
-				BIT_FLAG++;
-
-				if (Bitmap[i] == '1')
-					BIT_INT += (uint)Math.Pow(2, i);
+				result <<= 1;
+				if (bitmap[i] == '1')
+					result |= 1;
 			}
-
-			return BIT_INT;
+			return result;
 		}
 
-		public static string UInt32ToBitmap(uint Flags)
+		public static string UInt32ToBitmap(uint flags)
 		{
-			string BITMAP = "";
-
-			for (int i = 0; i < 4; i++)
+			var result = new StringBuilder();
+			for (var i = 0; i < sizeof (uint)*8; i++)
 			{
-				var CURRENT_BYTE = (byte)(Flags >> (8*i));
-				string _BMP = Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
-				string _BMP2 = "";
-
-				for (int j = 7; j >= 0; j--)
-					_BMP2 += _BMP[j];
-
-				BITMAP += _BMP2;
+				result.Append(flags & 1);
+				flags >>= 1;
 			}
-
-			return BITMAP;
+			return result.ToString();
 		}
 
 		/// <summary>
 		///     a 64-bit version of <see cref="UInt32ToBitmap" />
 		/// </summary>
-		public static string UInt64ToBitmap(ulong Flags)
+		public static string UInt64ToBitmap(ulong flags)
 		{
-			string BITMAP = "";
-			for (int i = 0; i < 8; i++)
+			var result = new StringBuilder();
+			for (var i = 0; i < sizeof(ulong) * 8; i++)
 			{
-				var CURRENT_BYTE = (byte)(Flags >> (8*i));
-				string _BMP = Convert.ToString(CURRENT_BYTE, 2).PadLeft(8, '0');
-				string _BMP2 = "";
-
-				for (int j = 7; j >= 0; j--)
-					_BMP2 += _BMP[j];
-
-				BITMAP += _BMP2;
+				result.Append(flags & 1);
+				flags >>= 1;
 			}
-			return BITMAP;
+			return result.ToString();
 		}
 
 		public static string ConvertBytesToStringGuid(byte[] GUID_bytes)
