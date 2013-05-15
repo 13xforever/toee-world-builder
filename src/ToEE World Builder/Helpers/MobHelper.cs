@@ -164,55 +164,55 @@ namespace WorldBuilder.Helpers
 
 			switch (MobType)
 			{
-				case MobType.Portal:
+				case MobType.obj_t_portal:
 					Num_Blocks = 4;
 					break;
-				case MobType.Container:
+				case MobType.obj_t_container:
 					Num_Blocks = 4;
 					break;
-				case MobType.Scenery:
+				case MobType.obj_t_scenery:
 					Num_Blocks = 5;
 					break;
-				case MobType.Projectile:
+				case MobType.obj_t_projectile:
 					Num_Blocks = 5;
 					break;
-				case MobType.Weapon:
+				case MobType.obj_t_weapon:
 					Num_Blocks = 7;
 					break;
-				case MobType.Ammo:
+				case MobType.obj_t_ammo:
 					Num_Blocks = 7;
 					break;
-				case MobType.Armor:
+				case MobType.obj_t_armor:
 					Num_Blocks = 8;
 					break;
-				case MobType.Money:
+				case MobType.obj_t_money:
 					Num_Blocks = 8;
 					break;
-				case MobType.Food:
+				case MobType.obj_t_food:
 					Num_Blocks = 8;
 					break;
-				case MobType.Scroll:
+				case MobType.obj_t_scroll:
 					Num_Blocks = 8;
 					break;
-				case MobType.Key:
+				case MobType.obj_t_key:
 					Num_Blocks = 9;
 					break;
-				case MobType.Written:
+				case MobType.obj_t_written:
 					Num_Blocks = 9;
 					break;
-				case MobType.Generic:
+				case MobType.obj_t_generic:
 					Num_Blocks = 9;
 					break;
-				case MobType.Pc:
+				case MobType.obj_t_pc:
 					Num_Blocks = 11;
 					break;
-				case MobType.Npc:
+				case MobType.obj_t_npc:
 					Num_Blocks = 13;
 					break;
-				case MobType.Trap:
+				case MobType.obj_t_trap:
 					Num_Blocks = 13;
 					break;
-				case MobType.Bag:
+				case MobType.obj_t_bag:
 					Num_Blocks = 9;
 					break;
 				default:

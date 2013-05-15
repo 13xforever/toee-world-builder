@@ -10,27 +10,11 @@ namespace WorldBuilder.Helpers
 		{
 			if (mobileTypeString == null) throw new ArgumentNullException("mobileTypeString");
 
-			switch (mobileTypeString)
-			{
-				case "obj_t_portal"		: return MobType.Portal;
-				case "obj_t_container"	: return MobType.Container;
-				case "obj_t_scenery"	: return MobType.Scenery;
-				case "obj_t_projectile"	: return MobType.Projectile;
-				case "obj_t_weapon"		: return MobType.Weapon;
-				case "obj_t_ammo"		: return MobType.Ammo;
-				case "obj_t_armor"		: return MobType.Armor;
-				case "obj_t_money"		: return MobType.Money;
-				case "obj_t_food"		: return MobType.Food;
-				case "obj_t_scroll"		: return MobType.Scroll;
-				case "obj_t_key"		: return MobType.Key;
-				case "obj_t_written"	: return MobType.Written;
-				case "obj_t_generic"	: return MobType.Generic;
-				case "obj_t_pc"			: return MobType.Pc;
-				case "obj_t_npc"		: return MobType.Npc;
-				case "obj_t_trap"		: return MobType.Trap;
-				case "obj_t_bag"		: return MobType.Bag;
-				default					: throw new ArgumentException("Unexpected Error 002: Illegal mobile type string was passed to GetMobileType(string)!");
-			}
+			MobType result;
+			if (MobType.TryParse(mobileTypeString, false, out result))
+				return result;
+
+			throw new ArgumentException("Unexpected Error 002: Illegal mobile type string was passed to GetMobileType(string)!");
 		}
 
 		public static uint BitmapToUInt32(string Bitmap)

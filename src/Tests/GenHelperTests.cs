@@ -49,9 +49,9 @@ namespace Tests
 		}
 
 		[Test]
-		[TestCase("obj_t_portal", Result = MobType.Portal)]
-		[TestCase("obj_t_food", Result = MobType.Food)]
-		[TestCase("obj_t_bag", Result = MobType.Bag)]
+		[TestCase("obj_t_portal", Result = MobType.obj_t_portal)]
+		[TestCase("obj_t_food", Result = MobType.obj_t_food)]
+		[TestCase("obj_t_bag", Result = MobType.obj_t_bag)]
 		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
 		[TestCase("", ExpectedException = typeof(ArgumentException))]
 		[TestCase("sdfasfg", ExpectedException = typeof(ArgumentException))]
