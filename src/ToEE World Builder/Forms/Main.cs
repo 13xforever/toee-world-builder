@@ -973,9 +973,9 @@ namespace WorldBuilder.Forms
 							break;
 						case 46:
 							// obj_f_secretdoor_flags
-							var sdflags = (int) GetSecretDoorFlags();
+							var sdflags = GetSecretDoorFlags();
 							// now, we need to embed the door DC in here
-							sdflags = DcRankHelper.MakeDc(sdflags, int.Parse(vSDDC.Text));
+							sdflags = BitMasking.Dc.Set(sdflags, int.Parse(vSDDC.Text));
 							w_mob.Write(sdflags);
 							break;
 						case 47:
@@ -985,8 +985,8 @@ namespace WorldBuilder.Forms
 							break;
 						case 48:
 							// obj_f_secretdoor_dc
-							int sddc = 0;
-							sddc = DcRankHelper.MakeDc(sddc, int.Parse(vSDDC.Text));
+							uint sddc = 0;
+							sddc = BitMasking.Dc.Set(sddc, int.Parse(vSDDC.Text));
 							w_mob.Write(sddc);
 							break;
 						case 53:
@@ -1377,7 +1377,7 @@ namespace WorldBuilder.Forms
 							p_OSDF.Checked = true;
 							SetSecretDoorFlags((uint) SDFlags);
 							// we need to load the DC from here, I believe
-							vSDDC.Text = DcRankHelper.GetDc(SDFlags).ToString();
+							vSDDC.Text = BitMasking.Dc.Get(SDFlags).ToString();
 							break;
 						case 47:
 							// obj_f_secretdoor_effectname
@@ -1726,9 +1726,9 @@ namespace WorldBuilder.Forms
 			// Note: spawn rate should be controlled in radiobox event handlers!
 			uint gdata = 0;
 
-			gdata = GeneratorEncoder.GenId.Set(gdata, int.Parse(vNPCGenData.Text));
-			gdata = GeneratorEncoder.SpawnMax.Set(gdata, int.Parse(vNPCGSpawnConcurrent.Text));
-			gdata = GeneratorEncoder.Total.Set(gdata, int.Parse(vNPCGSpawnTotal.Text));
+			gdata = BitMasking.GenId.Set(gdata, int.Parse(vNPCGenData.Text));
+			gdata = BitMasking.SpawnMax.Set(gdata, int.Parse(vNPCGSpawnConcurrent.Text));
+			gdata = BitMasking.Total.Set(gdata, int.Parse(vNPCGSpawnTotal.Text));
 
 			// set flags
 			if (vNPCGDay.Checked)
@@ -1775,15 +1775,15 @@ namespace WorldBuilder.Forms
 			else
 				vNPCGIgnoreTotal.Checked = false;
 
-			vNPCGenData.Text = GeneratorEncoder.GenId.Get(_gdata).ToString();
-			vNPCGSpawnConcurrent.Text = GeneratorEncoder.SpawnMax.Get(_gdata).ToString();
-			vNPCGSpawnTotal.Text = GeneratorEncoder.Total.Get(_gdata).ToString();
+			vNPCGenData.Text = BitMasking.GenId.Get(_gdata).ToString();
+			vNPCGSpawnConcurrent.Text = BitMasking.SpawnMax.Get(_gdata).ToString();
+			vNPCGSpawnTotal.Text = BitMasking.Total.Get(_gdata).ToString();
 
 			// NPC rate flags setup
 			if (MobHelper.GetPropertyState(MOB_BITMAP, 353) == TriState.True)
 			{
 				uint flags = GetNPCFlags();
-				int rate = GeneratorEncoder.NpcGen.Get((int) flags);
+				int rate = BitMasking.NpcGen.Get((int) flags);
 
 				if (rate == 0)
 				{
@@ -5303,14 +5303,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 0);
+				flags = BitMasking.NpcGen.Set(flags, 0);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 0);
+				flags = BitMasking.NpcGen.Set(flags, 0);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5320,14 +5320,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 1);
+				flags = BitMasking.NpcGen.Set(flags, 1);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 1);
+				flags = BitMasking.NpcGen.Set(flags, 1);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5337,14 +5337,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 2);
+				flags = BitMasking.NpcGen.Set(flags, 2);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 2);
+				flags = BitMasking.NpcGen.Set(flags, 2);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5354,14 +5354,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 3);
+				flags = BitMasking.NpcGen.Set(flags, 3);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 3);
+				flags = BitMasking.NpcGen.Set(flags, 3);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5371,14 +5371,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 4);
+				flags = BitMasking.NpcGen.Set(flags, 4);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 4);
+				flags = BitMasking.NpcGen.Set(flags, 4);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5388,14 +5388,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 5);
+				flags = BitMasking.NpcGen.Set(flags, 5);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 5);
+				flags = BitMasking.NpcGen.Set(flags, 5);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5405,14 +5405,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 6);
+				flags = BitMasking.NpcGen.Set(flags, 6);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 6);
+				flags = BitMasking.NpcGen.Set(flags, 6);
 				SetNPCFlags(flags);
 			}
 		}
@@ -5422,14 +5422,14 @@ namespace WorldBuilder.Forms
 			if (p_ONF.Checked)
 			{
 				uint flags = GetNPCFlags();
-				flags = GeneratorEncoder.NpcGen.Set(flags, 7);
+				flags = BitMasking.NpcGen.Set(flags, 7);
 				SetNPCFlags(flags);
 			}
 			else
 			{
 				p_ONF.Checked = true;
 				uint flags = 0;
-				flags = GeneratorEncoder.NpcGen.Set(flags, 7);
+				flags = BitMasking.NpcGen.Set(flags, 7);
 				SetNPCFlags(flags);
 			}
 		}

@@ -27,7 +27,7 @@ namespace Tests
 		[TestCase(0x00000000, Result = 0x00)]
 		public int GeneratorEncoderGet(long value)
 		{
-			return GeneratorEncoder.GenId.Get((int)value);
+			return BitMasking.GenId.Get((int)value);
 		}
 	
 		[Test]
@@ -44,7 +44,7 @@ namespace Tests
 		[TestCase(0x55555555, 0x55555555, Result = 0x52ad5555)]
 		public uint GeneratorEncoderSet(long value1, long value2)
 		{
-			return GeneratorEncoder.GenId.Set((uint)value1, (int)value2);
+			return BitMasking.GenId.Set((uint)value1, (int)value2);
 		}
 	}
 }
