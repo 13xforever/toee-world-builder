@@ -1,7 +1,10 @@
+using System;
+
 namespace WorldBuilder
 {
-	public enum MobTypes
+	public enum MobType
 	{
+		
 		Portal,
 		Container,
 		Scenery,

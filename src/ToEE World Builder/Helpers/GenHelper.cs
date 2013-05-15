@@ -6,28 +6,30 @@ namespace WorldBuilder.Helpers
 {
 	public static class GenHelper
 	{
-		public static MobTypes GetMobileType(string MobileTypeString)
+		public static MobType GetMobileType(string mobileTypeString)
 		{
-			switch (MobileTypeString)
+			if (mobileTypeString == null) throw new ArgumentNullException("mobileTypeString");
+
+			switch (mobileTypeString)
 			{
-				case "obj_t_portal"		: return MobTypes.Portal;
-				case "obj_t_container"	: return MobTypes.Container;
-				case "obj_t_scenery"	: return MobTypes.Scenery;
-				case "obj_t_projectile"	: return MobTypes.Projectile;
-				case "obj_t_weapon"		: return MobTypes.Weapon;
-				case "obj_t_ammo"		: return MobTypes.Ammo;
-				case "obj_t_armor"		: return MobTypes.Armor;
-				case "obj_t_money"		: return MobTypes.Money;
-				case "obj_t_food"		: return MobTypes.Food;
-				case "obj_t_scroll"		: return MobTypes.Scroll;
-				case "obj_t_key"		: return MobTypes.Key;
-				case "obj_t_written"	: return MobTypes.Written;
-				case "obj_t_generic"	: return MobTypes.Generic;
-				case "obj_t_pc"			: return MobTypes.Pc;
-				case "obj_t_npc"		: return MobTypes.Npc;
-				case "obj_t_trap"		: return MobTypes.Trap;
-				case "obj_t_bag"		: return MobTypes.Bag;
-				default					: throw new Exception("Unexpected Error 002: Illegal mobile type string was passed to GetMobileType(string)!");
+				case "obj_t_portal"		: return MobType.Portal;
+				case "obj_t_container"	: return MobType.Container;
+				case "obj_t_scenery"	: return MobType.Scenery;
+				case "obj_t_projectile"	: return MobType.Projectile;
+				case "obj_t_weapon"		: return MobType.Weapon;
+				case "obj_t_ammo"		: return MobType.Ammo;
+				case "obj_t_armor"		: return MobType.Armor;
+				case "obj_t_money"		: return MobType.Money;
+				case "obj_t_food"		: return MobType.Food;
+				case "obj_t_scroll"		: return MobType.Scroll;
+				case "obj_t_key"		: return MobType.Key;
+				case "obj_t_written"	: return MobType.Written;
+				case "obj_t_generic"	: return MobType.Generic;
+				case "obj_t_pc"			: return MobType.Pc;
+				case "obj_t_npc"		: return MobType.Npc;
+				case "obj_t_trap"		: return MobType.Trap;
+				case "obj_t_bag"		: return MobType.Bag;
+				default					: throw new ArgumentException("Unexpected Error 002: Illegal mobile type string was passed to GetMobileType(string)!");
 			}
 		}
 

@@ -151,7 +151,7 @@
     <Compile Include="Helpers\WaypointHelper.cs" />
     <Compile Include="PathNodeCollection.cs" />
     <Compile Include="PathNode.cs" />
-    <Compile Include="MobTypes.cs" />
+    <Compile Include="MobType.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

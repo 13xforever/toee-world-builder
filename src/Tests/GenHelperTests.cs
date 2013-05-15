@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using WorldBuilder;
 using WorldBuilder.Helpers;
 
 namespace Tests
@@ -45,6 +46,18 @@ namespace Tests
 		public uint GeneratorEncoderSet(long value1, long value2)
 		{
 			return BitMasking.GenId.Set((uint)value1, (int)value2);
+		}
+
+		[Test]
+		[TestCase("obj_t_portal", Result = MobType.Portal)]
+		[TestCase("obj_t_food", Result = MobType.Food)]
+		[TestCase("obj_t_bag", Result = MobType.Bag)]
+		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("sdfasfg", ExpectedException = typeof(ArgumentException))]
+		public MobType GetMobileType(string s)
+		{
+			return GenHelper.GetMobileType(s);
 		}
 	}
 }

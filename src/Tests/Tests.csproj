@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="GenHelperTests.cs" />
     <Compile Include="HelperTests.cs" />
+    <Compile Include="MobHelperTests.cs" />
     <Compile Include="PathNodeHelperTests.cs" />
     <Compile Include="ProtoHelperTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

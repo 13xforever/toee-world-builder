@@ -41,7 +41,7 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x34, SeekOrigin.Begin);
 					uint type = br.ReadUInt32();
 					br.BaseStream.Seek(0x3A, SeekOrigin.Begin);
-					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
+					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobType) type);
 					br.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 					uint x_coord = br.ReadUInt32();
 					uint y_coord = br.ReadUInt32();

@@ -158,61 +158,61 @@ namespace WorldBuilder.Helpers
 			return header;
 		}
 
-		public static int GetNumberofBitmapBlocks(MobTypes MobType)
+		public static int GetNumberofBitmapBlocks(MobType MobType)
 		{
 			int Num_Blocks = 4;
 
 			switch (MobType)
 			{
-				case MobTypes.Portal:
+				case MobType.Portal:
 					Num_Blocks = 4;
 					break;
-				case MobTypes.Container:
+				case MobType.Container:
 					Num_Blocks = 4;
 					break;
-				case MobTypes.Scenery:
+				case MobType.Scenery:
 					Num_Blocks = 5;
 					break;
-				case MobTypes.Projectile:
+				case MobType.Projectile:
 					Num_Blocks = 5;
 					break;
-				case MobTypes.Weapon:
+				case MobType.Weapon:
 					Num_Blocks = 7;
 					break;
-				case MobTypes.Ammo:
+				case MobType.Ammo:
 					Num_Blocks = 7;
 					break;
-				case MobTypes.Armor:
+				case MobType.Armor:
 					Num_Blocks = 8;
 					break;
-				case MobTypes.Money:
+				case MobType.Money:
 					Num_Blocks = 8;
 					break;
-				case MobTypes.Food:
+				case MobType.Food:
 					Num_Blocks = 8;
 					break;
-				case MobTypes.Scroll:
+				case MobType.Scroll:
 					Num_Blocks = 8;
 					break;
-				case MobTypes.Key:
+				case MobType.Key:
 					Num_Blocks = 9;
 					break;
-				case MobTypes.Written:
+				case MobType.Written:
 					Num_Blocks = 9;
 					break;
-				case MobTypes.Generic:
+				case MobType.Generic:
 					Num_Blocks = 9;
 					break;
-				case MobTypes.Pc:
+				case MobType.Pc:
 					Num_Blocks = 11;
 					break;
-				case MobTypes.Npc:
+				case MobType.Npc:
 					Num_Blocks = 13;
 					break;
-				case MobTypes.Trap:
+				case MobType.Trap:
 					Num_Blocks = 13;
 					break;
-				case MobTypes.Bag:
+				case MobType.Bag:
 					Num_Blocks = 9;
 					break;
 				default:
@@ -222,7 +222,7 @@ namespace WorldBuilder.Helpers
 			return Num_Blocks;
 		}
 
-		public static string CreateBitmap(MobTypes MobType)
+		public static string CreateBitmap(MobType MobType)
 		{
 			string Bitmap = "";
 			int Num_Blocks = GetNumberofBitmapBlocks(MobType);

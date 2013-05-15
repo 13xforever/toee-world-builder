@@ -528,7 +528,7 @@ namespace WorldBuilder.Forms
 
 				// Read the bitmap
 				// int BitmapSize = MobHelper.GetNumberofBitmapBlocks(GenHelper.GetMobileType(MobType.Text));
-				int BitmapSize = MobHelper.GetNumberofBitmapBlocks((MobTypes) MOB_TYPE_F);
+				int BitmapSize = MobHelper.GetNumberofBitmapBlocks((MobType) MOB_TYPE_F);
 				int BitmapNoBytes = BitmapSize*4;
 				var BitmapBytes = new byte[BitmapNoBytes];
 				BitmapBytes = r_mob.ReadBytes(BitmapNoBytes);
@@ -8045,7 +8045,7 @@ namespace WorldBuilder.Forms
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 						uint type = readobj.ReadUInt32();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
-						long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
+						long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobType) type);
 						readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 						uint x_coord = readobj.ReadUInt32();
 						uint y_coord = readobj.ReadUInt32();
@@ -9522,7 +9522,7 @@ namespace WorldBuilder.Forms
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 					uint type = readobj.ReadUInt32();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
-					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobTypes) type);
+					long BlocksToSkip = MobHelper.GetNumberofBitmapBlocks((MobType) type);
 					readobj.BaseStream.Seek(BlocksToSkip*4 + 1, SeekOrigin.Current);
 					uint x_coord = readobj.ReadUInt32();
 					uint y_coord = readobj.ReadUInt32();
