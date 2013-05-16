@@ -15,7 +15,7 @@ namespace Tests
 			var guidBytes = new byte[24];
 			guid.ToByteArray().CopyTo(guidBytes, 8);
 
-			var expected = "G_" + guid.ToString("D").Replace('-', '_').ToUpper();
+			var expected = "G_" + guid.ToString("D").Replace('-', '_');
 			Assert.That(GenHelper.ConvertBytesToStringGuid(guidBytes), Is.EqualTo(expected));
 		}
 
@@ -95,6 +95,18 @@ namespace Tests
 		public string UInt64ToBitmap(ulong value)
 		{
 			return GenHelper.UInt64ToBitmap(value);
+		}
+
+		[Test]
+		[TestCase(0x00000000u, Result = new byte[]{0x00, 0x00, 0x00, 0x00})]
+		[TestCase(0x80000000u, Result = new byte[]{0x00, 0x00, 0x00, 0x80})]
+		[TestCase(0x01000000u, Result = new byte[]{0x00, 0x00, 0x00, 0x01})]
+		[TestCase(0x00000080u, Result = new byte[]{0x80, 0x00, 0x00, 0x00})]
+		[TestCase(0x00000001u, Result = new byte[]{0x01, 0x00, 0x00, 0x00})]
+		[TestCase(0xffffffffu, Result = new byte[]{0xff, 0xff, 0xff, 0xff})]
+		public byte[] ConvertFlagsToByteArray(uint value)
+		{
+			return GenHelper.ConvertFlagsToByteArray(value);
 		}
 	}
 }

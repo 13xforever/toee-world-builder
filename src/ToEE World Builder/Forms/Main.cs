@@ -8068,7 +8068,7 @@ namespace WorldBuilder.Forms
 						}
 
 						static_objguid.Add(proto_guid);
-						SecObjList.Items.Add(itm.ToString() + ":\t(" + x_coord.ToString() + "," + y_coord.ToString() + ")\t\t\t" + proto_name);
+						SecObjList.Items.Add(string.Format("{0}:\t({1},{2})\t\t\t{3}", itm, x_coord, y_coord, proto_name));
 					}
 					readobj.Close();
 

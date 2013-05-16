@@ -53,14 +53,13 @@ namespace WorldBuilder.Helpers
 			return result.ToString();
 		}
 
-		public static string ConvertBytesToStringGuid(byte[] GUID_bytes)
+		public static string ConvertBytesToStringGuid(byte[] guidBytes)
 		{
 			//8-23?
 			return new StringBuilder("G_")
-				.Append(new Guid(GUID_bytes.Skip(8).ToArray()).ToString("D"))
+				.Append(new Guid(guidBytes.Skip(8).ToArray()).ToString("D"))
 				.Replace('-', '_')
-				.ToString()
-				.ToUpper(); //todo: is it necessary?
+				.ToString();
 		}
 
 		/// <summary>
@@ -69,14 +68,7 @@ namespace WorldBuilder.Helpers
 		/// </summary>
 		public static byte[] ConvertFlagsToByteArray(uint flags)
 		{
-			var bytes = new byte[4];
-
-			bytes[0] = (byte)flags;
-			bytes[1] = (byte)(flags >> 8);
-			bytes[2] = (byte)(flags >> 16);
-			bytes[3] = (byte)(flags >> 24);
-
-			return bytes;
+			return BitConverter.GetBytes(flags);
 		}
 	}
 }
