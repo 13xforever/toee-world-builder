@@ -153,7 +153,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Memory setup: initialize runtime-critical arrays
-			HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
+			HsdHelper.Tiles = HsdHelper.Init();
 
 			// Display splash screen and enter worlded loading routine
 			tmrSplash.Enabled = true;
@@ -304,7 +304,7 @@ namespace WorldBuilder.Forms
 		private void CallAddin(object sender, EventArgs e)
 		{
 			string[] aim_nametag = sender.ToString().Split(':');
-			string aim_name = aim_nametag[aim_nametag.GetUpperBound(0)].Trim();
+			string aim_name = aim_nametag[aim_nametag.Length].Trim();
 			string proc_to_exec = "";
 
 			var sr = new StreamReader("ToEE World Builder.aim");
@@ -4425,7 +4425,7 @@ namespace WorldBuilder.Forms
 			if (inv_add.ShowDialog() == DialogResult.OK)
 			{
 				string ProtoName = "";
-				ProtoName = inv_add.FullString.Split('\t')[inv_add.FullString.Split('\t').GetUpperBound(0)];
+				ProtoName = inv_add.FullString.Split('\t')[inv_add.FullString.Split('\t').Length];
 				ProtoName += "\t\t\t\t" + inv_add.GUID;
 
 				vChestInv.Items.Add(ProtoName);
@@ -4724,7 +4724,7 @@ namespace WorldBuilder.Forms
 			if (inv_add.ShowDialog() == DialogResult.OK)
 			{
 				string ProtoName = "";
-				ProtoName = inv_add.FullString.Split('\t')[inv_add.FullString.Split('\t').GetUpperBound(0)];
+				ProtoName = inv_add.FullString.Split('\t')[inv_add.FullString.Split('\t').Length];
 				ProtoName += "\t\t\t\t" + inv_add.GUID;
 
 				vNpcInv.Items.Add(ProtoName);
@@ -5455,7 +5455,7 @@ namespace WorldBuilder.Forms
 			//MessageBox.Show(m_path);
 			//return;
 
-			if (files.GetUpperBound(0) > 800)
+			if (files.Length > 800)
 			{
 				// Too many files. Consider partial recombining?
 				if (
@@ -5893,7 +5893,7 @@ namespace WorldBuilder.Forms
 			//MessageBox.Show(m_path);
 			//return;
 
-			if (files.GetUpperBound(0) > 800)
+			if (files.Length > 800)
 			{
 				// Too many files. Consider partial recombining?
 				if (
@@ -8136,14 +8136,14 @@ namespace WorldBuilder.Forms
 					r_hsd.ReadInt32(); // version tag, skipping it
 
 					for (int i = 0; i < 36864; i++)
-						HsdHelper.HSD_Tiles[i] = r_hsd.ReadByte();
+						HsdHelper.Tiles[i] = r_hsd.ReadByte();
 
 					r_hsd.Close();
 				}
 				else
 				{
 					// Clean up the previous HSD info
-					HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
+					HsdHelper.Tiles = HsdHelper.Init();
 				}
 
 				btnLoadTile_Click(null, null); // Load the first tile
@@ -8260,7 +8260,7 @@ namespace WorldBuilder.Forms
 
 				// Make sure the SVB/HSD data is empty when a new sector is created
 				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
-				HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
+				HsdHelper.Tiles = HsdHelper.Init();
 
 				btnLoadTile_Click(null, null); // Load the first tile
 
@@ -8348,7 +8348,7 @@ namespace WorldBuilder.Forms
 				w_hsd.Write(0x02); // save the HSD version tag
 
 				for (int i = 0; i < 36864; i++)
-					w_hsd.Write(HsdHelper.HSD_Tiles[i]); // save the tile info
+					w_hsd.Write(HsdHelper.Tiles[i]); // save the tile info
 
 				w_hsd.Close();
 			}
@@ -8367,7 +8367,7 @@ namespace WorldBuilder.Forms
 					w_hsd.Write(0x02); // save the HSD version tag
 
 					for (int i = 0; i < 36864; i++)
-						w_hsd.Write(HsdHelper.HSD_Tiles[i]); // save the tile info
+						w_hsd.Write(HsdHelper.Tiles[i]); // save the tile info
 
 					w_hsd.Close();
 				}
@@ -8430,7 +8430,7 @@ namespace WorldBuilder.Forms
 				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
 
 			if (MessageBox.Show("Do you want to clear the negative height/water tile information for all tiles as well?", "Please confirm additional operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-				HsdHelper.HSD_Tiles = HsdHelper.HSD_NewArray();
+				HsdHelper.Tiles = HsdHelper.Init();
 
 			MessageBox.Show("Tile data reset.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -8688,24 +8688,24 @@ namespace WorldBuilder.Forms
 			// Water support (HSD)
 			int HSD_index = HsdHelper.HSD_GetTileAddress(RealTX, RealTY) - 1;
 
-			HSD_UR.Checked = (HsdHelper.HSD_Tiles[HSD_index] != 0x00) ? true : false;
-			HSD_UM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 1] != 0x00) ? true : false;
-			HSD_UL.Checked = (HsdHelper.HSD_Tiles[HSD_index + 2] != 0x00) ? true : false;
-			HSD_MR.Checked = (HsdHelper.HSD_Tiles[HSD_index + 3] != 0x00) ? true : false;
-			HSD_MM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 4] != 0x00) ? true : false;
-			HSD_ML.Checked = (HsdHelper.HSD_Tiles[HSD_index + 5] != 0x00) ? true : false;
-			HSD_LR.Checked = (HsdHelper.HSD_Tiles[HSD_index + 6] != 0x00) ? true : false;
-			HSD_LM.Checked = (HsdHelper.HSD_Tiles[HSD_index + 7] != 0x00) ? true : false;
-			HSD_LL.Checked = (HsdHelper.HSD_Tiles[HSD_index + 8] != 0x00) ? true : false;
-			HGT_UR.Value = HsdHelper.HSD_Tiles[HSD_index];
-			HGT_UM.Value = HsdHelper.HSD_Tiles[HSD_index + 1];
-			HGT_UL.Value = HsdHelper.HSD_Tiles[HSD_index + 2];
-			HGT_MR.Value = HsdHelper.HSD_Tiles[HSD_index + 3];
-			HGT_MM.Value = HsdHelper.HSD_Tiles[HSD_index + 4];
-			HGT_ML.Value = HsdHelper.HSD_Tiles[HSD_index + 5];
-			HGT_LR.Value = HsdHelper.HSD_Tiles[HSD_index + 6];
-			HGT_LM.Value = HsdHelper.HSD_Tiles[HSD_index + 7];
-			HGT_LL.Value = HsdHelper.HSD_Tiles[HSD_index + 8];
+			HSD_UR.Checked = (HsdHelper.Tiles[HSD_index] != 0x00) ? true : false;
+			HSD_UM.Checked = (HsdHelper.Tiles[HSD_index + 1] != 0x00) ? true : false;
+			HSD_UL.Checked = (HsdHelper.Tiles[HSD_index + 2] != 0x00) ? true : false;
+			HSD_MR.Checked = (HsdHelper.Tiles[HSD_index + 3] != 0x00) ? true : false;
+			HSD_MM.Checked = (HsdHelper.Tiles[HSD_index + 4] != 0x00) ? true : false;
+			HSD_ML.Checked = (HsdHelper.Tiles[HSD_index + 5] != 0x00) ? true : false;
+			HSD_LR.Checked = (HsdHelper.Tiles[HSD_index + 6] != 0x00) ? true : false;
+			HSD_LM.Checked = (HsdHelper.Tiles[HSD_index + 7] != 0x00) ? true : false;
+			HSD_LL.Checked = (HsdHelper.Tiles[HSD_index + 8] != 0x00) ? true : false;
+			HGT_UR.Value = HsdHelper.Tiles[HSD_index];
+			HGT_UM.Value = HsdHelper.Tiles[HSD_index + 1];
+			HGT_UL.Value = HsdHelper.Tiles[HSD_index + 2];
+			HGT_MR.Value = HsdHelper.Tiles[HSD_index + 3];
+			HGT_MM.Value = HsdHelper.Tiles[HSD_index + 4];
+			HGT_ML.Value = HsdHelper.Tiles[HSD_index + 5];
+			HGT_LR.Value = HsdHelper.Tiles[HSD_index + 6];
+			HGT_LM.Value = HsdHelper.Tiles[HSD_index + 7];
+			HGT_LL.Value = HsdHelper.Tiles[HSD_index + 8];
 		}
 
 		// Set the WallFlag variables based on the passability setting
@@ -9581,8 +9581,8 @@ namespace WorldBuilder.Forms
 			if (SVB_Bitmap.Length > 1000)
 				san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-			if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-				san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+			if (HsdHelper.Tiles.Length > 1000)
+				san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 
 			san.Show();
 		}
@@ -9911,8 +9911,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.Tiles.Length > 1000)
+						san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 
 					SysMsg.SM_PAINT_TILE_QUEUE.Clear();
 					SysMsg.SM_PAINT_TILE = false;
@@ -10311,8 +10311,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.Tiles.Length > 1000)
+						san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB1 = false;
 				}
 				catch (Exception)
@@ -10350,8 +10350,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.Tiles.Length > 1000)
+						san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB2 = false;
 				}
 				catch (Exception)
@@ -10389,8 +10389,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.Tiles.Length > 1000)
+						san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB3 = false;
 				}
 				catch (Exception)
@@ -10428,8 +10428,8 @@ namespace WorldBuilder.Forms
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
 
-					if (HsdHelper.HSD_Tiles.GetUpperBound(0) > 1000)
-						san.HSD_BMP = HsdHelper.HSD_Tiles; // pass the HSD bitmap
+					if (HsdHelper.Tiles.Length > 1000)
+						san.HSD_BMP = HsdHelper.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB4 = false;
 				}
 				catch (Exception)

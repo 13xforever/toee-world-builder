@@ -115,7 +115,7 @@ namespace WorldBuilder.Forms
 				{
 					string set = item0.Split('(', ')')[1].Trim();
 					string[] i_set = set.Split(',');
-					int i_item_to_choose = r.Next(0, i_set.GetUpperBound(0) + 1);
+					int i_item_to_choose = r.Next(0, i_set.Length + 1);
 					PROTO_ID = i_set[i_item_to_choose];
 				}
 				ITEMS.Add(PROTO_ID + "," + AMOUNT);

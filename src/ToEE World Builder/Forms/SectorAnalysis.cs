@@ -153,13 +153,13 @@ namespace WorldBuilder.Forms
 					}
 
 					// Test for HSD WATER
-					if (HSD_BMP.GetUpperBound(0) > 1000) /* safety check */
+					if (HSD_BMP.Length > 1000) /* safety check */
 					{
-						int HSD_index = HsdHelper.HSD_GetTileAddress(X1, Y1) - 1;
+						int HSD_index = HsdHelper.GetTileAddress(X1, Y1) - 1;
 
 						for (int T = 0; T < 9; T++)
 						{
-							if (HsdHelper.HSD_Tiles[HSD_index + T] != 0x00)
+							if (HsdHelper.Tiles[HSD_index + T] != 0x00)
 							{
 								ptr_vp.FillRectangle(Brushes.PowderBlue, 630 - (10*X1) + 4, 10*Y1 + 4, 6, 6);
 								break;
