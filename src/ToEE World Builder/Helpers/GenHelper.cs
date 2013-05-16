@@ -19,8 +19,8 @@ namespace WorldBuilder.Helpers
 
 		public static uint BitmapToUInt32(string bitmap)
 		{
-			if (string.IsNullOrEmpty(bitmap)) return 0;
-			if (bitmap.Length > 32) throw new ArgumentException("Bitmap should not exceed 32 bits.", "bitmap");
+			if (bitmap == null) throw new ArgumentNullException("bitmap");
+			if (bitmap.Length != 32) throw new ArgumentException("Bitmap should be exactly 32 bits long.", "bitmap");
 
 			uint result = 0;
 			for (int i = bitmap.Length - 1; i >= 0; i--)
@@ -34,22 +34,18 @@ namespace WorldBuilder.Helpers
 
 		public static string UInt32ToBitmap(uint flags)
 		{
-			var result = new StringBuilder();
-			for (var i = 0; i < sizeof (uint)*8; i++)
-			{
-				result.Append(flags & 1);
-				flags >>= 1;
-			}
-			return result.ToString();
+			return UIntToBitmap(flags, sizeof(uint));
 		}
 
-		/// <summary>
-		///     a 64-bit version of <see cref="UInt32ToBitmap" />
-		/// </summary>
 		public static string UInt64ToBitmap(ulong flags)
 		{
+			return UIntToBitmap(flags, sizeof (ulong));
+		}
+
+		private static string UIntToBitmap(ulong flags, int sizeInBytes)
+		{
 			var result = new StringBuilder();
-			for (var i = 0; i < sizeof(ulong) * 8; i++)
+			for (var i = 0; i < sizeInBytes*8; i++)
 			{
 				result.Append(flags & 1);
 				flags >>= 1;

@@ -61,12 +61,12 @@ namespace Tests
 		}
 
 		[Test]
-		[TestCase(null, Result = 0x00000000)]
-		[TestCase("", Result = 0x00000000)]
-		[TestCase("0", Result = 0x00000000)]
-		[TestCase("1", Result = 0x00000001)]
-		[TestCase("10", Result = 0x00000001)]
-		[TestCase("01", Result = 0x00000002)]
+		[TestCase(null, ExpectedException = typeof(ArgumentNullException))]
+		[TestCase("", ExpectedException = typeof(ArgumentException))]
+		[TestCase("0", ExpectedException = typeof(ArgumentException))]
+		[TestCase("1", ExpectedException = typeof(ArgumentException))]
+		[TestCase("10", ExpectedException = typeof(ArgumentException))]
+		[TestCase("01", ExpectedException = typeof(ArgumentException))]
 		[TestCase("00000000000000000000000000000000", Result = 0x00000000)]
 		[TestCase("00000000000000000000000000000001", Result = 0x80000000)]
 		[TestCase("10000000000000000000000000000000", Result = 0x00000001)]
@@ -88,10 +88,10 @@ namespace Tests
 		}
 
 		[Test]
-		[TestCase(0x0000000000000000u, Result = "0000000000000000000000000000000000000000000000000000000000000000")]
-		[TestCase(0x8000000000000000u, Result = "0000000000000000000000000000000000000000000000000000000000000001")]
-		[TestCase(0x0000000000000001u, Result = "1000000000000000000000000000000000000000000000000000000000000000")]
-		[TestCase(0xffffffffffffffffu, Result = "1111111111111111111111111111111111111111111111111111111111111111")]
+		[TestCase(0x0000000000000000ul, Result = "0000000000000000000000000000000000000000000000000000000000000000")]
+		[TestCase(0x8000000000000000ul, Result = "0000000000000000000000000000000000000000000000000000000000000001")]
+		[TestCase(0x0000000000000001ul, Result = "1000000000000000000000000000000000000000000000000000000000000000")]
+		[TestCase(0xfffffffffffffffful, Result = "1111111111111111111111111111111111111111111111111111111111111111")]
 		public string UInt64ToBitmap(ulong value)
 		{
 			return GenHelper.UInt64ToBitmap(value);
