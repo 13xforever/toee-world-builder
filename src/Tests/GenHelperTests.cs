@@ -106,7 +106,7 @@ namespace Tests
 		[TestCase(0xffffffffu, Result = new byte[]{0xff, 0xff, 0xff, 0xff})]
 		public byte[] ConvertFlagsToByteArray(uint value)
 		{
-			return GenHelper.ConvertFlagsToByteArray(value);
+			return BitConverter.GetBytes(value);
 		}
 	}
 }

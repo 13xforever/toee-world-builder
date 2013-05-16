@@ -8775,7 +8775,7 @@ namespace WorldBuilder.Forms
 				FLAGS += 0x08000000;
 
 			// Convert flags to a byte array for WallFlagX variables
-			byte[] flagbytes = GenHelper.ConvertFlagsToByteArray(FLAGS);
+			byte[] flagbytes = BitConverter.GetBytes(FLAGS);
 
 			// Set the wall flags
 			WallFlag4 = flagbytes[0];

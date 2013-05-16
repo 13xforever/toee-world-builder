@@ -61,14 +61,5 @@ namespace WorldBuilder.Helpers
 				.Replace('-', '_')
 				.ToString();
 		}
-
-		/// <summary>
-		///     Convert an uint flag value into a set of bytes
-		///     (for sector wall flag setup routine)
-		/// </summary>
-		public static byte[] ConvertFlagsToByteArray(uint flags)
-		{
-			return BitConverter.GetBytes(flags);
-		}
 	}
 }
