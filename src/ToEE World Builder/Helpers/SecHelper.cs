@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace WorldBuilder.Helpers
 {
 	public static class SecHelper
 	{
-		public static ArrayList SectorTiles = new ArrayList(); // Sector data
+		public static List<byte[]> SectorTiles = new List<byte[]>(); // Sector data
 		public static ArrayList SectorLights = new ArrayList();
 		public static ArrayList SectorObjects = new ArrayList();
 		public static ArrayList SectorLightsChunk = new ArrayList();
@@ -79,7 +80,7 @@ namespace WorldBuilder.Helpers
 		{
 			// Modifies sector data variables
 			SectorLights = new ArrayList();
-			SectorTiles = new ArrayList();
+			SectorTiles = new List<byte[]>();
 			SectorObjects = new ArrayList();
 			SectorLightsChunk = new ArrayList();
 

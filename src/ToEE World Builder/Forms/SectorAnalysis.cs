@@ -9,30 +9,30 @@ namespace WorldBuilder.Forms
 	public partial class SectorAnalysis : Form
 	{
 		// IMPORTANT: public variables to carry minX/minY
-		public byte[] HSD_BMP = new byte[1];
-		public int MIN_X = 0;
-		public int MIN_Y = 0;
+		public int MinX;
+		public int MinY;
 
-		public bool SVB1_STATE = false;
-		public bool SVB2_STATE = false;
-		public bool SVB3_STATE = false;
-		public bool SVB4_STATE = false;
+		public bool SVB1_STATE;
+		public bool SVB2_STATE;
+		public bool SVB3_STATE;
+		public bool SVB4_STATE;
 		public string SVB_BMP = "";
 
-		private Hsd hsd;
+		private readonly Hsd hsd;
 
 		public SectorAnalysis(Hsd hsd)
 		{
 			InitializeComponent();
 			this.hsd = hsd;
 		}
-
-		private void btnRefreshSAViewPort_Click(object sender, EventArgs e)
+		
+		/// <summary>
+		/// Main routine to draw the sector blocks (4096 10*10 blocks)
+		/// </summary>
+		private void OnRefreshViewPortClick(object sender, EventArgs e)
 		{
-			// Main routine to draw the sector blocks (4096 10*10 blocks)
-
-			CurPosXY.Text = "X=" + MIN_X.ToString() + ", Y=" + MIN_Y.ToString();
-			Graphics ptr_vp = viewport.CreateGraphics();
+			CurPosXY.Text = string.Format("X={0}, Y={1}", MinX, MinY);
+			Graphics viewportGfx = viewport.CreateGraphics();
 
 			// Prepare the rectangles
 			//for (int X=0; X<64; X++)
@@ -40,19 +40,12 @@ namespace WorldBuilder.Forms
 			//		ptr_vp.FillRectangle(Brushes.White, 10*X, 10*Y, 10, 10);
 
 			// Draw the blocked stuff
-			for (int X1 = 63; X1 >= 0; X1--)
-			{
-				for (int Y1 = 0; Y1 < 64; Y1++)
+			for (int x1 = 63; x1 >= 0; x1--)
+				for (int y1 = 0; y1 < 64; y1++)
 				{
-					var tile = (byte[]) SecHelper.SectorTiles[Y1*64 + X1];
+					var tile = SecHelper.SectorTiles[y1*64 + x1];
 
-					byte[] wflagbytes =
-						{
-							tile[4],
-							tile[5],
-							tile[6],
-							tile[7]
-						};
+					byte[] wflagbytes = {tile[4], tile[5], tile[6], tile[7]};
 
 					// Load the wall flags (using a MOB routine to carry out the task)
 					string WallBitmap = MobHelper.BytesToBitmap(wflagbytes);
@@ -62,7 +55,7 @@ namespace WorldBuilder.Forms
 					{
 						if (MobHelper.GetPropertyState(WallBitmap, T) == TriState.True)
 						{
-							ptr_vp.FillRectangle(Brushes.RoyalBlue, 630 - (10*X1), 10*Y1, 10, 10);
+							viewportGfx.FillRectangle(Brushes.RoyalBlue, 630 - (10*x1), 10*y1, 10, 10);
 							break;
 						}
 					}
@@ -72,7 +65,7 @@ namespace WorldBuilder.Forms
 					{
 						if (MobHelper.GetPropertyState(WallBitmap, T) == TriState.True)
 						{
-							ptr_vp.FillRectangle(Brushes.DarkCyan, 630 - (10*X1), 10*Y1, 10, 10);
+							viewportGfx.FillRectangle(Brushes.DarkCyan, 630 - (10*x1), 10*y1, 10, 10);
 							break;
 						}
 					}
@@ -80,13 +73,13 @@ namespace WorldBuilder.Forms
 					// Test for FLYOVER/COVER
 					if (MobHelper.GetPropertyState(WallBitmap, 27) == TriState.True)
 					{
-						ptr_vp.FillRectangle(Brushes.LimeGreen, 630 - (10*X1), 10*Y1, 10, 10);
+						viewportGfx.FillRectangle(Brushes.LimeGreen, 630 - (10*x1), 10*y1, 10, 10);
 					}
 
 					// Test for SVB_BIT1 (EXTEND)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1); // ptr to UL corner
+						int SVB_index = SvbHelper.SVB_GetTileAddress(x1, y1); // ptr to UL corner
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -94,7 +87,7 @@ namespace WorldBuilder.Forms
 							{
 								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4) == TriState.True)
 								{
-									ptr_vp.FillRectangle(Brushes.Sienna, 630 - (10*X1), 10*Y1, 7, 7);
+									viewportGfx.FillRectangle(Brushes.Sienna, 630 - (10*x1), 10*y1, 7, 7);
 									break;
 								}
 							}
@@ -104,7 +97,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT2 (END)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(x1, y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -112,7 +105,7 @@ namespace WorldBuilder.Forms
 							{
 								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 1) == TriState.True)
 								{
-									ptr_vp.FillRectangle(Brushes.DarkGoldenrod, 630 - (10*X1), 10*Y1, 7, 7);
+									viewportGfx.FillRectangle(Brushes.DarkGoldenrod, 630 - (10*x1), 10*y1, 7, 7);
 									break;
 								}
 							}
@@ -122,7 +115,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT3 (ARCHWAY)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(x1, y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -130,7 +123,7 @@ namespace WorldBuilder.Forms
 							{
 								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 2) == TriState.True)
 								{
-									ptr_vp.FillRectangle(Brushes.DarkGray, 630 - (10*X1), 10*Y1, 7, 7);
+									viewportGfx.FillRectangle(Brushes.DarkGray, 630 - (10*x1), 10*y1, 7, 7);
 									break;
 								}
 							}
@@ -140,7 +133,7 @@ namespace WorldBuilder.Forms
 					// Test for SVB_BIT4 (ARCHWAY)
 					if (SVB_BMP != "")
 					{
-						int SVB_index = SvbHelper.SVB_GetTileAddress(X1, Y1);
+						int SVB_index = SvbHelper.SVB_GetTileAddress(x1, y1);
 
 						for (int i = 0; i <= 2; i++)
 						{
@@ -148,7 +141,7 @@ namespace WorldBuilder.Forms
 							{
 								if (MobHelper.GetPropertyState(SVB_BMP, SVB_index + i*192*4 + j*4 + 3) == TriState.True)
 								{
-									ptr_vp.FillRectangle(Brushes.Tomato, 630 - (10*X1), 10*Y1, 7, 7);
+									viewportGfx.FillRectangle(Brushes.Tomato, 630 - (10*x1), 10*y1, 7, 7);
 									break;
 								}
 							}
@@ -156,25 +149,24 @@ namespace WorldBuilder.Forms
 					}
 
 					// Test for HSD WATER
-					if (HSD_BMP.Length > 1000) /* safety check */
+					if (hsd.Tiles.Length > 1000) /* safety check */
 					{
-						int HSD_index = Hsd.GetTileAddress(X1, Y1) - 1;
+						int HSD_index = Hsd.GetTileAddress(x1, y1) - 1;
 
 						for (int T = 0; T < 9; T++)
 						{
 							if (hsd.Tiles[HSD_index + T] != 0x00)
 							{
-								ptr_vp.FillRectangle(Brushes.PowderBlue, 630 - (10*X1) + 4, 10*Y1 + 4, 6, 6);
+								viewportGfx.FillRectangle(Brushes.PowderBlue, 630 - (10*x1) + 4, 10*y1 + 4, 6, 6);
 								break;
 							}
 						}
 					}
 				}
-			}
 			for (int X = 0; X < 64; X++)
-				ptr_vp.DrawLine(Pens.Black, (float) X*10, 0F, (float) X*10, 640F);
+				viewportGfx.DrawLine(Pens.Black, (float) X*10, 0F, (float) X*10, 640F);
 			for (int Y = 0; Y < 64; Y++)
-				ptr_vp.DrawLine(Pens.Black, 0F, (float) Y*10, 640F, (float) Y*10);
+				viewportGfx.DrawLine(Pens.Black, 0F, (float) Y*10, 640F, (float) Y*10);
 		}
 
 		private void SectorAnalysis_Load(object sender, EventArgs e)
@@ -189,7 +181,7 @@ namespace WorldBuilder.Forms
 			if (e.Button == MouseButtons.Left) // pass the request down the call
 				viewport_MouseDown(sender, e); // stack to paint if LMB is held.
 
-			CurPosXY.Text = "X=" + (MIN_X + ((640 - e.X)/10)).ToString() + ", Y=" + (MIN_Y + (e.Y/10)).ToString();
+			CurPosXY.Text = "X=" + (MinX + ((640 - e.X)/10)).ToString() + ", Y=" + (MinY + (e.Y/10)).ToString();
 		}
 
 		private void viewport_MouseDown(object sender, MouseEventArgs e)
@@ -212,35 +204,35 @@ namespace WorldBuilder.Forms
 				// Send the system messages
 				if (SVB1_STATE)
 				{
-					SysMsg.SM_SVB1_X = (MIN_X + ((640 - e.X)/10));
-					SysMsg.SM_SVB1_Y = (MIN_Y + (e.Y/10));
+					SysMsg.SM_SVB1_X = (MinX + ((640 - e.X)/10));
+					SysMsg.SM_SVB1_Y = (MinY + (e.Y/10));
 					SysMsg.SM_SVB1 = true;
 					return;
 				}
 				else if (SVB2_STATE)
 				{
-					SysMsg.SM_SVB2_X = (MIN_X + ((640 - e.X)/10));
-					SysMsg.SM_SVB2_Y = (MIN_Y + (e.Y/10));
+					SysMsg.SM_SVB2_X = (MinX + ((640 - e.X)/10));
+					SysMsg.SM_SVB2_Y = (MinY + (e.Y/10));
 					SysMsg.SM_SVB2 = true;
 					return;
 				}
 				else if (SVB3_STATE)
 				{
-					SysMsg.SM_SVB3_X = (MIN_X + ((640 - e.X)/10));
-					SysMsg.SM_SVB3_Y = (MIN_Y + (e.Y/10));
+					SysMsg.SM_SVB3_X = (MinX + ((640 - e.X)/10));
+					SysMsg.SM_SVB3_Y = (MinY + (e.Y/10));
 					SysMsg.SM_SVB3 = true;
 					return;
 				}
 				else if (SVB4_STATE)
 				{
-					SysMsg.SM_SVB4_X = (MIN_X + ((640 - e.X)/10));
-					SysMsg.SM_SVB4_Y = (MIN_Y + (e.Y/10));
+					SysMsg.SM_SVB4_X = (MinX + ((640 - e.X)/10));
+					SysMsg.SM_SVB4_Y = (MinY + (e.Y/10));
 					SysMsg.SM_SVB4 = true;
 					return;
 				}
 
-				SysMsg.SM_PAINT_TILE_QUEUE.Add((MIN_X + ((640 - e.X)/10)).ToString());
-				SysMsg.SM_PAINT_TILE_QUEUE.Add((MIN_Y + (e.Y/10)).ToString());
+				SysMsg.SM_PAINT_TILE_QUEUE.Add((MinX + ((640 - e.X)/10)).ToString());
+				SysMsg.SM_PAINT_TILE_QUEUE.Add((MinY + (e.Y/10)).ToString());
 				SysMsg.SM_PAINT_TILE_QUEUE.Add(cmbTileSound.SelectedIndex);
 				SysMsg.SM_PAINT_TILE = true;
 			}
@@ -248,8 +240,8 @@ namespace WorldBuilder.Forms
 			if (chkRememberForObject.Checked)
 			{
 				// Send the system message
-				SysMsg.SM_REMEMBER_COORDS_QUEUE.Add((MIN_X + ((640 - e.X)/10)).ToString());
-				SysMsg.SM_REMEMBER_COORDS_QUEUE.Add((MIN_Y + (e.Y/10)).ToString());
+				SysMsg.SM_REMEMBER_COORDS_QUEUE.Add((MinX + ((640 - e.X)/10)).ToString());
+				SysMsg.SM_REMEMBER_COORDS_QUEUE.Add((MinY + (e.Y/10)).ToString());
 				SysMsg.SM_REMEMBER_COORDS = true;
 			}
 		}
@@ -322,7 +314,7 @@ namespace WorldBuilder.Forms
 		{
 			Graphics ptr_vp = viewport.CreateGraphics();
 			ptr_vp.FillRectangle(Brushes.White, 0, 0, viewport.Width, viewport.Height);
-			btnRefreshSAViewPort_Click(sender, e);
+			OnRefreshViewPortClick(sender, e);
 		}
 
 		private void btnAddExtend_Click(object sender, EventArgs e)

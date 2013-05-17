@@ -114,7 +114,7 @@ namespace WorldBuilder.Forms
 			this.btnRefreshSAViewPort.Size = new System.Drawing.Size(104, 23);
 			this.btnRefreshSAViewPort.TabIndex = 3;
 			this.btnRefreshSAViewPort.Text = "Draw / Refresh";
-			this.btnRefreshSAViewPort.Click += new System.EventHandler(this.btnRefreshSAViewPort_Click);
+			this.btnRefreshSAViewPort.Click += new System.EventHandler(this.OnRefreshViewPortClick);
 			// 
 			// label2
 			// 

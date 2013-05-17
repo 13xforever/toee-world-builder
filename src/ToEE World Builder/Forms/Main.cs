@@ -9576,14 +9576,11 @@ namespace WorldBuilder.Forms
 			SysMsg.SM_SAN_ENABLED = true; // System message to control runtime
 
 			san = new SectorAnalysis(hsd);
-			san.MIN_X = (int) TX.Minimum;
-			san.MIN_Y = (int) TY.Minimum;
+			san.MinX = (int) TX.Minimum;
+			san.MinY = (int) TY.Minimum;
 
 			if (SVB_Bitmap.Length > 1000)
 				san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-			if (hsd.Tiles.Length > 1000)
-				san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 
 			san.Show();
 		}
@@ -9911,9 +9908,6 @@ namespace WorldBuilder.Forms
 
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-					if (hsd.Tiles.Length > 1000)
-						san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 
 					SysMsg.SM_PAINT_TILE_QUEUE.Clear();
 					SysMsg.SM_PAINT_TILE = false;
@@ -10311,9 +10305,6 @@ namespace WorldBuilder.Forms
 
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-					if (hsd.Tiles.Length > 1000)
-						san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB1 = false;
 				}
 				catch (Exception)
@@ -10350,9 +10341,6 @@ namespace WorldBuilder.Forms
 
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-					if (hsd.Tiles.Length > 1000)
-						san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB2 = false;
 				}
 				catch (Exception)
@@ -10389,9 +10377,6 @@ namespace WorldBuilder.Forms
 
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-					if (hsd.Tiles.Length > 1000)
-						san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB3 = false;
 				}
 				catch (Exception)
@@ -10428,9 +10413,6 @@ namespace WorldBuilder.Forms
 
 					if (SVB_Bitmap.Length > 1000)
 						san.SVB_BMP = SVB_Bitmap; // pass the SVB bitmap
-
-					if (hsd.Tiles.Length > 1000)
-						san.HSD_BMP = hsd.Tiles; // pass the HSD bitmap
 					SysMsg.SM_SVB4 = false;
 				}
 				catch (Exception)
