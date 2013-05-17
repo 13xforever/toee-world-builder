@@ -19,9 +19,12 @@ namespace WorldBuilder.Forms
 		public bool SVB4_STATE = false;
 		public string SVB_BMP = "";
 
-		public SectorAnalysis()
+		private Hsd hsd;
+
+		public SectorAnalysis(Hsd hsd)
 		{
 			InitializeComponent();
+			this.hsd = hsd;
 		}
 
 		private void btnRefreshSAViewPort_Click(object sender, EventArgs e)
@@ -155,11 +158,11 @@ namespace WorldBuilder.Forms
 					// Test for HSD WATER
 					if (HSD_BMP.Length > 1000) /* safety check */
 					{
-						int HSD_index = HsdHelper.GetTileAddress(X1, Y1) - 1;
+						int HSD_index = Hsd.GetTileAddress(X1, Y1) - 1;
 
 						for (int T = 0; T < 9; T++)
 						{
-							if (HsdHelper.Tiles[HSD_index + T] != 0x00)
+							if (hsd.Tiles[HSD_index + T] != 0x00)
 							{
 								ptr_vp.FillRectangle(Brushes.PowderBlue, 630 - (10*X1) + 4, 10*Y1 + 4, 6, 6);
 								break;

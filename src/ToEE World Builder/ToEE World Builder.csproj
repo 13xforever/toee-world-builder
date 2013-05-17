@@ -139,7 +139,7 @@
     </Compile>
     <Compile Include="Helpers\BitMasking.cs" />
     <Compile Include="Helpers\GenHelper.cs" />
-    <Compile Include="Helpers\HsdHelper.cs" />
+    <Compile Include="Hsd.cs" />
     <Compile Include="Helpers\IntelliProperties.cs" />
     <Compile Include="Helpers\LightExHelper.cs" />
     <Compile Include="Helpers\LightHelper.cs" />
