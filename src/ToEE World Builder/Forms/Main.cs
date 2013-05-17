@@ -153,7 +153,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Memory setup: initialize runtime-critical arrays
-			HsdHelper.Tiles = HsdHelper.Init();
+			HsdHelper.Init();
 
 			// Display splash screen and enter worlded loading routine
 			tmrSplash.Enabled = true;
@@ -8143,7 +8143,7 @@ namespace WorldBuilder.Forms
 				else
 				{
 					// Clean up the previous HSD info
-					HsdHelper.Tiles = HsdHelper.Init();
+					HsdHelper.Init();
 				}
 
 				btnLoadTile_Click(null, null); // Load the first tile
@@ -8260,7 +8260,7 @@ namespace WorldBuilder.Forms
 
 				// Make sure the SVB/HSD data is empty when a new sector is created
 				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
-				HsdHelper.Tiles = HsdHelper.Init();
+				HsdHelper.Init();
 
 				btnLoadTile_Click(null, null); // Load the first tile
 
@@ -8340,7 +8340,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Saving the HSD file
-			if (HsdHelper.HSD_CheckIsSaveNecessary())
+			if (HsdHelper.IsModified())
 			{
 				// saving is necessary (at least one subtile is set)
 				var w_hsd = new BinaryWriter(new FileStream(HSDFile, FileMode.Create));
@@ -8430,7 +8430,7 @@ namespace WorldBuilder.Forms
 				SVB_Bitmap = SvbHelper.SVB_NewBitmap();
 
 			if (MessageBox.Show("Do you want to clear the negative height/water tile information for all tiles as well?", "Please confirm additional operation", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
-				HsdHelper.Tiles = HsdHelper.Init();
+				HsdHelper.Init();
 
 			MessageBox.Show("Tile data reset.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
@@ -8686,7 +8686,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// Water support (HSD)
-			int HSD_index = HsdHelper.HSD_GetTileAddress(RealTX, RealTY) - 1;
+			int HSD_index = HsdHelper.GetTileAddress(RealTX, RealTY) - 1;
 
 			HSD_UR.Checked = (HsdHelper.Tiles[HSD_index] != 0x00) ? true : false;
 			HSD_UM.Checked = (HsdHelper.Tiles[HSD_index + 1] != 0x00) ? true : false;
@@ -8795,17 +8795,17 @@ namespace WorldBuilder.Forms
 		public void SetWaterFlags(int RealTX, int RealTY)
 		{
 			// Set the water flags
-			int HSD_index = HsdHelper.HSD_GetTileAddress(RealTX, RealTY) - 1;
+			int HSD_index = HsdHelper.GetTileAddress(RealTX, RealTY) - 1;
 
-			HsdHelper.HSD_ModifyProperty(HSD_index, HSD_UR.Checked, (byte) HGT_UR.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 1, HSD_UM.Checked, (byte) HGT_UM.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 2, HSD_UL.Checked, (byte) HGT_UL.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 3, HSD_MR.Checked, (byte) HGT_MR.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 4, HSD_MM.Checked, (byte) HGT_MM.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 5, HSD_ML.Checked, (byte) HGT_ML.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 6, HSD_LR.Checked, (byte) HGT_LR.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 7, HSD_LM.Checked, (byte) HGT_LM.Value);
-			HsdHelper.HSD_ModifyProperty(HSD_index + 8, HSD_LL.Checked, (byte) HGT_LL.Value);
+			HsdHelper.ModifyProperty(HSD_index, HSD_UR.Checked, (byte) HGT_UR.Value);
+			HsdHelper.ModifyProperty(HSD_index + 1, HSD_UM.Checked, (byte) HGT_UM.Value);
+			HsdHelper.ModifyProperty(HSD_index + 2, HSD_UL.Checked, (byte) HGT_UL.Value);
+			HsdHelper.ModifyProperty(HSD_index + 3, HSD_MR.Checked, (byte) HGT_MR.Value);
+			HsdHelper.ModifyProperty(HSD_index + 4, HSD_MM.Checked, (byte) HGT_MM.Value);
+			HsdHelper.ModifyProperty(HSD_index + 5, HSD_ML.Checked, (byte) HGT_ML.Value);
+			HsdHelper.ModifyProperty(HSD_index + 6, HSD_LR.Checked, (byte) HGT_LR.Value);
+			HsdHelper.ModifyProperty(HSD_index + 7, HSD_LM.Checked, (byte) HGT_LM.Value);
+			HsdHelper.ModifyProperty(HSD_index + 8, HSD_LL.Checked, (byte) HGT_LL.Value);
 		}
 
 		// Get the loaded wall flags

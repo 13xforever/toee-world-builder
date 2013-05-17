@@ -24,20 +24,9 @@ namespace WorldBuilder.Helpers
 			return ((y*64 + x)*9) + 1;
 		}
 
-		public static void ModifyProperty(int tilePtr, bool source)
+		public static void ModifyProperty(int tilePtr, bool source, byte negativeHeight = 0x24)
 		{
-			if (source)
-				Tiles[tilePtr] = 0x24;
-			else
-				Tiles[tilePtr] = 0x00;
-		}
-
-		public static void ModifyProperty(int tilePtr, bool source, byte negativeHeight)
-		{
-			if (source)
-				Tiles[tilePtr] = negativeHeight;
-			else
-				Tiles[tilePtr] = 0x00;
+			Tiles[tilePtr] = source ? negativeHeight : (byte)0x00;
 		}
 	}
 }
