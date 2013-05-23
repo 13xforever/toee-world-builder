@@ -5074,7 +5074,7 @@ namespace WorldBuilder.Forms
 			}
 
 			// FIX: BETA R1.1
-			MobHelper.SectorName = SecHelper.SEC_GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
+			MobHelper.SectorName = SecHelper.GetSectorCorrespondence(int.Parse(LocationX.Text), int.Parse(LocationY.Text)).ToString() + ".sec";
 			var e_sect = new EmbedInSector();
 			if (e_sect.ShowDialog() == DialogResult.OK)
 			{
@@ -5086,7 +5086,7 @@ namespace WorldBuilder.Forms
 				if (!File.Exists(e_sect.FileName))
 				{
 					var w_sec = new BinaryWriter(new FileStream(e_sect.FileName, FileMode.Create));
-					SecHelper.SEC_CreateEmptySectorFile(w_sec);
+					SecHelper.CreateEmptySectorFile(w_sec);
 					w_sec.Close();
 				}
 

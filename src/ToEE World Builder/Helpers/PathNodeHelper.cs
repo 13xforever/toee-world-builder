@@ -28,7 +28,7 @@ namespace WorldBuilder.Helpers
 		public static bool IsAvailableTile(int x, int y)
 		{
 			//todo: nasty mix of responsibility
-			string sector = SecHelper.SEC_GetSectorCorrespondence(x, y).ToString();
+			string sector = SecHelper.GetSectorCorrespondence(x, y).ToString();
 			string sectfile = Path.Combine(SectorsPath, sector + ".sec");
 			if (!File.Exists(sectfile)) return false; // check if this sector tile is taken first
 

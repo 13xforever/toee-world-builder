@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -13,7 +12,7 @@ namespace WorldBuilder.Helpers
 		public static List<byte> SectorObjects = new List<byte>();
 		public static List<byte[]> SectorLightsChunk = new List<byte[]>();
 
-		public static uint SEC_GetSecNameFromXY(int secX, int secY)
+		public static uint GetSecNameFromXY(int secX, int secY)
 		{
 			if (secX > 0x3f) throw new ArgumentOutOfRangeException("secX", "SecX should be in range [0..0x3f]");
 			if (secY > 0xff) throw new ArgumentOutOfRangeException("secY", "SecY should be in range [0..0xFF]");
@@ -23,7 +22,7 @@ namespace WorldBuilder.Helpers
 			return (uint)(x | y);
 		}
 
-		public static uint SEC_GetSectorCorrespondence(int worldX, int worldY) //todo: why in this order?
+		public static uint GetSectorCorrespondence(int worldX, int worldY)
 		{
 			if (worldX > 0x3FFF) throw new ArgumentOutOfRangeException("worldX", "World Y should be in range [0..0x3FFF]");
 			if (worldY > 0x0FFF) throw new ArgumentOutOfRangeException("worldY", "World X should be in range [0..0x0FFF]");
@@ -33,27 +32,24 @@ namespace WorldBuilder.Helpers
 			return (uint)(secX | secY);
 		}
 
-		public static void SEC_CreateEmptySectorFile(BinaryWriter w_sec)
+		public static void CreateEmptySectorFile(BinaryWriter writer)
 		{
-			w_sec.Write(0); // No lights
-
-			for (int i = 0; i < 4096; i++)
+			writer.Write(0); // No lights
+			for (int i = 0; i < 0x1000; i++)
 			{
-				w_sec.Write((ulong) 2); // Sector tile data
-				w_sec.Write((ulong) 0);
+				writer.Write((ulong) 2); // Sector tile data
+				writer.Write((ulong) 0);
 			}
-
-			w_sec.Write(1);
-			w_sec.Write((short) 4);
-			w_sec.Write((byte) 0xAA);
-
-			for (int j = 0; j < 45; j++)
-				w_sec.Write((byte) 0);
+			writer.Write((int)1);
+			writer.Write((short) 4);
+			writer.Write((byte) 0xaa);
+			for (int j = 0; j < 0x2d; j++)
+				writer.Write((byte) 0);
 		}
 
-		public static void SEC_GetXY(string sectorName, out int x, out int y)
+		public static void GetXY(string sectorName, out int x, out int y)
 		{
-			string sectorNameX = int.Parse(sectorName).ToString("x8");
+			string sectorNameX = uint.Parse(sectorName).ToString("x8");
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
