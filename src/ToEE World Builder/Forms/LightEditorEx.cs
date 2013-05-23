@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
@@ -12,7 +13,7 @@ namespace WorldBuilder.Forms
 		public ArrayList data = new ArrayList(); // other data in the sector besides lights
 		public bool int_state = false; // interface state
 		public LightExHelper.LightEx light = new LightExHelper.LightEx(); // a light to be edited
-		public ArrayList lights = new ArrayList(); // a collection of all lights to process
+		public List<LightExHelper.LightEx> lights = new List<LightExHelper.LightEx>(); // a collection of all lights to process
 
 		public LightEditorEx()
 		{
@@ -609,7 +610,7 @@ namespace WorldBuilder.Forms
 
 				// Now, tricky stuff: we have to reload the lights and rearrange all
 				// the IDs
-				var p_lightarr = new ArrayList();
+				var p_lightarr = new  List<LightExHelper.LightEx>();
 
 				for (int i = 0; i < lights.Count; i++)
 					p_lightarr.Add(lights[i]);
@@ -630,7 +631,7 @@ namespace WorldBuilder.Forms
 				// the IDs
 				if (lights.Count > 0)
 				{
-					var p_lightarr = new ArrayList();
+					var p_lightarr = new List<LightExHelper.LightEx>();
 
 					for (int i = 0; i < lights.Count; i++)
 						p_lightarr.Add(lights[i]);

@@ -8,9 +8,10 @@ namespace WorldBuilder.Helpers
 	public static class SecHelper
 	{
 		public static List<byte[]> SectorTiles = new List<byte[]>(); // Sector data
-		public static ArrayList SectorLights = new ArrayList();
-		public static ArrayList SectorObjects = new ArrayList();
-		public static ArrayList SectorLightsChunk = new ArrayList();
+		public static List<LightExHelper.LightEx> SectorLights = new List<LightExHelper.LightEx>();
+		public static List<LightHelper.LightInfo> SectorLightsOld = new List<LightHelper.LightInfo>(); //todo: nuke this
+		public static List<byte> SectorObjects = new List<byte>();
+		public static List<byte[]> SectorLightsChunk = new List<byte[]>();
 
 		public static uint SEC_GetSecNameFromXY(int secX, int secY)
 		{
@@ -52,7 +53,7 @@ namespace WorldBuilder.Helpers
 
 		public static void SEC_GetXY(string sectorName, out int x, out int y)
 		{
-			string sectorNameX = Int32.Parse(sectorName).ToString("x8");
+			string sectorNameX = int.Parse(sectorName).ToString("x8");
 			string sectorX = sectorNameX.Substring(0, 2);
 			string sectorY = sectorNameX.Substring(6, 2);
 
@@ -66,7 +67,7 @@ namespace WorldBuilder.Helpers
 		public static void Sec_GetMinMax(string sectorName, out int minX, out int maxX, out int minY, out int maxY)
 		{
 			//todo: fix minX/minY & maxX/maxY?
-			uint sectorId = UInt32.Parse(sectorName);
+			uint sectorId = uint.Parse(sectorName);
 			int secX = (int)((sectorId & 0xfc000000) >> 20);
 			int secY = (int)((sectorId & 0xff) << 6);
 
@@ -79,10 +80,10 @@ namespace WorldBuilder.Helpers
 		public static void SEC_CreateNewData()
 		{
 			// Modifies sector data variables
-			SectorLights = new ArrayList();
+			SectorLights = new List<LightExHelper.LightEx>();
 			SectorTiles = new List<byte[]>();
-			SectorObjects = new ArrayList();
-			SectorLightsChunk = new ArrayList();
+			SectorObjects = new List<byte>();
+			SectorLightsChunk = new List<byte[]>();
 
 			var tiledata = new byte[16];
 			tiledata[0] = 0x02;

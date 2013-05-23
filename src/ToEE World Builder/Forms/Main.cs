@@ -7917,7 +7917,7 @@ namespace WorldBuilder.Forms
 					for (int i = 0; i < LightCount; i++)
 					{
 						LightHelper.LoadLight(r_sec, ref light);
-						SecHelper.SectorLights.Add(light);
+						SecHelper.SectorLightsOld.Add(light);
 						LightID.Maximum++;
 						SetLightEdInterfaceState(1, light); // light is passed on
 					}
@@ -8285,10 +8285,10 @@ namespace WorldBuilder.Forms
 
 			if (SecHelper.SectorLightsChunk.Count == 0)
 			{
-				w_sec.Write(SecHelper.SectorLights.Count); // the number of light objects
+				w_sec.Write(SecHelper.SectorLightsOld.Count); // the number of light objects
 
-				for (int i = 0; i < SecHelper.SectorLights.Count; i++)
-					LightHelper.SaveLight(w_sec, (LightHelper.LightInfo) SecHelper.SectorLights[i]);
+				for (int i = 0; i < SecHelper.SectorLightsOld.Count; i++)
+					LightHelper.SaveLight(w_sec, SecHelper.SectorLightsOld[i]);
 			}
 			else
 			{
@@ -9229,7 +9229,7 @@ namespace WorldBuilder.Forms
 				SetLightEdInterfaceState(0, new LightHelper.LightInfo());
 			}
 
-			SetLightEdInterfaceState(3, (LightHelper.LightInfo) SecHelper.SectorLights[(int) LightID.Value]);
+			SetLightEdInterfaceState(3, SecHelper.SectorLightsOld[(int) LightID.Value]);
 		}
 
 		private void btnLightUpdate_Click(object sender, EventArgs e)
@@ -9249,7 +9249,7 @@ namespace WorldBuilder.Forms
 				return;
 			}
 
-			SecHelper.SectorLights[(int) LightID.Value] = t_light;
+			SecHelper.SectorLightsOld[(int) LightID.Value] = t_light;
 			MessageBox.Show("Light updated.", "Done", MessageBoxButtons.OK, MessageBoxIcon.Information);
 		}
 
@@ -9271,7 +9271,7 @@ namespace WorldBuilder.Forms
 
 				// Now, tricky stuff: we have to reload the lights and rearrange all
 				// the IDs
-				var p_lightarr = new ArrayList();
+				var p_lightarr = new List<LightExHelper.LightEx>();
 
 				for (int i = 0; i < SecHelper.SectorLights.Count; i++)
 					p_lightarr.Add(SecHelper.SectorLights[i]);
@@ -9292,7 +9292,7 @@ namespace WorldBuilder.Forms
 				// the IDs
 				if (SecHelper.SectorLights.Count > 0)
 				{
-					var p_lightarr = new ArrayList();
+					var p_lightarr = new List<LightExHelper.LightEx>();
 
 					for (int i = 0; i < SecHelper.SectorLights.Count; i++)
 						p_lightarr.Add(SecHelper.SectorLights[i]);
@@ -9322,10 +9322,12 @@ namespace WorldBuilder.Forms
 				// there were no lights for this sector, so we need to create a
 				// bank for lights on this map
 				SetLightEdInterfaceState(1, new LightHelper.LightInfo());
-				var light = new LightHelper.LightInfo();
-				light.loc_x = (uint) Light10_X.Minimum;
-				light.loc_y = (uint) Light11_Y.Minimum;
-				SecHelper.SectorLights.Add(light);
+				var light = new LightHelper.LightInfo
+								{
+									loc_x = (uint)Light10_X.Minimum,
+									loc_y = (uint)Light11_Y.Minimum
+								};
+				SecHelper.SectorLightsOld.Add(light);
 				SetLightEdInterfaceState(3, light);
 				LightID.Minimum = 0;
 				LightID.Value = 0;
@@ -9338,7 +9340,7 @@ namespace WorldBuilder.Forms
 				LightHelper.LightInfo light = CreateLightInfo();
 				light.loc_x = (uint) Light10_X.Value;
 				light.loc_y = (uint) Light11_Y.Value;
-				SecHelper.SectorLights.Add(light);
+				SecHelper.SectorLightsOld.Add(light);
 				LightID.Maximum++;
 				LightID.Value = LightID.Maximum; //auto pass parameters
 			}

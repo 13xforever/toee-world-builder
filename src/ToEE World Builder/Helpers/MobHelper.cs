@@ -404,7 +404,7 @@ namespace WorldBuilder.Helpers
 						continue;
 
 					sa_str_arr = sa_str.Split('=');
-					sa_mem_index = UInt32.Parse(sa_str_arr[1]);
+					sa_mem_index = uint.Parse(sa_str_arr[1]);
 				}
 				sr.Close();
 
