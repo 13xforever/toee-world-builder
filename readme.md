@@ -5,8 +5,8 @@ ToEE World Builder 3.0 (WiP)
 
 ### NOTE
 	This is a refactoring branch. A lot of strange things will happen here, probably undocumented, so be cautious.
-	
-It is strongly recommended to look at the [stable tree](tree/stable) for the latest release.
+
+It is strongly recommended to look at the [stable tree](../../tree/stable) for the latest release.
 
 ---
 
