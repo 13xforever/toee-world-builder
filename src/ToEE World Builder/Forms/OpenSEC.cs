@@ -28,7 +28,8 @@ namespace WorldBuilder.Forms
 
 			string[] secs = Directory.GetFiles(sectorsPath, "*.sec");
 
-			int X, Y, mX, mY, MX, MY;
+			byte X, Y;
+			int mX, mY, MX, MY;
 			foreach (string sec in secs)
 			{
 				SecHelper.GetXY(Path.GetFileNameWithoutExtension(sec), out X, out Y);

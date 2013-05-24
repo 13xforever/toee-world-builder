@@ -33,7 +33,7 @@ namespace WorldBuilder.Forms
 				int _fromY = int.Parse(fromY.Text);
 				int _toX = int.Parse(toX.Text);
 				int _toY = int.Parse(toY.Text);
-				int SX, SY;
+				byte SX, SY;
 				string secname = "";
 
 				for (int X = _fromX; X <= _toX; X++)
@@ -42,8 +42,9 @@ namespace WorldBuilder.Forms
 					{
 						secname = SecHelper.GetSectorCorrespondence(X, Y).ToString();
 						SecHelper.GetXY(secname, out SX, out SY);
-						if (!(lstSecs.Items.Contains(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")")))
-							lstSecs.Items.Add(secname + ".sec (Sector coords: X=" + SX + ", Y=" + SY + ")");
+						var sectorId = string.Format("{0}.sec (Sector coords: X={1}, Y={2})", secname, SX, SY);
+						if (!(lstSecs.Items.Contains(sectorId)))
+							lstSecs.Items.Add(sectorId);
 					}
 				}
 			}

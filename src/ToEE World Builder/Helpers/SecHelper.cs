@@ -47,14 +47,11 @@ namespace WorldBuilder.Helpers
 				writer.Write((byte) 0);
 		}
 
-		public static void GetXY(string sectorName, out int x, out int y)
+		public static void GetXY(string sectorName, out byte x, out byte y)
 		{
-			string sectorNameX = uint.Parse(sectorName).ToString("x8");
-			string sectorX = sectorNameX.Substring(0, 2);
-			string sectorY = sectorNameX.Substring(6, 2);
-
-			x = Convert.ToInt32(sectorX, 16)/4;
-			y = Convert.ToInt32(sectorY, 16);
+			var sector = uint.Parse(sectorName);
+			x = (byte)(sector >> 26);
+			y = (byte)(sector);
 		}
 
 		/// <summary>

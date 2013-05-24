@@ -65,7 +65,7 @@ namespace Tests
 		[TestCase("4278190335", 0x3f, 0xff)] //0xff0000ff
 		public void GetXY(string sectorName, int expectedX, int expectedY)
 		{
-			int x, y;
+			byte x, y;
 			SecHelper.GetXY(sectorName, out x, out y);
 			Assert.That(x, Is.EqualTo(expectedX));
 			Assert.That(y, Is.EqualTo(expectedY));
