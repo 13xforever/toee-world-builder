@@ -7847,7 +7847,7 @@ namespace WorldBuilder.Forms
 				SecFile = "Sectors\\" + o.FileToOpen + ".sec";
 
 				int minX, maxX, minY, maxY;
-				SecHelper.Sec_GetMinMax(o.FileToOpen, out minY, out maxY, out minX, out maxX);
+				SecHelper.GetMinMax(o.FileToOpen, out minY, out maxY, out minX, out maxX);
 				tu_0_0.Text = string.Format("({0},{1})", minX, minY);
 				tu_X_0.Text = string.Format("({0},{1})", maxX, minY);
 				tu_0_Y.Text = string.Format("({0},{1})", minX, maxY);
@@ -8215,7 +8215,7 @@ namespace WorldBuilder.Forms
 				btnDelObjects.Enabled = true;
 				btnResetTiles.Enabled = true;
 
-				SecHelper.SEC_CreateNewData();
+				SecHelper.CreateNewData();
 
 				tu_0_0.Text = String.Format("({0},{1})", cn.minX, cn.minY);
 				tu_X_0.Text = String.Format("({0},{1})", cn.maxX, cn.minY);

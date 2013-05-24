@@ -57,7 +57,7 @@ namespace WorldBuilder.Helpers
 		/// <summary>
 		///     NOTE: in fact, minX and minY are reversed here... as well as maxX and maxY... sorry
 		/// </summary>
-		public static void Sec_GetMinMax(string sectorName, out int minX, out int maxX, out int minY, out int maxY)
+		public static void GetMinMax(string sectorName, out int minX, out int maxX, out int minY, out int maxY)
 		{
 			//todo: fix minX/minY & maxX/maxY?
 			uint sectorId = uint.Parse(sectorName);
@@ -70,27 +70,19 @@ namespace WorldBuilder.Helpers
 			maxY = secY+63;
 		}
 
-		public static void SEC_CreateNewData()
+		public static void CreateNewData()
 		{
 			// Modifies sector data variables
 			SectorLights = new List<LightExHelper.LightEx>();
 			SectorTiles = new List<byte[]>();
-			SectorObjects = new List<byte>();
+			SectorObjects = new List<byte> {0x00, 0x00, 0x00, 0x00};
 			SectorLightsChunk = new List<byte[]>();
 
 			var tiledata = new byte[16];
 			tiledata[0] = 0x02;
 
-			for (int j = 1; j < 16; j++)
-				tiledata[j] = 0x00;
-
-			for (int i = 0; i < 4096; i++)
-			{
-				SectorTiles.Add(tiledata);
-			}
-
-			for (int k = 0; k < 4; k++)
-				SectorObjects.Add((byte) 0x00);
+			for (int i = 0; i < 0x1000; i++)
+				SectorTiles.Add(tiledata); //todo: filling with 4096 references to the same array? why bother?
 		}
 
 		public static void SEC_WriteUnknownEmptyAreas(BinaryWriter w_sec)

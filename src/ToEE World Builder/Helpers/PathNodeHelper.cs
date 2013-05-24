@@ -37,7 +37,7 @@ namespace WorldBuilder.Helpers
 			using (var reader = new BinaryReader(stream))
 			{
 				int maxX, maxY, minX, minY;
-				SecHelper.Sec_GetMinMax(sector, out minY, out maxY, out minX, out maxX);
+				SecHelper.GetMinMax(sector, out minY, out maxY, out minX, out maxX);
 				uint lightsCount = reader.ReadUInt32();
 				for (int i = 0; i < lightsCount; i++)
 					LightEditorEx.LoadLightFromSEC(reader);

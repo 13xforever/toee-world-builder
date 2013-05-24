@@ -28,7 +28,7 @@ namespace WorldBuilder.Forms
 				CX = int.Parse(ObjX.Text);
 				CY = int.Parse(ObjY.Text);
 				FileToOpen = SecHelper.GetSectorCorrespondence(CX, CY).ToString();
-				SecHelper.Sec_GetMinMax(FileToOpen, out minY, out maxY, out minX, out maxX);
+				SecHelper.GetMinMax(FileToOpen, out minY, out maxY, out minX, out maxX);
 			}
 			else
 			{
@@ -43,7 +43,7 @@ namespace WorldBuilder.Forms
 				CX = int.Parse(SecX.Text);
 				CY = int.Parse(SecY.Text);
 				FileToOpen = SecHelper.GetSecNameFromXY(CX, CY).ToString();
-				SecHelper.Sec_GetMinMax(Path.GetFileNameWithoutExtension(FileToOpen), out minY, out maxY, out minX, out maxX);
+				SecHelper.GetMinMax(Path.GetFileNameWithoutExtension(FileToOpen), out minY, out maxY, out minX, out maxX);
 			}
 
 			if (File.Exists(Path.Combine(SectorsPath, FileToOpen + ".sec")))
