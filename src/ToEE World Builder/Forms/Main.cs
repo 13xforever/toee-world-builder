@@ -8301,7 +8301,7 @@ namespace WorldBuilder.Forms
 			for (int i = 0; i < 4096; i++)
 				w_sec.Write((byte[]) SecHelper.SectorTiles[i]); // write tiledata
 
-			SecHelper.SEC_WriteUnknownEmptyAreas(w_sec); // write unknown stuff
+			SecHelper.WriteUnknownEmptyAreas(w_sec); // write unknown stuff
 
 			for (int i = 0; i < SecHelper.SectorObjects.Count; i++)
 				w_sec.Write((byte) SecHelper.SectorObjects[i]); // write objects
@@ -8465,8 +8465,8 @@ namespace WorldBuilder.Forms
 			SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(STX, STY));
 			//SVB_Bitmap = Helper.SVB_SetPropertyLine(SVB_Bitmap, destflags, Helper.SVB_GetTileAddress(STX, STY));
 
-			byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-			SecHelper.SEC_SetTileData(STX, STY, tile);
+			byte[] tile = SecHelper.MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+			SecHelper.SetTileData(STX, STY, tile);
 
 			chkAutoTile.Checked = INTERNAL_CALLBACK;
 
@@ -8494,8 +8494,8 @@ namespace WorldBuilder.Forms
 					SetWallFlags();
 					SetWaterFlags(STX, STY);
 					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(STX, STY));
-					byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-					SecHelper.SEC_SetTileData(STX, STY, tile);
+					byte[] tile = SecHelper.MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+					SecHelper.SetTileData(STX, STY, tile);
 				}
 			}
 
@@ -8557,8 +8557,8 @@ namespace WorldBuilder.Forms
 					SetWallFlags();
 					SetWaterFlags(Cur_TX, Cur_TY);
 					SVB_Bitmap = SetSVBFlags(SVB_Bitmap, SvbHelper.SVB_GetTileAddress(Cur_TX, Cur_TY));
-					byte[] tile = SecHelper.SEC_MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
-					SecHelper.SEC_SetTileData(Cur_TX, Cur_TY, tile);
+					byte[] tile = SecHelper.MakeTileData((byte) cmbTileSound.SelectedIndex, 0, 0, 0, WallFlag4, WallFlag5, WallFlag6, WallFlag7, 0, 0, 0, 0, 0, 0, 0, 0);
+					SecHelper.SetTileData(Cur_TX, Cur_TY, tile);
 				}
 			}
 

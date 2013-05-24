@@ -85,70 +85,47 @@ namespace WorldBuilder.Helpers
 				SectorTiles.Add(tiledata); //todo: filling with 4096 references to the same array? why bother?
 		}
 
-		public static void SEC_WriteUnknownEmptyAreas(BinaryWriter w_sec)
+		public static void WriteUnknownEmptyAreas(BinaryWriter writer)
 		{
-			w_sec.Write(1);
-			w_sec.Write((short) 4);
-			w_sec.Write((byte) 0xAA);
-
+			writer.Write((int)0x00000001);
+			writer.Write((short) 0x0004);
+			writer.Write((byte) 0xaa);
 			for (int j = 0; j < 41; j++)
-				w_sec.Write((byte) 0);
+				writer.Write((byte) 0x00);
 		}
 
-		public static void SEC_SetTileData(int X, int Y, byte[] tiledata)
+		public static void SetTileData(int x, int y, byte[] tiledata)
 		{
-			if (X < 0 || X > 63 || Y < 0 || Y > 63)
+			if (x < 0 || x > 63 || y < 0 || y > 63)
 				return;
 
-			//todo: FIXME: Tile position in an array of tiles?
-			int target = Y*64 + X;
-
+			int target = y * 64 + x; //todo: FIXME: Tile position in an array of tiles?
 			SectorTiles[target] = tiledata;
 		}
 
-		public static byte[] SEC_MakeTileData(byte STEP_SOUND, byte b1, byte b2, byte b3, byte b4, byte b5, byte b6, byte b7, byte b8, byte b9, byte b10, byte b11, byte b12, byte b13, byte b14, byte b15)
+		public static byte[] MakeTileData(byte stepSound, byte b1, byte b2, byte b3, //todo: better parameters handling
+										byte b4, byte b5, byte b6, byte b7,
+										byte b8, byte b9, byte b10, byte b11,
+										byte b12, byte b13, byte b14, byte b15)
 		{
-			var tiledata = new byte[16];
-
-			tiledata[0] = STEP_SOUND;
-			tiledata[1] = b1;
-			tiledata[2] = b2;
-			tiledata[3] = b3;
-			tiledata[4] = b4; /* +WALL FLAGS+ */
-			tiledata[5] = b5;
-			tiledata[6] = b6;
-			tiledata[7] = b7; /* -WALL FLAGS- */
-			tiledata[8] = b8;
-			tiledata[9] = b9;
-			tiledata[10] = b10;
-			tiledata[11] = b11;
-			tiledata[12] = b12;
-			tiledata[13] = b13;
-			tiledata[14] = b14;
-			tiledata[15] = b15;
-
-			return tiledata;
+			return new[]
+						{
+							stepSound, b1, b2, b3,
+							b4, b5, b6, b7, // wall flags
+							b8, b9, b10, b11,
+							b12, b13, b14, b15
+						};
 		}
 
-		public static bool SEC_SetTileDataRange(int minX, int maxX, int minY, int maxY, byte[] tiledata) //todo: VERIFY: Double-check how well this works!
+		public static bool SetTileDataRange(int minX, int maxX, int minY, int maxY, byte[] tiledata) //todo: VERIFY: Double-check how well this works!
 		{
-			bool IS_VALID_RECT = true;
-
 			if (minX < 0 || minX > 63 || maxX < 0 || maxX > 63 || minY < 0 || minY > 63 || maxY < 0 || maxY > 63)
-			{
-				IS_VALID_RECT = false;
-				return IS_VALID_RECT;
-			}
+				return false;
 
 			for (int y = minY; y <= maxY; y++)
-			{
 				for (int x = minX; x <= maxX; x++)
-				{
-					SEC_SetTileData(x, y, tiledata);
-				}
-			}
-
-			return IS_VALID_RECT;
+					SetTileData(x, y, tiledata);
+			return true;
 		}
 	}
 }
