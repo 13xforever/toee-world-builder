@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace WorldBuilder.Helpers
@@ -8,7 +9,7 @@ namespace WorldBuilder.Helpers
 	{
 		public static string LastOpenedMob = ""; // v1.7.5s1: For Cerulean the Blue: a string of last opened MOB file
 		public static string InteropPath = "C:\\wb200_il.lri"; // interoperability support for v2.0.0
-		public static readonly Hashtable ProtoById = new Hashtable();
+		public static readonly Dictionary<short, string> ProtoById = new Dictionary<short, string>();
 		public static string SectorName = "NOT_DETECTED";
 		public static bool EmbedMode;
 

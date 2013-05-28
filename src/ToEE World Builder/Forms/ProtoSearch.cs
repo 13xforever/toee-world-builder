@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using WorldBuilder.Helpers;
 
@@ -13,6 +15,18 @@ namespace WorldBuilder.Forms
 		public ProtoSearch()
 		{
 			InitializeComponent();
+			searchCtrls = new[]
+							{
+								psProtoSearch,
+								psScriptSearch,
+								psPortraitSearch,
+								psSpellSearch,
+								psFeatSearch,
+								psDescriptionSearch,
+								psFactionSearch,
+								psNameSearch,
+								psStrategySearch
+							};
 		}
 
 		private void btnSearchProto_Click(object sender, EventArgs e)
@@ -133,10 +147,11 @@ namespace WorldBuilder.Forms
 		{
 		}
 
+		private readonly TextBox[] searchCtrls;
+
 		private void button1_Click(object sender, EventArgs e)
 		{
-			if (psProtoSearch.Text != "" || psScriptSearch.Text != "" || psPortraitSearch.Text != "" || psSpellSearch.Text != "" || psFeatSearch.Text != "" || psDescriptionSearch.Text != "" || psFactionSearch.Text != "" || psNameSearch.Text != "" ||
-				psStrategySearch.Text != "")
+			if (!searchCtrls.All(c=>string.IsNullOrEmpty(c.Text)))
 			{
 				lstResult.Items.Clear();
 
@@ -145,8 +160,9 @@ namespace WorldBuilder.Forms
 				{
 					string s_Proto = protos_complete[i].ToString();
 					string[] proto_details = s_Proto.Replace((char) 0x0B, ' ').Split('\t');
-					string s_Proto_ID = proto_details[0];
-					string s_description = MobHelper.ProtoById[s_Proto_ID].ToString();
+					var s_Proto_ID = proto_details[0]; //todo: what's in the string
+					var proto_ID = short.Parse(s_Proto_ID);
+					string s_description = MobHelper.ProtoById[proto_ID];
 
 
 					//23 - name ID
@@ -161,7 +177,7 @@ namespace WorldBuilder.Forms
 
 					//Strategy
 
-					if (proto_details[333].ToLower().Contains(psStrategySearch.Text.ToLower()) == false)
+					if (proto_details[333].ToUpperInvariant().Contains(psStrategySearch.Text.ToUpperInvariant()) == false)
 						continue;
 
 					//Spells
@@ -169,7 +185,7 @@ namespace WorldBuilder.Forms
 					{
 						for (int pp = 312; pp < 332; pp++)
 						{
-							if (proto_details[pp].ToLower().Contains(psSpellSearch.Text.ToLower()))
+							if (proto_details[pp].ToUpperInvariant().Contains(psSpellSearch.Text.ToUpperInvariant()))
 								ok_to_go_on = 1;
 						}
 						if (ok_to_go_on == 0)
@@ -179,7 +195,7 @@ namespace WorldBuilder.Forms
 					//Scripts
 					if (psScriptSearch.Text != "")
 					{
-						string script_ahoy = psScriptTypeDropDown.Text.ToLower();
+						string script_ahoy = psScriptTypeDropDown.Text.ToUpperInvariant();
 						int script_index = 0;
 						switch (script_ahoy)
 						{
@@ -240,13 +256,13 @@ namespace WorldBuilder.Forms
 						{
 							for (int pp = 268; pp < 311; pp++)
 							{
-								if (proto_details[pp].ToLower().Contains(psScriptSearch.Text.ToLower()))
+								if (proto_details[pp].ToUpperInvariant().Contains(psScriptSearch.Text.ToUpperInvariant()))
 									ok_to_go_on = 1;
 							}
 						}
 						if (script_index != 0)
 						{
-							if (proto_details[script_index].ToLower().Contains(psScriptSearch.Text.ToLower()))
+							if (proto_details[script_index].ToUpperInvariant().Contains(psScriptSearch.Text.ToUpperInvariant()))
 								ok_to_go_on = 1;
 						}
 						if (ok_to_go_on == 0)
@@ -259,7 +275,7 @@ namespace WorldBuilder.Forms
 						ok_to_go_on = 0;
 						for (int pp = 258; pp < 268; pp++)
 						{
-							if (proto_details[pp].ToLower().Contains(psFeatSearch.Text.ToLower()))
+							if (proto_details[pp].ToUpperInvariant().Contains(psFeatSearch.Text.ToUpperInvariant()))
 								ok_to_go_on = 1;
 						}
 						if (ok_to_go_on == 0)
@@ -267,18 +283,19 @@ namespace WorldBuilder.Forms
 					}
 
 					//Faction
-					if (proto_details[154].ToLower().Contains(psFactionSearch.Text.ToLower()) == false)
+					if (proto_details[154].ToUpperInvariant().Contains(psFactionSearch.Text.ToUpperInvariant()) == false)
 						continue;
 
 					//Portrait
-					if (proto_details[123].ToLower().Contains(psPortraitSearch.Text.ToLower()) == false)
+					if (proto_details[123].ToUpperInvariant().Contains(psPortraitSearch.Text.ToUpperInvariant()) == false)
 						continue;
 
-					if (proto_details[23].ToLower().Contains(psNameSearch.Text.ToLower()) == false)
+					if (proto_details[23].ToUpperInvariant().Contains(psNameSearch.Text.ToUpperInvariant()) == false)
 						continue;
 
 					// finally, ID and Description
-					if (s_description.ToLower().Contains(psDescriptionSearch.Text.ToLower()) && s_Proto_ID.Contains(psProtoSearch.Text.ToLower()))
+					if (s_description.ToUpperInvariant().Contains(psDescriptionSearch.Text.ToUpperInvariant()) &&
+						s_Proto_ID.Contains(psProtoSearch.Text.ToUpperInvariant()))
 					{
 						lstResult.Items.Add(s_description + " -> #" + proto_details[0]);
 					}

@@ -37,7 +37,7 @@ namespace WorldBuilder.Forms
 					br.BaseStream.Seek(0x06, SeekOrigin.Begin);
 					uint compat = br.ReadUInt32();
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
-					Int16 proto_id = br.ReadInt16();
+					short proto_id = br.ReadInt16();
 					br.BaseStream.Seek(0x34, SeekOrigin.Begin);
 					uint type = br.ReadUInt32();
 					br.BaseStream.Seek(0x3A, SeekOrigin.Begin);
@@ -48,8 +48,9 @@ namespace WorldBuilder.Forms
 					br.Close();
 
 					string COMPATIBLE = "(MOB OBJECT)";
-					MOB_LIST.Items.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + MobHelper.ProtoById[proto_id.ToString()] + "\t(" + proto_id + ")");
-					mobListMemory.Add(Path.GetFileNameWithoutExtension(mob) + "\t" + COMPATIBLE + "\t" + "(X=" + x_coord.ToString() + "; Y=" + y_coord.ToString() + ")\t\t" + MobHelper.ProtoById[proto_id.ToString()] + "\t(" + proto_id + ")");
+					var value = string.Format("{0}\t{1}\t" + "(X={2}; Y={3})\t\t{4}\t({5})", Path.GetFileNameWithoutExtension(mob), COMPATIBLE, x_coord, y_coord, MobHelper.ProtoById[proto_id], proto_id);
+					MOB_LIST.Items.Add(value);
+					mobListMemory.Add(value);
 				}
 				catch (Exception)
 				{

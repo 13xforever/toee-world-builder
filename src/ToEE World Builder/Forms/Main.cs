@@ -49,7 +49,7 @@ namespace WorldBuilder.Forms
 
 		#region Generic Interface
 
-		private readonly Hashtable Descriptions = new Hashtable();
+		private readonly Dictionary<short, string> Descriptions = new Dictionary<short, string>();
 		private readonly Hashtable LongDescs = new Hashtable();
 		private readonly Hashtable Proto_Types = new Hashtable();
 
@@ -228,7 +228,7 @@ namespace WorldBuilder.Forms
 				string[] __DESC = str.Split('{', '}');
 				try
 				{
-					Descriptions.Add(__DESC[1], __DESC[3]);
+					Descriptions.Add(short.Parse(__DESC[1]), __DESC[3]);
 				}
 				catch (Exception)
 				{
@@ -266,14 +266,14 @@ namespace WorldBuilder.Forms
 			foreach (string st in protos)
 			{
 				proto = st.Split('\t');
-				string ID = proto[0].Trim();
+				var ID = short.Parse(proto[0].Trim());
 				string DESC = "<No description>";
 
 				if (!MobType.Items.Contains(proto[1]))
 					MobType.Items.Add(proto[1]);
 
-				if (Descriptions[ID] != null) // && Descriptions[ID].ToString().Trim() != "")
-					DESC = Descriptions[ID].ToString();
+				if (Descriptions.ContainsKey(ID)) // && Descriptions[ID].ToString().Trim() != "")
+					DESC = Descriptions[ID];
 				//else
 				//	DESC = "(Unnamed)";
 
@@ -1901,9 +1901,9 @@ namespace WorldBuilder.Forms
 				{
 					var br = new BinaryReader(new FileStream("Mobiles\\" + s_GUID + ".mob", FileMode.Open));
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
-					int proto = br.ReadInt32();
+					short proto = br.ReadInt16(); //todo: everywhere else this is short
 					br.Close();
-					vChestInv.Items.Add(MobHelper.ProtoById[proto.ToString()] + "\t\t\t\t" + s_GUID);
+					vChestInv.Items.Add(MobHelper.ProtoById[proto] + "\t\t\t\t" + s_GUID);
 				}
 				catch (Exception)
 				{
@@ -1933,9 +1933,9 @@ namespace WorldBuilder.Forms
 				{
 					var br = new BinaryReader(new FileStream("Mobiles\\" + s_GUID + ".mob", FileMode.Open));
 					br.BaseStream.Seek(0x0C, SeekOrigin.Begin);
-					int proto = br.ReadInt32();
+					short proto = br.ReadInt16(); //todo: here mob proto was also int
 					br.Close();
-					vNpcInv.Items.Add(MobHelper.ProtoById[proto.ToString()] + "\t\t\t\t" + s_GUID);
+					vNpcInv.Items.Add(MobHelper.ProtoById[proto] + "\t\t\t\t" + s_GUID);
 				}
 				catch (Exception)
 				{
@@ -8042,7 +8042,7 @@ namespace WorldBuilder.Forms
 					{
 						// Acquire a pointer and read all the needed data
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x0C, SeekOrigin.Begin);
-						Int16 proto_id = readobj.ReadInt16();
+						short proto_id = readobj.ReadInt16();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 						uint type = readobj.ReadUInt32();
 						readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
@@ -8057,7 +8057,7 @@ namespace WorldBuilder.Forms
 						string proto_name = "";
 						try
 						{
-							proto_name = MobHelper.ProtoById[proto_id.ToString()].ToString();
+							proto_name = MobHelper.ProtoById[proto_id];
 						}
 						catch (Exception)
 						{
@@ -9521,7 +9521,7 @@ namespace WorldBuilder.Forms
 				{
 					// Acquire a pointer and read all the needed data
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x0C, SeekOrigin.Begin);
-					Int16 proto_id = readobj.ReadInt16();
+					short proto_id = readobj.ReadInt16();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x34, SeekOrigin.Begin);
 					uint type = readobj.ReadUInt32();
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x3A, SeekOrigin.Begin);
@@ -9533,10 +9533,10 @@ namespace WorldBuilder.Forms
 					readobj.BaseStream.Seek((long) static_objlist[itm] + 0x1C, SeekOrigin.Begin);
 					string proto_guid = GenHelper.ConvertBytesToStringGuid(readobj.ReadBytes(24));
 					// - GUID -
-					string proto_name = MobHelper.ProtoById[proto_id.ToString()].ToString();
+					string proto_name = MobHelper.ProtoById[proto_id];
 
 					static_objguid.Add(proto_guid);
-					SecObjList.Items.Add(itm.ToString() + ":\t(" + x_coord.ToString() + "," + y_coord.ToString() + ")\t\t\t" + proto_name);
+					SecObjList.Items.Add(string.Format("{0}:\t({1},{2})\t\t\t{3}", itm, x_coord, y_coord, proto_name));
 				}
 				readobj.Close();
 

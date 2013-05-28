@@ -46,7 +46,7 @@ namespace Tests
 		public void GetMinMax(string sectorName, int minX, int maxX, int minY, int maxY)
 		{
 			int resMinX, resMinY, resMaxX, resMaxY;
-			SecHelper.Sec_GetMinMax(sectorName, out resMinX, out resMaxX, out resMinY, out resMaxY);
+			SecHelper.GetMinMax(sectorName, out resMinX, out resMaxX, out resMinY, out resMaxY);
 
 			Assert.That(resMinX, Is.EqualTo(minX));
 			Assert.That(resMinY, Is.EqualTo(minY));
